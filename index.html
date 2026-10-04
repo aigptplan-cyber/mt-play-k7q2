@@ -416,6 +416,8 @@ const toW = (u,v) => ({x: XMIN + u*(XMAX-XMIN), z: FLOOR_TOP + v*(FLOOR_BOT-FLOO
 const toUV = (x,z) => ({u: (x-XMIN)/(XMAX-XMIN), v: (z-FLOOR_TOP)/(FLOOR_BOT-FLOOR_TOP)});
 const FEED_TIMES = [7, 12, 18];
 const FEED_MAX = 9;
+// きゅうじきの ようりょう：ゆっくりの かず × 2にちぶん（1にち 3かい）
+function feedMax(){ const n=(S && S.yk && S.yk.length) ? S.yk.filter(y=>!y.dead).length : 1; return Math.max(1,n)*FEED_TIMES.length*2; }
 
 /* ============================================================
    ユーティリティ
@@ -451,7 +453,7 @@ function talk(src, o){
   const SPC = SPECIES[S.sp||'maricha'];
   if(SPC.words) for(const [f,t] of SPC.words) src = src.split(f).join(t);
   if(SPC.end) src = src.replace(/\[([^\]]*)\]/g, (m,e)=> SPC.end[e]!==undefined ? '['+SPC.end[e]+']' : m).replace(/のじぇ/g, SPC.end['のじぇ']);
-  if(SPC.end) src = src.replace(/\](ぇ+)/g, (m,e)=>']'+'ぉ'.repeat(e.length));
+  if(SPC.end && !/じぇ$/.test(SPC.end['のじぇ']||'')) src = src.replace(/\](ぇ+)/g, (m,e)=>']'+'ぉ'.repeat(e.length));   // こちゃ（のじぇ の まま）は ぇ の まま
   let s = src.replace(/\{me\}/g, pickMe);
   if(o) s = s.replace(/\{o\}/g, o);
   return s.split(/(\[[^\]]*\])/).map(seg =>
@@ -1889,10 +1891,9 @@ function reactToFood(type, f){
 }
 /* ---------- 自動給餌器（おさらの近くに置くと そこに出す） ---------- */
 function feederSlotNow(day, hour){ let id=-1; FEED_TIMES.forEach((h,i)=>{ if(hour>=h) id=day*FEED_TIMES.length+i; }); return id; }
-function ensureFeederSettings(){ if(!S.feeder) S.feeder = {type:'happy', stock:FEED_MAX, last:feederSlotNow(dayIndex(), gameHour()), emptyNoted:false}; }
+function ensureFeederSettings(){ if(!S.feeder) S.feeder = {type:'happy', stock:feedMax(), last:feederSlotNow(dayIndex(), gameHour()), emptyNoted:false}; }
 function feederDispense(silent, manual){
   const F=S.feeder, o=objsOf('feeder')[0]; if(!F || !o) return false;
-  if(F.stock<=0){ F.stock=FEED_MAX; F.emptyNoted=false; }
   if(F.stock<=0){
     if(!F.emptyNoted){ F.emptyNoted=true; note('じどうきゅうじきが からっぽ だった。'); }
     if(manual) toast('きゅうじきが からっぽです（ほじゅうしてね）');
@@ -1921,7 +1922,7 @@ function feederCheck(day, hour, silent){
   if(id>F.last){
     const slotHour = FEED_TIMES[((id%FEED_TIMES.length)+FEED_TIMES.length)%FEED_TIMES.length];
     F.last = id;
-    if(hour - slotHour < 3) feederDispense(silent, false);
+    if(hour - slotHour < 3){ const n=Math.max(1,S.yk.filter(y=>!y.dead).length); for(let k=0;k<n;k++) if(!feederDispense(silent, false)) break; }   // 1ぴき 1こずつ
   }
 }
 function drawFeederAt(g,o){
@@ -1938,7 +1939,7 @@ function drawFeederAt(g,o){
   g.fillStyle='#8f887c'; rr(g,-5,-7,10,6,2); g.fill();
   const th=30, ty=-24-th;
   g.fillStyle='rgba(230,245,250,.55)'; g.strokeStyle='rgba(120,140,150,.7)'; rr(g,-13,ty,26,th,4); g.fill(); g.stroke();
-  const fill = F.stock/FEED_MAX;
+  const fill = F.stock/feedMax();
   if(fill>0){
     const fh=(th-4)*fill, cols=FOODS[F.type].pellet, rand=mulberry(5);
     g.save(); rr(g,-12,ty+1,24,th-2,3); g.clip();
@@ -2067,11 +2068,25 @@ function tickStats(minutes, awake){
   else if(S.full>45 && S.clean>50) S.health = Math.min(100, S.health + minutes*.045);
 }
 function gameRate(){ return S.set.daySpeed ? 1440/S.set.daySpeed : 1; }
+// るすの あいだの ごはん：ゲスから さきに たべる（よこどり。2こ とることも ある）
+function offlineEatPass(){
+  const order=S.yk.map((y,i)=>i).sort((a,b)=>((S.yk[b].ps||{}).gesu||0)-((S.yk[a].ps||{}).gesu||0));
+  for(const i of order) ykDo(i, ()=>{
+    if(isDead()) return;
+    const gz=(PS().gesu||0)>=45 && S.yk.filter(y=>!y.dead).length>1, bf=bestFood();
+    if(!bf){ if(S.full<40 && S.yk.some(y=>y._offGreedy)) PS().offStarved=true; return; }
+    if(!(gz ? S.full<92 : (bf.type!=='yuck' ? S.full<70 : S.full<40))) return;
+    const eat=f=>{ S.food.splice(S.food.indexOf(f),1); const d=FOODS[f.type]; S.full=Math.min(100,S.full+d.full); S.mood=clamp(S.mood+d.mood,0,100); S.poopNeed+=d.full*.9; };
+    eat(bf);
+    if(gz && chance(.5)){ const b2=bestFood(); if(b2){ eat(b2); S.yk[YK_I]._offGreedy=(S.yk[YK_I]._offGreedy||0)+1; } }
+  });
+}
 function offlineCatchup(){
   const realMins = (Date.now()-S.lastSeen)/60000;
   if(realMins < .3) return 0;
   const rate = gameRate();
-  let gm = Math.min(3*1440, realMins*rate);
+  // とじている あいだは げんじつの じかんで すすむ（さいだい ゲームない 2にち）
+  let gm = Math.min(2*1440, realMins);
   const STEP = 10, t0 = S.lastSeen;
   for(let done=0; done<gm; done+=STEP){
     const step = Math.min(STEP, gm-done);
@@ -2086,10 +2101,13 @@ function offlineCatchup(){
       let uv, onT=false; if(t && chance(.6)){ const p=objPos(t); uv=toUV(p.x+rnd(-8,8),p.z+rnd(-1,2)); onT=true; } else { const p=randomFloor(); uv=toUV(p.x,p.z); }
       S.poops.push({u:uv.u,v:uv.v,t:Date.now(),toilet:onT}); S.poopNeed=0; if(S.poops.length>8) S.poops.shift();
     }
-    const bf = bestFood(); if(bf && (bf.type!=='yuck' ? S.full<70 : S.full<40)){ S.food.splice(S.food.indexOf(bf),1); const d=FOODS[bf.type]; S.full=Math.min(100,S.full+d.full); S.mood=clamp(S.mood+d.mood,0,100); S.poopNeed+=d.full*.9; }
     });
+    offlineEatPass();
   }
-  if(S.set.daySpeed && realMins*rate>gm) advanceClock((realMins*rate-gm)/rate);
+  if(S.set.daySpeed && realMins>gm) advanceClock((realMins-gm)/rate);
+  { const g=S.yk.filter(y=>y._offGreedy), v=S.yk.filter(y=>y.ps && y.ps.offStarved && !y._offGreedy);
+    if(g.length && v.length) note(`るすの あいだ、${g.map(ykLabel).join('・')}が ${v.map(ykLabel).join('・')}の ごはんを よこどり していた…。`);
+    S.yk.forEach(y=>{ delete y._offGreedy; if(y.ps) delete y.ps.offStarved; }); }
   return realMins;
 }
 
@@ -2743,8 +2761,9 @@ function drawMariSprite(g, name, bottom){
   if(BLEND_C.width<W2 || BLEND_C.height<H){ BLEND_C.width=Math.max(W2,BLEND_C.width); BLEND_C.height=Math.max(H,BLEND_C.height); }
   const q=BLEND_C.getContext('2d'); q.setTransform(1,0,0,1,0,0); q.clearRect(0,0,W2,H);
   q.globalCompositeOperation='lighter';
-  q.globalAlpha=1-t; q.drawImage(A.img,A.sx,A.sy,A.sw,A.sh,(W2-A.w*R)/2+A.ox*R,H-A.h*R,A.w*R,A.h*R);
-  q.globalAlpha=t;   q.drawImage(B.img,B.sx,B.sy,B.sw,B.sh,(W2-B.w*R)/2+B.ox*R,H-B.h*R,B.w*R,B.h*R);
+  const DA=anyoDecor(A), DB=anyoDecor(B);   // あんよ・ゆかび の かざりも まぜる ときに のこす
+  q.globalAlpha=1-t; if(DA) q.drawImage(DA,0,0,DA.width,DA.height,(W2-A.w*R)/2+A.ox*R,H-A.h*R,A.w*R,A.h*R); else q.drawImage(A.img,A.sx,A.sy,A.sw,A.sh,(W2-A.w*R)/2+A.ox*R,H-A.h*R,A.w*R,A.h*R);
+  q.globalAlpha=t;   if(DB) q.drawImage(DB,0,0,DB.width,DB.height,(W2-B.w*R)/2+B.ox*R,H-B.h*R,B.w*R,B.h*R); else q.drawImage(B.img,B.sx,B.sy,B.sw,B.sh,(W2-B.w*R)/2+B.ox*R,H-B.h*R,B.w*R,B.h*R);
   q.globalAlpha=1; q.globalCompositeOperation='source-over';
   jellyDraw(g, BLEND_C, 0, 0, W2, H, -W2/R/2, bottom, W2/R, H/R);
 }
@@ -2783,6 +2802,7 @@ function drawWarped(g, A, bottom, amt){
   if(!WARP_C) WARP_C=document.createElement('canvas');
   if(WARP_C.width<W || WARP_C.height<H){ WARP_C.width=Math.max(W,WARP_C.width); WARP_C.height=Math.max(H,WARP_C.height); }
   const q=WARP_C.getContext('2d'); q.setTransform(1,0,0,1,0,0); q.clearRect(0,0,W,H);
+  const D=anyoDecor(A); if(D) A=Object.assign({},A,{img:D,sx:0,sy:0});   // ゆかび・あんよ も いっしょに ゆがめる
   const y0=Math.floor(A.sh*.42), amp=amt*A.sw;
   q.drawImage(A.img, A.sx, A.sy, A.sw, y0, pad, 0, A.sw, y0);
   for(let y=y0; y<A.sh; y+=2){
@@ -3183,7 +3203,7 @@ function toolDown(e,p){
   switch(k){
     case 'match': TOOL.strike=.8; SFX.strike(); ignite('body'); break;
     case 'hatBurn': if(S.hat.st!=='ok'){ toast('おぼうしが ありません'); return; } TOOL.strike=.8; SFX.strike(); ignite('hat'); break;
-    case 'hatTear': if(S.hat.st!=='ok'){ toast('おぼうしが ありません'); return; } tearHat(); break;
+    case 'hatTear': if(typeof kz3Shatter==='function' && (S.hat.st==='torn'||S.hat.st==='burnt')){ kz3Shatter(); break; } if(S.hat.st!=='ok'){ toast('おぼうしが ありません'); return; } tearHat(); break;
     case 'hatLift': if(S.hat.st!=='ok'){ toast('おぼうしが ありません'); return; } cv.setPointerCapture(e.pointerId); liftHat(p, e.pointerId); break;
     case 'pick': stab(p); break;
     case 'flick': flick(p); break;
@@ -3498,7 +3518,7 @@ function openPlaySheet(btn){
   const tools = meanOn() ? ['match','hatLift','hatBurn','hatTear','pick','flick','braid'] : [];
   const fixes = [];
   if(S.hat.st==='taken') fixes.push(['fixHat','おかざりを かえしてあげる']);
-  if(S.hat.st==='burnt'||S.hat.st==='torn') fixes.push(['fixHat','あたらしい おかざりを あげる']);
+  if(['burnt','torn','scrap','shard'].includes(S.hat.st)) fixes.push(['fixHat','あたらしい おかざりを あげる']);
   if(S.braid==='torn') fixes.push(['fixBraid','おさげを なおしてあげる']);
   if((S.anyo||0)>0 || (M.soak||0)>6) fixes.push(['giveOJ','オレンジジュースを かけてあげる']);
   if(PICKS.length) fixes.push(['pullAll','つまようじを ぜんぶ ぬく']);
@@ -6908,7 +6928,7 @@ tickStats = function(minutes, awake){
   const loose = S.poops.filter(q=>!q.toilet).length;
   const risk = p.wet*.004 + (S.clean<40 ? (40-S.clean)*.006 : 0) + loose*.03;
   if(p.kabi<100) p.kabi = clamp(p.kabi + minutes*(risk - (S.clean>70 && p.wet<20 ? .12 : 0)), 0, 100);
-  else { p.kabi = Math.min(300, p.kabi + minutes*.04); S.health = Math.max(hpFloor(), S.health - minutes*.05*(p.kabi/100)); if(S.health<=0 && deathOn()) die('kabi'); }
+  else { p.kabi = Math.min(300, p.kabi + minutes*.04); S.health = Math.max(hpFloor(), S.health - minutes*(typeof KABI_V2!=='undefined'?.006:.05)*(p.kabi/100)); if(S.health<=0 && deathOn()) die('kabi'); }
   // べんぴ（たべた ものは たべた ときに たす）
   if(p.benpi>0 && awake) p.benpi = Math.max(0, p.benpi - minutes*.01);
   // じゅみょう
@@ -7038,7 +7058,7 @@ drawMari = function(){
   _by_drawMari();
   if(M.hidden) return;
   const p=BY(), g=ctx;
-  if(p.kabi>=100){
+  if(p.kabi>=100 && typeof KABI_V2==='undefined'){
     const b=mariBox(), n=Math.min(14, 3+Math.floor((p.kabi-100)/15)), r=mulberry(((S.yk[YK_I]||{}).id||'k').length*97+7);
     g.save(); for(let i=0;i<n;i++){ const a=r()*6.28, rr=Math.sqrt(r())*.36, x=b.x+Math.cos(a)*b.w*rr, y=b.cy+b.h*.12+Math.sin(a)*b.h*rr*.8, s=(2+r()*3.4)*depthScale(M.z);
       g.fillStyle=`rgba(${90+r()*30|0},${130+r()*30|0},${70+r()*20|0},.72)`; g.beginPath(); g.ellipse(x,y,s,s*.8,r()*3,0,6.28); g.fill();
@@ -8426,7 +8446,7 @@ function hitPart(){
   const dx=(h.px-h.cx)/h.rx, rel=h.rel, name=currentSprite();
   const back = /^(back|mv_back|backwobble)/.test(name);
   const sideV = /^(side|crawl|mv_side|kzpero)/.test(name);
-  if(rel<.3 && S.hat && S.hat.st==='ok' && !isSuijo()) return {part:'hat', dx};
+  if(rel<.3 && S.hat && (S.hat.st==='ok' || (typeof shellKind==='function' && shellKind() && ['torn','burnt'].includes(S.hat.st))) && !isSuijo()) return {part:'hat', dx};
   if(back && rel>.45) return {part:'oshiri', dx};
   if(sideV && dx*(M.face||1) < -.35 && rel>.4) return {part:'oshiri', dx};
   // おさげ（まりちゃは ひだりがわ だけ）
@@ -9790,9 +9810,10 @@ const SIDE_RE = /^(side|crawl|mv_side|kzpero|suri|pero|mv_turn)/, BACK_RE = /^(b
 // おかざりの 絵は いつも「なし」に する（から・こたつを べつに かく）
 const _sp_hatState = hatState;
 hatState = function(){ return shellKind() ? 'nohat' : _sp_hatState(); };
-function shellOn(){ return S.hat && (S.hat.st==='ok' || S.hat.st==='torn' || S.hat.st==='burnt'); }
+function shellOn(){ return S.hat && (S.hat.st==='ok' || S.hat.st==='torn' || S.hat.st==='burnt' || S.hat.st==='scrap'); }
 function drawShellPart(g, name, bottom, view){
   const k=shellKind(), A=sprInfo(name); if(!A) return;
+  if(typeof KZ2!=='undefined' && S.hat.st==='scrap') view='f';
   let bx=SHELL_BOX[k][view];
   if(!SP_RAW[SHELL_SPR[k][view]]){ view='f'; if(k==='kotatsu') bx=[-.14,1.11,-1.06,-.15]; }   // うしろの え が ない ときは まえの え を すこし おおきく
   const spr=SHELL_SPR[k][view], r=SP_RAW[spr]; if(!r || !atlasReady) return;
@@ -9800,6 +9821,7 @@ function drawShellPart(g, name, bottom, view){
   const x0=left+box[0]*w, x1=left+box[1]*w;
   const y0 = SHELL_BOX[k].wb ? bottom+box[2]*w : top+box[2]*h, y1 = SHELL_BOX[k].wb ? bottom+box[3]*w : top+box[3]*h;
   g.save();
+  if(typeof KZ2!=='undefined'){ if(isDead()) g.filter='grayscale(1) brightness(.8)'; g.drawImage(kz2ShellImg(spr), x0, y0, x1-x0, y1-y0); g.restore(); return; }
   if(S.hat.st==='burnt') g.filter='brightness(.42) sepia(.5)';
   if(isDead()) g.filter='grayscale(1) brightness(.8)';
   g.drawImage(atlas, r[0],r[1],r[2],r[3], x0, y0, x1-x0, y1-y0);
@@ -9815,8 +9837,9 @@ drawMariSprite = function(g, name, bottom){
   const view = SIDE_RE.test(name) ? 's' : BACK_RE.test(name) ? 'b' : 'f';
   // まるごとの え（つむり うしろ／こちゃ よこ・うしろ）：からだと から・こたつを いっしょに かいた え
   const whole = SHELL_WHOLE[shellKind()+'_'+view];
-  if(whole && SP_RAW[whole.spr] && atlasReady){
+  if(whole && SP_RAW[whole.spr] && atlasReady && !(typeof KZ2!=='undefined' && S.hat.st==='scrap')){
     const A=sprInfo(name); if(A){ const r=SP_RAW[whole.spr], w=A.w*whole.k, h=w*r[3]/r[2];
+      if(typeof KZ2!=='undefined'){ g.save(); if(isDead()) g.filter='grayscale(1) brightness(.8)'; g.drawImage(kz2WholeImg(whole.spr), -w/2 + A.ox + whole.dx*A.w, bottom-h, w, h); g.restore(); return; }
       g.save(); if(S.hat.st==='burnt') g.filter='brightness(.42) sepia(.5)'; if(isDead()) g.filter='grayscale(1) brightness(.8)';
       g.drawImage(atlas, r[0],r[1],r[2],r[3], -w/2 + A.ox + whole.dx*A.w, bottom-h, w, h); g.restore(); return; }
   }
@@ -10477,9 +10500,9 @@ function foodSheetHTML(){
   return `<div class="sheet-h"><h2>ごはんを あげる</h2><button class="x" type="button" aria-label="とじる">✕</button></div>
   <div class="foods">${Object.entries(FOODS).map(([k,f])=>`<button class="food" type="button" data-f="${k}"><span data-icon="${k}"></span><b>${f.name}</b><small>${f.desc}</small></button>`).join('')}</div>
   <div class="feeder">
-    <div class="row"><span><b>じどうきゅうじき</b><small>おなかが すいた子が いて おさらが からっぽなら、じどうで ゆっくりフードを だします（ゲーム内の ${FEED_TIMES.join('じ・')}じ にも だします）。るすの あいだも うごきます</small></span><button class="btn" id="fd-toggle" type="button">${has?'とりはずす':'せっちする'}</button></div>
+    <div class="row"><span><b>じどうきゅうじき</b><small>おなかが すいた子が いて おさらが からっぽなら、じどうで ゆっくりフードを だします（ゲーム内の ${FEED_TIMES.join('じ・')}じ にも 1ぴき 1こずつ だします）。るすの あいだも うごきます。いっぱいで ゆっくりの かず × 2にちぶん。からっぽに なったら「ほじゅう」してね（ゲスが いると ほかの子の ぶんを よこどり することも）</small></span><button class="btn" id="fd-toggle" type="button">${has?'とりはずす':'せっちする'}</button></div>
     ${has&&F?`<div class="row"><span>だす あじ</span><div class="seg" id="fd-type">${['happy','soso','yuck'].map(flavor).join('')}</div></div>
-    <div class="row"><span>のこり <b>${F.stock}</b> / ${FEED_MAX} かいぶん<small>きゅうじきを タップしても すぐ だせます</small></span><div class="seg"><button type="button" id="fd-fill">ほじゅう</button><button type="button" id="fd-now">いま だす</button></div></div>
+    <div class="row"><span>のこり <b>${F.stock}</b> / ${feedMax()} かいぶん<small>きゅうじきを タップしても すぐ だせます</small></span><div class="seg"><button type="button" id="fd-fill">ほじゅう</button><button type="button" id="fd-now">いま だす</button></div></div>
 `:''}
   </div>
   <p class="memo">${objsOf('bowl').length?'':'<b>おさらが ありません。</b>「もようがえ」で おさらを おくと、ごはんが ちらかりません。<br>'}<b>げろまずー味</b>は おなかが へっているときしか たべません。<b>あまあま</b>は いつでも だいかんげい。</p>`;
@@ -10492,7 +10515,7 @@ function openFoodSheet(btn, keep){
   sheet.querySelectorAll('.food').forEach(b=>b.addEventListener('click',()=>giveFood(b.dataset.f)));
   $('#fd-toggle').addEventListener('click',()=>{ const f=objsOf('feeder')[0]; if(f) removeObject(f); else placeFeederAuto(); save(); openFoodSheet(null,true); });
   sheet.querySelectorAll('#fd-type button').forEach(b=>b.addEventListener('click',()=>{ S.feeder.type=b.dataset.t; SFX.click(); save(); openFoodSheet(null,true); }));
-  $('#fd-fill')?.addEventListener('click',()=>{ S.feeder.stock=FEED_MAX; S.feeder.emptyNoted=false; SFX.sparkle(); toast('きゅうじきを ほじゅうした'); note('じどうきゅうじきを ほじゅうした。'); save(); openFoodSheet(null,true); });
+  $('#fd-fill')?.addEventListener('click',()=>{ S.feeder.stock=feedMax(); S.feeder.emptyNoted=false; SFX.sparkle(); toast('きゅうじきを ほじゅうした'); note('じどうきゅうじきを ほじゅうした。'); save(); openFoodSheet(null,true); });
   $('#fd-now')?.addEventListener('click',()=>{ feederDispense(false,true); save(); openFoodSheet(null,true); });
 }
 function openDiary(btn){
@@ -10907,5 +10930,1505 @@ openWxSheet = function(){
   sheet.querySelectorAll('[data-ev]').forEach(b=>b.remove());
   sheet.querySelectorAll('h3.sub').forEach(h=>{ if(/いじわる/.test(h.textContent)){ const n=h.nextElementSibling; if(n && !n.children.length){ n.remove(); h.remove(); } } });
 };
+
+/* ============================================================
+   v1.3.3 ふぐあい しゅうせい
+   ・おかざりを すてた／とられた 子を みずに しずめても、おかざりが わいてこない
+   ・しんだ あとに「あたらしい子を むかえる」と、まえの子の せいかく（ひゆっくりしょう・ゆかび など）が のこっていた
+   ・こわがりが さがらなかった：なでなで・やさしい ことば・ごはん・ねむり・おだやかな じかんで すこしずつ さがる
+   ============================================================ */
+
+/* ---- 1) みずに おちても、ないはずの おかざりは でてこない ---- */
+const _v133_boatFall = boatFall;
+boatFall = function(cause){
+  const keep = S.hat;
+  const r = _v133_boatFall(cause);
+  if(keep && keep.st!=='ok' && S.hat && S.hat.st==='lost'){ S.hat = keep; if(typeof clearVariants==='function') clearVariants(); }
+  return r;
+};
+
+/* ---- 2) あたらしい子は まっさらな せいかくで くる ---- */
+const _v133_newMari = newMari;
+newMari = function(...a){
+  S.ps = psNew(); S.rx = null;
+  if(typeof BY==='function') BY();
+  return _v133_newMari(...a);
+};
+
+/* ---- 3) こわがりは あんしん できると さがる ---- */
+const _v133_psAdd = psAdd;
+psAdd = function(k, d){ if(k==='kyofu' && d>0){ const p=PS(); p.kyCalm=0; } return _v133_psAdd(k, d); };
+function v133Calm(){ return !isDead() && !M.boxed && !M.trapped && M.state!=='box' && M.state!=='trapped' && !(typeof brokenOn==='function' && brokenOn()); }
+function v133KyTick(dt){
+  if(isDead()) return;
+  const p=PS(); p.kyCalm=(p.kyCalm||0)+dt;
+  if((p.kyofu||0)<=0 || p.kyCalm<40 || !v133Calm()) return;
+  const sl = M.state==='sleep' || M.state==='nap';
+  let k = sl ? .03 : .012;
+  if(S.mood>=60) k*=1.4; else if(S.mood<25) k*=.3;
+  if((p.natsu||0)>=40) k*=1.3;
+  p.kyofu = Math.max(0, p.kyofu - dt*k);
+}
+const _v133_update = update;
+update = function(dt){ _v133_update(dt); const d=Math.min(dt,.1); ykEach(()=>v133KyTick(d)); };
+
+// なでなで：ハートが でるたびに すこし あんしん
+const _v133_stroking = stroking;
+stroking = function(pr){
+  const before = pr && pr.lastHeart;
+  const r = _v133_stroking(pr);
+  if(pr && pr.lastHeart!==before && !isDead() && !M.lifted && v133Calm()) _v133_psAdd('kyofu', -.9);
+  return r;
+};
+// やさしい ことば
+const _v133_psVoice = psVoice;
+psVoice = function(kind){
+  const r = _v133_psVoice(kind);
+  if(kind==='kind' && !isDead() && v133Calm()) _v133_psAdd('kyofu', psOnce('kindKy') ? -4 : -1.5);
+  return r;
+};
+// おいしい ごはん・あまあま
+const _v133_finishEat = finishEat;
+finishEat = function(){
+  const t = M.eatItem && M.eatItem.type;
+  const r = _v133_finishEat();
+  if(!isDead() && t && t!=='yuck' && t!=='soso') _v133_psAdd('kyofu', t==='happy' ? -1.2 : -2);
+  return r;
+};
+
+/* ============================================================
+   v1.3.3 ゲスっぽさ きょうか（pixiv ゆ虐 人気作 50本の かたを もとに）
+   ・ゲス（45〜）は ふだんの はんのうも ぜんぶ えらそうに なる
+     なでられても・ごはんでも・うんうんでも・そうじでも「とうぜん」「どれい」
+   ・よびかた：くそにんげん／くそじじい（ばばあ）／くそどれい
+   ・きまりもんく：すぐでいいよ／たくさんでいいよ／ちょうだいね／せいっさい／ばかなの？しぬの？／かわいい{me}
+   ・どゲス（72〜）は さらに つよく
+   ============================================================ */
+Object.assign(L, {
+  gHello:["おそい[のじぇ]！ くそ{you}！ さっさと あまあま だす[のじぇ]！","ゆふん、やっと きた[のじぇ]？ {me}を またせるなんて ばかなの？ しぬの？","かわいい {me}が まってて やった[のじぇ]！ かんしゃ する[のじぇ]！"],
+  gIdle2:["ここは かわいい {me}の ゆっくりぷれいす[なのじぇ]！ じゃまな やつは せいっさい[なのじぇ]！","{you}は {me}の どれい[なのじぇ]！ あまあま もってくる[のじぇ]！ すぐで いいよ！","{me}は さいきょうで かわいい[のじぇ]！ {you}も そう おもう[のじぇ]？ おもわないなら ばかなの？","ゆっへっへ！ {me}が いちばん えらい[のじぇ]！","あまあま ちょうだい[ね]！ たくさんで いいよ！","{you}！ ぼーっと してないで {me}を ゆっくり させる[のじぇ]！","{me}に さからう やつは みんな せいっさい[なのじぇ]！ ぷくーっ！"],
+  gStroke:["ふん！ どれいの くせに なかなか じょうず[なのじぇ]！","もっと ていねいに なでる[のじぇ]！ へたくそ！","とうぜん[なのじぇ]！ かわいい {me}を なでられて しあわせ[なのじぇ]？","なでなでは もういい[のじぇ]！ あまあま よこす[のじぇ]！"],
+  gYummy:["むーしゃむーしゃ… まあまあ[なのじぇ]！ つぎは もっと もってくる[のじぇ]！","とうぜんの ごはん[なのじぇ]！ おかわり！ すぐで いいよ！","ゆふん、どれいに しては よく やった[のじぇ]！"],
+  gSoso:["こんなの えさ[なのじぇ]！ {me}に ふさわしい ものを もってくる[のじぇ]！","それなりー… {me}を なめてる[のじぇ]？ くそ{you}！"],
+  gYuck:["げろまずー！ こんなの たべさせる なんて せいっさい[なのじぇ]！ ぷくーっ！","ぺっ！ ぺっ！ {you}は ばかなの？ しぬの？","こんなもの {me}が たべる わけ ない[のじぇ]！ あまあま もってこい！"],
+  gSweet:["あまあま[なのじぇ]！ しあわせー！ もっと よこす[のじぇ]！ たくさんで いいよ！","ゆっへっへ！ {me}は とくべつ だから あまあまが にあう[のじぇ]！ まいにち もってこい！"],
+  gFull:["もう いらない[のじぇ]！ のこりは {me}の ものだから さわるな[なのじぇ]！"],
+  gHungry:["おなか すいた[のじぇ]！ くそ{you}！ ごはん！ すぐで いいよ！","{me}が おなか すいてる[のじぇ]！ さっさと ごはん もってくる[のじぇ]！ ぐず！"],
+  gSeeFood:["{me}の ごはん[なのじぇ]！ だれにも わたさない[のじぇ]！","ゆっ！ それは ぜんぶ {me}の[なのじぇ]！"],
+  gSeeSweet:["あまあま！ あまあま[なのじぇ]！ はやく よこす[のじぇ]！ すぐで いいよ！"],
+  gPoke:["さわるな[なのじぇ]！ くそ{you}！ せいっさい[なのじぇ]！","なにする[のじぇ]！ かわいい {me}に さわるなんて ばかなの？","ぷくーっ！ {me}は さいきょう[なのじぇ]！ いたくも なんとも ない[のじぇ]！"],
+  gLift:["おろせ[なのじぇ]！ くそどれい！ はやく おろす[のじぇ]ぇ！","ゆっ！ {me}を もちあげるとは いい どきょう[なのじぇ]！ せいっさい[なのじぇ]！"],
+  gPoop:["うんうん した[のじぇ]！ どれいは さっさと かたづける[のじぇ]！","すっきりー！ {you}は {me}の うんうん どれい[なのじぇ]！ ゆっへっへ！"],
+  gCleaned:["ふん！ どれいなんだから とうぜん[なのじぇ]！","おそい[のじぇ]！ もっと はやく かたづける[のじぇ]！"],
+  gPlay:["これは {me}の おもちゃ[なのじぇ]！ だれにも かさない[のじぇ]！","ゆっへっへ！ {me}が いちばん うまい[のじぇ]！"],
+  gNewObj:["ゆふん！ やっと {me}に ふさわしい ものを もってきた[のじぇ]？","それも {me}の もの[なのじぇ]！ とうぜん[なのじぇ]！"],
+  gLook:["なに みてる[のじぇ]？ みる ひまが あったら あまあま もってこい[なのじぇ]！"],
+  gMorning:["おきて やった[のじぇ]！ どれいは さっさと あさごはん だす[のじぇ]！ すぐで いいよ！"],
+  gKindR:["ふん！ そんなの とうぜん[なのじぇ]！ ことばより あまあま よこす[のじぇ]！","わかってる[のじぇ]！ {me}は かわいい[のじぇ]！ もっと いう[のじぇ]！","ほめても ゆるして やらない[のじぇ]！ …でも もっと ほめる[のじぇ]！"],
+  gSpecialR:["そうだ[なのじぇ]！ {me}は とくべつで さいきょう[なのじぇ]！ {you}は ひれふす[のじぇ]！","ゆっへっへ！ やっと わかった[のじぇ]？ {me}の どれいに して あげる[のじぇ]！"],
+});
+// どゲス（72〜）だけの もっと ひどい ことば
+Object.assign(L, {
+  ggIdle:["ここは {me}の ゆっくりぷれいすに した[のじぇ]！ くそ{you}は でていく[のじぇ]！","くそ{you}は {me}に あまあまを よこす ことしか かちの ない むのう[なのじぇ]！","{me}に さからったら ゆっくり できなく して やる[のじぇ]！ ゆっへっへ！","{you}の ものは {me}の もの、{me}の ものも {me}の もの[なのじぇ]！"],
+});
+
+/* ---- よびかた：ゲスは「くそ〜」を つける ---- */
+const _gs_youName = youName;
+youName = function(){
+  const p=PS(), one=S.set.youOne;
+  if(p.gesu>=72) return pick([one?'くそばばあ':'くそじじい','くそどれい','くそにんげん']);
+  if(p.gesu>=45 && p.natsu<50) return pick([one?'ばばあ':'じじい','どれい','くそにんげん']);
+  return _gs_youName();
+};
+// 「くそ{you}」が「くそくそ〜」に ならないように
+const _gs_talk = talk;
+talk = function(src, o){ if(typeof src==='string' && src.includes('くそ{you}')){ const y=youName(); src=src.replace(/くそ\{you\}/g, y.startsWith('くそ') ? y : 'くそ'+y); } return _gs_talk(src, o); };
+
+/* ---- ふだんの せりふを ゲス用に すりかえ ---- */
+const GS_MAP = {
+  hello:'gHello', idle:'gIdle2', stroke:'gStroke', yummy:'gYummy', eat:'gYummy', soso:'gSoso',
+  yuckBite:'gYuck', yuckEnd:'gYuck', yuckRefuse:'gYuck', yummySweet:'gSweet', full:'gFull',
+  hungry:'gHungry', starving:'gHungry', seeFood:'gSeeFood', seeSweet:'gSeeSweet',
+  poke1:'gPoke', poke2:'gPoke', liftStart:'gLift', liftHold:'gLift',
+  poopDone:'gPoop', poopOut:'gPoop', cleaned:'gCleaned', poopGone:'gCleaned',
+  play:'gPlay', playNew:'gPlay', ball:'gPlay', newObj:'gNewObj', lookYou:'gLook', morning:'gMorning',
+  vKindG:'gKindR', vSpecial:'gSpecialR',
+};
+function gsOn(){ if(isDead()) return 0; if(typeof auDistress==='function' && auDistress()) return 0; const p=PS(); if(typeof brokenOn==='function' && brokenOn()) return 0; if(typeof RX==='function' && (RX().fear>=38 || RX().broken>0)) return 0; if((p.stress||0)>=85) return 0; return p.gesu>=72 ? 2 : p.gesu>=45 ? 1 : 0; }
+const _gs_say = say;
+say = function(key, opts={}){
+  if(typeof key==='string'){
+    const lv=gsOn();
+    if(lv && GS_MAP[key] && Math.random() < (key==='vKindG'||key==='vSpecial' ? 1 : lv===2 ? .85 : .65)){
+      key = GS_MAP[key];
+      if(key==='gIdle2' && lv===2 && chance(.45)) key='ggIdle';
+      else if(key==='gIdle2' && SPECIES[S.sp||'maricha'].L.gIdle && chance(.4)) key='gIdle';   // つむりは とくべつ など
+      if(opts.cls==='soft' || opts.cls==='sleepy') opts=Object.assign({}, opts, {cls:'shout'});
+    } else if(lv && key==='gIdle') key = lv===2 && chance(.5) ? 'ggIdle' : 'gIdle2';
+  }
+  return _gs_say(key, opts);
+};
+
+/* ============================================================
+   v1.3.3 セーブの バックアップ
+   ・ファイルに かきだす（.json を ダウンロード）
+   ・ファイルから よみこむ（なかみを みせて かくにん → うわがき → よみなおし）
+   ・テキストで コピー／はりつけ（ファイルが あつかいにくい スマホ むけ）
+   ============================================================ */
+const BK_APP = 'maricha-terrarium';
+function bkJSON(){
+  save();
+  const data = JSON.parse(JSON.stringify(S, (k,v)=> (k[0]==='_' ? undefined : v)));
+  return JSON.stringify({app:BK_APP, ver:'1.3.3', at:Date.now(), data});
+}
+function bkStamp(t){ const d=new Date(t), z=n=>String(n).padStart(2,'0'); return `${d.getFullYear()}${z(d.getMonth()+1)}${z(d.getDate())}`; }
+function bkDateText(t){ const d=new Date(t), z=n=>String(n).padStart(2,'0'); return `${d.getFullYear()}/${z(d.getMonth()+1)}/${z(d.getDate())} ${z(d.getHours())}:${z(d.getMinutes())}`; }
+function bkMarkDone(){ S.set.lastBackup=Date.now(); save(); const el=document.getElementById('bk-last'); if(el) el.textContent=bkDateText(S.set.lastBackup); }
+
+// かきだす
+function bkExport(){
+  try{
+    const json=bkJSON(), name=`maricha_save_${bkStamp(Date.now())}.json`;
+    const blob=new Blob([json],{type:'application/json'}), url=URL.createObjectURL(blob);
+    const a=document.createElement('a'); a.href=url; a.download=name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url), 4000);
+    bkMarkDone(); toast(`${name} を かきだしました`);
+  }catch(e){ console.warn(e); toast('かきだせませんでした…「テキストで コピー」を つかってね'); }
+}
+
+// よみとり：かきだした ファイル／ふつうの セーブ どちらでも
+function bkParse(text){
+  let o; try{ o=JSON.parse(String(text||'').trim()); }catch(e){ return null; }
+  if(!o || typeof o!=='object') return null;
+  const data = o.app===BK_APP && o.data ? o.data : o;
+  if(!data || typeof data!=='object' || !data.set || !('full' in data) && !Array.isArray(data.yk)) return null;
+  return {data, at:o.at || data.lastSeen || null};
+}
+function bkSummary(b){
+  const d=b.data, yk=Array.isArray(d.yk)&&d.yk.length ? d.yk : [{sp:d.sp||'maricha', born:d.born, dead:d.dead}];
+  const alive=yk.filter(y=>!(y.dead && y.dead.cleared));
+  const names=alive.map(y=>(SPECIES[y.sp||'maricha']||SPECIES.maricha).name);
+  const born=Math.min(...yk.map(y=>y.born||Date.now()));
+  const days=Math.max(1, Math.floor(((b.at||Date.now())-born)/86400000)+1);
+  return {when:b.at?bkDateText(b.at):'わからない', names:names.join('・')||'いない', n:alive.length, days};
+}
+function bkConfirm(b){
+  const s=bkSummary(b);
+  const wrap=document.createElement('div'); wrap.id='bk-confirm';
+  wrap.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:9999;padding:16px';
+  wrap.innerHTML=`<div style="background:#fffaf0;border-radius:18px;padding:20px 22px;width:min(360px,100%);box-shadow:0 8px 30px rgba(0,0,0,.3)">
+  <h2 style="margin:0 0 10px;font-size:19px">この データに もどしますか？</h2>
+  <div style="background:#f3ead8;border-radius:12px;padding:10px 12px;font-size:14px;line-height:1.8">ほぞんした日：${escapeHtml(s.when)}<br>ゆっくり：${escapeHtml(s.names)}（${s.n}ひき）<br>いっしょに すごした日：${s.days}にち</div>
+  <p style="font-size:13px;color:#b8452f;margin:10px 0 14px">いまの データは うわがき されて きえます</p>
+  <div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn" type="button" data-bk="no">やめる</button><button class="btn danger" type="button" data-bk="yes">もどす</button></div></div>`;
+  document.body.appendChild(wrap);
+  wrap.querySelector('[data-bk="no"]').addEventListener('click',()=>wrap.remove());
+  wrap.addEventListener('click',ev=>{ if(ev.target===wrap) wrap.remove(); });
+  wrap.querySelector('[data-bk="yes"]').addEventListener('click',()=>bkApply(b));
+}
+function bkApply(b){
+  const json=JSON.stringify(b.data);
+  // よみなおす まえに いまの データで うわがき されないように とめる
+  save = function(){};
+  try{ const s0 = typeof _mn_save==='function' ? _mn_save : null; if(s0){ window.removeEventListener('pagehide', s0); window.removeEventListener('beforeunload', s0); } }catch(e){}
+  try{ const set0=Storage.prototype.setItem; Storage.prototype.setItem=function(k,v){ if(k===SAVE_KEY && v!==json) return; return set0.call(this,k,v); }; }catch(e){}
+  try{ localStorage.setItem(SAVE_KEY, json); }catch(e){ toast('ほぞんできませんでした…'); return; }
+  try{ NATIVE && NATIVE.prefs && NATIVE.prefs.set({key:SAVE_KEY, value:json}); }catch(e){}
+  try{ DESKTOP && DESKTOP.save && DESKTOP.save(json); }catch(e){}
+  toast('もどしました。よみなおします…');
+  setTimeout(()=>location.reload(), 600);
+}
+function bkLoadText(text){ const b=bkParse(text); if(!b){ toast('セーブデータでは ないみたい…'); return false; } bkConfirm(b); return true; }
+function bkImportFile(){
+  const inp=document.createElement('input'); inp.type='file'; inp.accept='.json,application/json,text/plain';
+  inp.addEventListener('change',()=>{ const f=inp.files&&inp.files[0]; if(!f) return; const r=new FileReader(); r.onload=()=>bkLoadText(r.result); r.onerror=()=>toast('ファイルを よめませんでした'); r.readAsText(f); });
+  inp.click();
+}
+// テキストで コピー／はりつけ
+function bkTextBox(mode){
+  const old=document.getElementById('bk-text'); if(old) old.remove();
+  const box=document.createElement('div'); box.id='bk-text'; box.style.cssText='margin:6px 0 10px';
+  const json = mode==='copy' ? bkJSON() : '';
+  box.innerHTML=`<textarea style="width:100%;height:96px;font-size:11px;border-radius:10px;border:1px solid #d8c8a8;padding:6px;box-sizing:border-box" ${mode==='copy'?'readonly':''} placeholder="ここに コピーしておいた テキストを はりつけてね"></textarea>
+  <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:6px">${mode==='paste'?'<button class="btn danger" type="button" data-bk="load">この データに もどす</button>':''}<button class="btn" type="button" data-bk="close">とじる</button></div>`;
+  const ta=box.querySelector('textarea'); ta.value=json;
+  box.querySelector('[data-bk="close"]').addEventListener('click',()=>box.remove());
+  if(mode==='paste') box.querySelector('[data-bk="load"]').addEventListener('click',()=>bkLoadText(ta.value));
+  const row=document.getElementById('bk-textrow'); row.insertAdjacentElement('afterend', box);
+  if(mode==='copy'){
+    ta.focus(); ta.select();
+    const done=()=>{ bkMarkDone(); toast('コピーしました。メモアプリなどに はりつけて とっておいてね'); };
+    if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(json).then(done, ()=>toast('えらんだ テキストを コピーしてね'));
+    else { try{ document.execCommand('copy'); done(); }catch(e){ toast('えらんだ テキストを コピーしてね'); } }
+  } else ta.focus();
+}
+
+/* ---- せってい に つける ---- */
+const _bk_openSettings = openSettings;
+openSettings = function(btn){
+  _bk_openSettings(btn);
+  if(sheetKind!=='set') return;
+  const r=document.getElementById('set-reset'); if(!r) return;
+  const row=r.closest('.row'), d=document.createElement('div');
+  const last = S.set.lastBackup ? bkDateText(S.set.lastBackup) : 'まだ ありません';
+  d.innerHTML=`<h3 class="sub" style="margin-top:14px">セーブの バックアップ</h3>
+  <p class="memo" style="font-size:12.5px;line-height:1.6;margin:2px 0 6px">ブラウザの データは きえることが あります（スマホは しばらく ひらかないと きえる ことも）。ときどき かきだして おいてね。<br>さいごに かきだした日：<b id="bk-last">${last}</b></p>
+  <div class="row"><span>ファイルに ほぞん<small>maricha_save_${bkStamp(Date.now())}.json を ダウンロードします</small></span><button class="btn" type="button" id="bk-export">かきだす</button></div>
+  <div class="row"><span>ファイルから もどす<small>かきだした ファイルを えらぶと、その ときの じょうたいに もどります</small></span><button class="btn" type="button" id="bk-import">よみこむ</button></div>
+  <div class="row" id="bk-textrow"><span>テキストで コピー／はりつけ<small>ファイルが あつかいにくい スマホ むけ。メモアプリなどに はりつけて とっておけます</small></span><span class="seg"><button class="btn" type="button" id="bk-copy">コピー</button><button class="btn" type="button" id="bk-paste">はりつけ</button></span></div>`;
+  row.parentNode.insertBefore(d, row);
+  d.querySelector('#bk-export').addEventListener('click', bkExport);
+  d.querySelector('#bk-import').addEventListener('click', bkImportFile);
+  d.querySelector('#bk-copy').addEventListener('click', ()=>bkTextBox('copy'));
+  d.querySelector('#bk-paste').addEventListener('click', ()=>bkTextBox('paste'));
+};
+
+/* ============================================================
+   v1.3.3 ゆかび：あんよ から じわじわ むしばまれる
+   1 あんよに みどりの てん
+   2 あんよの まわりに はんてん
+   3 あんよ から おなかに かけて すきまの ある はんてん
+   4 したはんぶんが ぜんぶ みどり
+   5 げきつうで のたうち → しぬ（しぬ せっていが ON のとき）
+   ============================================================ */
+const KABI_V2 = true;
+function kabiStage(p){ p=p||BY(); const k=p.kabi||0; return k<100?0 : k<140?1 : k<185?2 : k<235?3 : k<285?4 : 5; }
+
+Object.assign(L, {
+  kabiItch1:["あんよが むずむず する[のじぇ]…","ゆ？ あんよに なにか ついてる[のじぇ]…"],
+  kabiItch2:["あんよが かゆい[のじぇ]… ぽつぽつ… とれない[のじぇ]…","ゆぅ… なんだか くさい[のじぇ]…"],
+  kabiItch3:["おなかまで みどりの ぽつぽつが… こわい[のじぇ]…","ゆぐっ… からだが じんじん する[のじぇ]…"],
+  kabiItch4:["いだい… からだが… いだい[のじぇ]ぇ…","したの ほうが… うごかない[のじぇ]…","ゆ…っくり… できない[のじぇ]…"],
+  kabiPain:["いだいいいい！！ からだが いだい[のじぇ]ぇぇぇ！！","ゆぎぃぃぃ！！ たすけて！ たすけて[ほしいのじぇ]ぇぇ！！","もっど… ゆっぐり… じだがっだ…"],
+});
+
+/* ---- え：からだの はだの ところだけ、した から みどりに ---- */
+const KABI_CACHE = {};
+function kabiSkin(r,g,b){ return r>180 && g>150 && b>130 && (r-b)>=3 && (r-b)<=48 && (r-g)<=40 && !isHair(r,g,b); }
+function kabiPaint(src, sx, sy, W, H, st){
+  const c=document.createElement('canvas'); c.width=W; c.height=H; const g=c.getContext('2d');
+  g.drawImage(src, sx, sy, W, H, 0, 0, W, H);
+  const img=g.getImageData(0,0,W,H), d=img.data;
+  // からだの たかさ（はだが ある いちばん うえ）
+  let top=H;
+  for(let y=0;y<H && top===H;y++) for(let x=0;x<W;x+=2){ const i=(y*W+x)*4; if(d[i+3]>200 && kabiSkin(d[i],d[i+1],d[i+2])){ top=y; break; } }
+  const bodyH=H;   // え ぜんたいの たかさを きじゅんに（かおは したに あるので）
+  // はんてん（まるい しみ）を たくさん つくる
+  const rand=mulberry(W*7+H*13), blobs=[];
+  const reach = [0,.07,.15,.3,.4,.42][st];            // どこまで のぼるか（したから）
+  const nB = [0,7,18,34,40,44][st];
+  for(let k=0;k<nB;k++){
+    const u = Math.pow(rand(), st<=2 ? 1.6 : 1.1) * reach;   // した ほど おおい
+    blobs.push({x:W*(.12+rand()*.76), y:H-u*bodyH, r:W*(st===1? .018+rand()*.02 : .03+rand()*.045)*(1+(st>=3?.35:0)), dark:rand()<.35});
+  }
+  const fullU = st>=4 ? .27 : 0;        // ここまでは ぜんぶ みどり
+  for(let y=top;y<H;y++){
+    const u=(H-y)/bodyH;
+    for(let x=0;x<W;x++){
+      const i=(y*W+x)*4; if(d[i+3]<30) continue;
+      const r=d[i], gg=d[i+1], b=d[i+2]; if(!kabiSkin(r,gg,b)) continue;
+      let a=0, dark=false;
+      // さかいめは ぎざぎざ（まっすぐに しない）
+      const fu = fullU ? fullU + .035*Math.sin(x/W*17.3) + .025*Math.sin(x/W*41.7+1.3) : 0;
+      if(u<fu) a = .78;
+      else if(fullU && u<fu+.05) a = .78*(1-(u-fu)/.05);
+      for(const B of blobs){ const dx=x-B.x, dy=(y-B.y)*1.15, q=(dx*dx+dy*dy)/(B.r*B.r); if(q<1){ const v=(1-q)*.85+.15; if(v>a){ a=v*.85; dark=B.dark; } } }
+      if(a<=0) continue;
+      // まだら（すこし むら）
+      const n=((x*12.9898+y*78.233)%1+1)%1*.18;
+      const gr = dark ? [78,112,52] : [112,152,76];
+      if(st>=5){ gr[0]-=20; gr[1]-=26; gr[2]-=14; }
+      const k=Math.min(.9,a+n*.4);
+      d[i]=r*(1-k)+gr[0]*k; d[i+1]=gg*(1-k)+gr[1]*k; d[i+2]=b*(1-k)+gr[2]*k;
+    }
+  }
+  g.putImageData(img,0,0);
+  return c;
+}
+const _kb_anyoDecor = anyoDecor;
+anyoDecor = function(A){
+  const base=_kb_anyoDecor(A);
+  const st = isDead() ? (S.dead && S.dead.cause==='kabi' ? 4 : 0) : kabiStage();
+  if(!st) return base;
+  const key=`${SPX}|${A.sx}|${A.sy}|${A.sw}|${A.img===atlas?'a':'v'}|${base?'d':'-'}|${st}`;
+  if(KABI_CACHE[key]) return KABI_CACHE[key];
+  const c = base ? kabiPaint(base,0,0,base.width,base.height,st) : kabiPaint(A.img,A.sx,A.sy,A.sw,A.sh,st);
+  const keys=Object.keys(KABI_CACHE); if(keys.length>120) delete KABI_CACHE[keys[0]];
+  return KABI_CACHE[key]=c;
+};
+
+/* ---- すすみかた：しぬ のは ゆかびが さいごまで すすんだ とき ---- */
+const _kb_tickStats = typeof tickStats==='function' ? tickStats : null;
+function kabiTick(dt){
+  if(isDead()) return;
+  const p=BY(), st=kabiStage(p);
+  if(!st) return;
+  p.kbSt = p.kbSt||0;
+  if(st!==p.kbSt){
+    p.kbSt=st;
+    if(st>=2) note(`${S.me||'まりちゃ'}の ゆかびが ひろがっている…（${['','あんよに てん','あんよの まわり','おなか まで','したはんぶん','げきつう'][st]}）`);
+  }
+  if(st>=5){
+    if(!M.lifted && M.state!=='jitabata' && chance(dt*.5)){ setState('jitabata', 2.5); express('cry3',2.5); M.tears=3; say('kabiPain',{cls:'shout'}); }
+    if(p.kabi>=300 && deathOn()) die('kabi');
+    return;
+  }
+  if(bubbleT<=0 && M.state==='idle' && chance(dt*.015)){ say('kabiItch'+Math.min(4,st), {cls: st>=4?'shout':'soft'}); express(st>=3?'cry3':'worry', 2.4); if(st>=3) M.tears=Math.max(M.tears||0,1.4); }
+}
+const _kb_update = update;
+update = function(dt){ _kb_update(dt); const d=Math.min(dt,.1); ykEach(()=>kabiTick(d)); };
+// 4だんかい いこうは うごきが にぶい
+const _kb_goTo = goTo;
+goTo = function(x, z, then, speed, gait){ if(!isDead() && kabiStage()>=4 && speed) speed*=.55; return _kb_goTo(x, z, then, speed, gait); };
+// じょうたいの ひょうじ
+if(typeof statusText==='function'){
+  const _kb_status = statusText;
+  statusText = function(){ const st=kabiStage(); if(!isDead() && st) return ['','あんよに みどりの てんてんが…','あんよに ゆかびが ひろがっている…','おなかまで ゆかびが…','したはんぶんが まっみどり…','ゆかびの げきつうで のたうっている…'][st]; return _kb_status.apply(this, arguments); };
+}
+
+/* ============================================================
+   v1.3.3 おかざりの はそん（だんかい しき）
+   まりちゃ・すいじょう：おぼうし いちぶ やぶれ → ビリビリ（ばらばら）
+   れいみゅ：りぼん いちぶ やぶれ → ビリビリ（ばらばら）
+   つむり：から ぜんたいに ひび → こなごな
+   こちゃ：てんばんが われて ゆがんで ひび → こなごな
+   ばらばらに なったら ぺーろぺーろ かきあつめ → ゴミみたいな おかざりを あたまに のせる／あきらめる
+   こげ：こげた いろ ＋ いちぶ かける
+   ※ 絵は もとの おかざりの 絵を くだいて つくる（どの むき・どの ひょうじょうでも ずれない）
+   S.hat.st: 'torn'(lv1) / 'shard'(ばらばら：ゆかに ちらばる) / 'rep2'(かきあつめ ちゅう) / 'scrap'(ゴミおかざり) / 'burnt' / 'gone'
+   ============================================================ */
+const KZ2 = true;
+const KZ2_CACHE = {};
+function kz2Kind(){ const k = typeof shellKind==='function' ? shellKind() : null; return k || (S.sp==='reimu' ? 'ribbon' : 'hat'); }
+function kz2Seed(s){ let h=2166136261; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619); } return mulberry(h>>>0); }
+function kz2Canvas(w,h){ const c=document.createElement('canvas'); c.width=Math.max(1,Math.round(w)); c.height=Math.max(1,Math.round(h)); return c; }
+function kz2Bounds(c){
+  const g=c.getContext('2d',{willReadFrequently:true}), d=g.getImageData(0,0,c.width,c.height).data;
+  let x0=c.width,x1=-1,y0=c.height,y1=-1;
+  for(let y=0;y<c.height;y++) for(let x=0;x<c.width;x++) if(d[(y*c.width+x)*4+3]>30){ if(x<x0)x0=x; if(x>x1)x1=x; if(y<y0)y0=y; if(y>y1)y1=y; }
+  return x1<0 ? null : {x0,x1,y0,y1,w:x1-x0+1,h:y1-y0+1};
+}
+
+/* ---------- こわしかた ---------- */
+// いちぶ けっそん（ぬの）：ふちが ぎざぎざに ちぎれて なくなる
+function kz2Jag(cx, cy, R, r, n){ const pts=[]; for(let a=0;a<n;a++){ const ang=a/n*6.283+r()*.2, rr=R*(a%2 ? .55+r()*.25 : .85+r()*.35); pts.push([cx+Math.cos(ang)*rr, cy+Math.sin(ang)*rr*.9]); } return pts; }
+function kz2Poly(g, pts, cx, cy, s){ g.beginPath(); pts.forEach((p,i)=>{ const x=cx+(p[0]-cx)*s, y=cy+(p[1]-cy)*s; i?g.lineTo(x,y):g.moveTo(x,y); }); g.closePath(); }
+function kz2Bite(g, b, W, cx, cy, R, r, rim, thread){
+  const pts=kz2Jag(cx, cy, R, r, 22);
+  g.globalCompositeOperation='source-atop'; g.fillStyle=rim; kz2Poly(g, pts, cx, cy, 1.14); g.fill();
+  g.globalCompositeOperation='destination-out'; kz2Poly(g, pts, cx, cy, 1); g.fill();
+  // ほつれた いと（あなの ほうへ たれる）
+  g.globalCompositeOperation='destination-over'; g.strokeStyle=thread; g.lineWidth=Math.max(1,W*.006); g.lineCap='round';
+  for(let k=0;k<pts.length;k+=2){ const p=pts[k], dx=cx-p[0], dy=cy-p[1], L=Math.hypot(dx,dy)||1, l=R*(.12+r()*.22);
+    g.beginPath(); g.moveTo(p[0],p[1]); g.quadraticCurveTo(p[0]+dx/L*l*.5+(r()-.5)*l*.6, p[1]+dy/L*l*.5, p[0]+dx/L*l, p[1]+dy/L*l+l*.3); g.stroke(); }
+  g.globalCompositeOperation='source-over';
+}
+function kz2Tear(src, seed, kind){
+  const b=kz2Bounds(src); if(!b) return src;
+  const W=src.width, H=src.height, r=kz2Seed(seed), c=kz2Canvas(W,H), g=c.getContext('2d');
+  g.drawImage(src,0,0);
+  const rim = kind==='ribbon' ? 'rgba(90,14,20,.55)' : 'rgba(12,10,20,.6)', th = kind==='ribbon' ? 'rgba(170,30,40,.95)' : 'rgba(45,40,60,.95)';
+  // おおきく ちぎれた ところ（うえの はし）と、ちいさく かけた ところ（したの はし）
+  kz2Bite(g, b, W, b.x0+b.w*(.66+r()*.12), b.y0+b.h*(.12+r()*.1), b.w*(.17+r()*.05), r, rim, th);
+  kz2Bite(g, b, W, b.x0+b.w*(.1+r()*.12), b.y0+b.h*(.72+r()*.12), b.w*(.09+r()*.04), r, rim, th);
+  // こまかい あな
+  kz2Bite(g, b, W, b.x0+b.w*(.38+r()*.15), b.y0+b.h*(.4+r()*.15), b.w*.035, r, rim, th);
+  return c;
+}
+// こたつ：てんばんに ひび＋かけ（すこし おれて まがる）、ふとんは ほつれ
+function kz2Kota(src, seed){
+  const b=kz2Bounds(src); if(!b) return src;
+  const W=src.width, H=src.height, r=kz2Seed(seed), c=kz2Canvas(W,H), g=c.getContext('2d');
+  const ty=b.y0+b.h*.3, mx=b.x0+b.w*(.55+r()*.1);
+  // ふとん（した）は そのまま、てんばん（うえ）は みぎがわが すこし おれて さがる
+  g.save(); g.beginPath(); g.rect(0,ty,W,H); g.clip(); g.drawImage(src,0,0); g.restore();
+  g.save(); g.beginPath(); g.rect(0,0,mx,ty); g.clip(); g.drawImage(src,0,0); g.restore();
+  g.save(); g.translate(mx, ty); g.rotate(.06+r()*.03); g.translate(-mx, -ty+b.h*.01); g.beginPath(); g.rect(mx,0,W,ty); g.clip(); g.drawImage(src,0,0); g.restore();
+  // おれめの ひび
+  g.globalCompositeOperation='source-atop'; g.lineCap='round';
+  const crack=(x,y,ang,len)=>{ const pts=[[x,y]]; for(let k=0;k<5;k++){ ang+=(r()-.5)*.8; x+=Math.cos(ang)*len/5; y+=Math.sin(ang)*len/5; pts.push([x,y]); }
+    g.strokeStyle='rgba(255,240,220,.5)'; g.lineWidth=Math.max(1,W*.01); g.beginPath(); pts.forEach((p,i)=>i?g.lineTo(p[0]+1,p[1]+1):g.moveTo(p[0]+1,p[1]+1)); g.stroke();
+    g.strokeStyle='rgba(40,22,12,.95)'; g.lineWidth=Math.max(1,W*.008); g.beginPath(); pts.forEach((p,i)=>i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])); g.stroke(); };
+  crack(mx, b.y0, Math.PI/2, ty-b.y0); crack(b.x0+b.w*.25, b.y0+(ty-b.y0)*.2, .3, b.w*.25); crack(mx, b.y0+(ty-b.y0)*.5, -2.8, b.w*.18);
+  // てんばんの かど が かける
+  g.globalCompositeOperation='destination-out';
+  const cx=b.x0+b.w*(.12+r()*.08), cy=b.y0+(ty-b.y0)*.35;
+  kz2Poly(g, kz2Jag(cx, cy, b.w*.09, r, 10), cx, cy, 1); g.fill();
+  // ふとんの ほつれ：すそから いとが たれる＋ちいさな あな
+  g.globalCompositeOperation='source-over';
+  const d=src.getContext('2d',{willReadFrequently:true}).getImageData(0,0,W,H).data;
+  for(let k=0;k<14;k++){
+    const x=Math.floor(b.x0+b.w*(.08+r()*.84)); let y=b.y1; while(y>ty && d[(y*W+x)*4+3]<60) y--;
+    const i=(y*W+x)*4; g.strokeStyle=`rgba(${d[i]},${d[i+1]},${d[i+2]},.95)`; g.lineWidth=Math.max(1,W*.005);
+    const l=b.h*(.04+r()*.07); g.beginPath(); g.moveTo(x,y-1); g.quadraticCurveTo(x+(r()-.5)*l, y+l*.5, x+(r()-.5)*l*.6, y+l); g.stroke();
+  }
+  for(let k=0;k<2;k++) kz2Bite(g, b, W, b.x0+b.w*(.25+r()*.5), ty+(b.y1-ty)*(.35+r()*.35), b.w*.04, r, 'rgba(60,10,10,.5)', 'rgba(230,220,210,.95)');
+  return c;
+}
+// ひび（から・こたつ）
+function kz2Crack(src, seed, kind){
+  const b=kz2Bounds(src); if(!b) return src;
+  const W=src.width, H=src.height, r=kz2Seed(seed), c=kz2Canvas(W,H), g=c.getContext('2d');
+  if(kind==='kotatsu'){
+    // てんばん（うえ 3わり）が まんなかで われて、みぎが さがって ゆがむ
+    const ty=b.y0+b.h*.3, mx=b.x0+b.w*(.46+r()*.08);
+    g.save(); g.beginPath(); g.rect(0,0,W,H); g.clip();
+    g.setTransform(1,0,-.06,1,ty*.06,0); g.drawImage(src,0,0); g.restore();
+    const right=kz2Canvas(W,H), q=right.getContext('2d'); q.beginPath(); q.moveTo(mx,0); q.lineTo(mx+b.w*.03,ty*.5); q.lineTo(mx-b.w*.01,ty); q.lineTo(W,ty); q.lineTo(W,0); q.closePath(); q.clip(); q.drawImage(c,0,0);
+    g.save(); g.globalCompositeOperation='destination-out'; g.beginPath(); g.moveTo(mx-1,0); g.lineTo(mx+b.w*.03-1,ty*.5); g.lineTo(mx-b.w*.01-1,ty); g.lineTo(W,ty); g.lineTo(W,0); g.closePath(); g.fill(); g.restore();
+    g.save(); g.translate(mx, ty); g.rotate(.07); g.translate(-mx, -ty+b.h*.03); g.drawImage(right,0,0); g.restore();
+  } else g.drawImage(src,0,0);
+  // ひびの あみめ
+  g.globalCompositeOperation='source-atop'; g.lineCap='round'; g.lineJoin='round';
+  const lines=[];
+  const walk=(x,y,ang,len,depth)=>{ const pts=[[x,y]]; for(let k=0;k<6;k++){ ang+= (r()-.5)*.9; x+=Math.cos(ang)*len/6; y+=Math.sin(ang)*len/6; pts.push([x,y]); if(depth<2 && r()<.28) walk(x,y,ang+(r()<.5?-1:1)*(.6+r()*.5),len*.55,depth+1); } lines.push([pts,depth]); };
+  const nRoot = kind==='kotatsu' ? 3 : 4;
+  for(let k=0;k<nRoot;k++) walk(b.x0+b.w*(.2+r()*.6), b.y0+b.h*(kind==='kotatsu'?.1:.05)+r()*b.h*.2, Math.PI/2+(r()-.5)*1.4, b.h*(.55+r()*.35), 0);
+  for(const [pts,dp] of lines){
+    g.strokeStyle='rgba(255,255,255,.55)'; g.lineWidth=Math.max(1,W*(.012-dp*.003)); g.beginPath(); pts.forEach((p,k)=>k?g.lineTo(p[0]+1,p[1]+1):g.moveTo(p[0]+1,p[1]+1)); g.stroke();
+    g.strokeStyle='rgba(25,22,30,.9)'; g.lineWidth=Math.max(1,W*(.009-dp*.002)); g.beginPath(); pts.forEach((p,k)=>k?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])); g.stroke();
+  }
+  g.globalCompositeOperation='source-over';
+  return c;
+}
+// こげ：こげいろ ＋ いちぶ かける
+function kz2Burn(src, seed){
+  const b=kz2Bounds(src); if(!b) return src;
+  const W=src.width, H=src.height, r=kz2Seed(seed), c=kz2Canvas(W,H), g=c.getContext('2d',{willReadFrequently:true});
+  g.drawImage(src,0,0);
+  const im=g.getImageData(0,0,W,H), d=im.data;
+  for(let i=0;i<d.length;i+=4){ if(d[i+3]<10) continue; const l=(d[i]*.3+d[i+1]*.59+d[i+2]*.11), n=((i*2654435761)>>>0)/4294967296;
+    const k=.55+n*.25; d[i]=d[i]*(1-k)+(l*.42+30)*k; d[i+1]=d[i+1]*(1-k)+(l*.3+18)*k; d[i+2]=d[i+2]*(1-k)+(l*.22+12)*k; }
+  g.putImageData(im,0,0);
+  // まだらの すす
+  g.globalCompositeOperation='source-atop';
+  for(let k=0;k<10;k++){ const x=b.x0+b.w*r(), y=b.y0+b.h*r(), rr=b.w*(.06+r()*.1); const gr=g.createRadialGradient(x,y,0,x,y,rr); gr.addColorStop(0,'rgba(18,10,8,.75)'); gr.addColorStop(1,'rgba(18,10,8,0)'); g.fillStyle=gr; g.beginPath(); g.arc(x,y,rr,0,7); g.fill(); }
+  // かけた ところ（ふちから かじられた ように）
+  const bites = 2 + (r()<.5?1:0);
+  for(let k=0;k<bites;k++){
+    const edge = r()<.5 ? [b.x0+b.w*(k%2?.85:.12), b.y0+b.h*(.3+r()*.5)] : [b.x0+b.w*(.3+r()*.4), b.y0+b.h*.04];
+    const R=b.w*(.09+r()*.06), pts=[]; for(let a=0;a<12;a++){ const ang=a/12*6.283, rr=R*(.65+r()*.5); pts.push([edge[0]+Math.cos(ang)*rr, edge[1]+Math.sin(ang)*rr]); }
+    const poly=(s)=>{ g.beginPath(); pts.forEach((p,i)=>{ const x=edge[0]+(p[0]-edge[0])*s, y=edge[1]+(p[1]-edge[1])*s; i?g.lineTo(x,y):g.moveTo(x,y); }); g.closePath(); };
+    g.globalCompositeOperation='source-atop'; g.fillStyle='#120a08'; poly(1.28); g.fill();
+    g.fillStyle='rgba(255,140,40,.55)'; for(let e=0;e<5;e++){ const p=pts[Math.floor(r()*pts.length)]; g.beginPath(); g.arc(edge[0]+(p[0]-edge[0])*1.12, edge[1]+(p[1]-edge[1])*1.12, Math.max(1,W*.006), 0, 7); g.fill(); }
+    g.globalCompositeOperation='destination-out'; poly(1); g.fill();
+  }
+  g.globalCompositeOperation='source-over';
+  return c;
+}
+// ばらばら：かけらに わける（いびつな ボロノイ）
+function kz2Pieces(src, seed, kind){
+  const b=kz2Bounds(src); if(!b) return [];
+  const W=src.width, H=src.height, r=kz2Seed(seed);
+  const n = kind==='hat'||kind==='ribbon' ? 9 : 12, cols=Math.ceil(Math.sqrt(n*b.w/b.h)), rows=Math.ceil(n/cols);
+  const seeds=[]; for(let j=0;j<rows;j++) for(let i=0;i<cols;i++) seeds.push([b.x0+b.w*(i+.2+r()*.6)/cols, b.y0+b.h*(j+.2+r()*.6)/rows]);
+  const g0=src.getContext ? src.getContext('2d',{willReadFrequently:true}) : null;
+  const sd=(g0||kz2Canvas(W,H).getContext('2d')).getImageData(0,0,W,H).data;
+  const own=new Int16Array(W*H).fill(-1);
+  for(let y=b.y0;y<=b.y1;y++) for(let x=b.x0;x<=b.x1;x++){
+    const i=y*W+x; if(sd[i*4+3]<30) continue;
+    let best=0, bd=1e9; const jit=(Math.sin(x*.37+y*.11)+Math.sin(y*.29-x*.07))*b.w*.025;
+    for(let k=0;k<seeds.length;k++){ const dx=x-seeds[k][0], dy=y-seeds[k][1], dd=Math.sqrt(dx*dx+dy*dy)+(k%2?jit:-jit); if(dd<bd){ bd=dd; best=k; } }
+    own[i]=best;
+  }
+  const out=[];
+  for(let k=0;k<seeds.length;k++){
+    let x0=W,x1=-1,y0=H,y1=-1; for(let y=b.y0;y<=b.y1;y++) for(let x=b.x0;x<=b.x1;x++) if(own[y*W+x]===k){ if(x<x0)x0=x; if(x>x1)x1=x; if(y<y0)y0=y; if(y>y1)y1=y; }
+    if(x1<0 || (x1-x0)*(y1-y0)<16) continue;
+    const pw=x1-x0+1, ph=y1-y0+1, c=kz2Canvas(pw,ph), g=c.getContext('2d'), im=g.createImageData(pw,ph);
+    for(let y=y0;y<=y1;y++) for(let x=x0;x<=x1;x++){ if(own[y*W+x]!==k) continue; const si=(y*W+x)*4, di=((y-y0)*pw+(x-x0))*4; im.data[di]=sd[si]; im.data[di+1]=sd[si+1]; im.data[di+2]=sd[si+2]; im.data[di+3]=sd[si+3]; }
+    g.putImageData(im,0,0);
+    // われめの ふち
+    g.globalCompositeOperation='source-atop'; g.strokeStyle= kind==='shell' ? 'rgba(255,255,255,.6)' : 'rgba(30,22,26,.55)'; g.lineWidth=Math.max(1,W*.006); g.strokeRect(.5,.5,pw-1,ph-1); g.globalCompositeOperation='source-over';
+    out.push({c, cx:(x0+x1)/2, cy:(y0+y1)/2, w:pw, h:ph, rot:(r()-.5)*2.4, dx:(r()-.5), dz:r(), s:.85+r()*.25});
+  }
+  return out;
+}
+// ゴミみたいな おかざり：かけらを あたまの うえに ぐしゃっと つみあげる
+function kz2Scrap(src, seed, kind){
+  const b=kz2Bounds(src); if(!b) return src;
+  const W=src.width, H=src.height, r=kz2Seed(seed+'s'), c=kz2Canvas(W,H), g=c.getContext('2d');
+  const ps=kz2Pieces(src, seed, kind).sort((p,q)=>q.w*q.h-p.w*p.h);
+  const cx=b.x0+b.w*.5, base=b.y0 + b.h*(kind==='hat' ? .7 : kind==='ribbon' ? .62 : .6), pileW=b.w*.4, pileH=b.h*.55;
+  // おおきい かけらから した に しいて、ちいさい のを うえに のせる（こんもり）
+  ps.forEach((p,k)=>{
+    const t=k/Math.max(1,ps.length-1), s=.78+r()*.18;
+    const x=cx+(r()-.5)*pileW*(1-t*.6), y=base - p.h*s*.42 - pileH*t*(.55+r()*.35);
+    g.save(); g.translate(x,y); g.rotate((r()-.5)*2.6); g.scale(s,s*(.82+r()*.2)); g.drawImage(p.c,-p.w/2,-p.h/2); g.restore();
+  });
+  // よごれ（ぺーろぺーろの よだれ・つち）
+  g.globalCompositeOperation='source-atop';
+  g.fillStyle='rgba(90,70,45,.22)'; g.fillRect(0,0,W,H);
+  for(let k=0;k<18;k++){ g.fillStyle=`rgba(${70+r()*40|0},${50+r()*30|0},${30+r()*20|0},.5)`; g.beginPath(); g.arc(cx+(r()-.5)*pileW*1.3, base-r()*pileH*1.2, Math.max(1,W*(.006+r()*.012)), 0, 7); g.fill(); }
+  g.fillStyle='rgba(255,255,255,.35)'; for(let k=0;k<5;k++){ g.beginPath(); g.ellipse(cx+(r()-.5)*pileW, base-r()*pileH, W*.012, W*.006, r()*3, 0, 7); g.fill(); }
+  g.globalCompositeOperation='source-over';
+  return c;
+}
+
+// ゴミおかざりの やま（もとの おかざりの かけらで つくる。きりぬき ずみ）
+function kz2PileCanvas(){
+  const key='pile|'+SPX+kz2Kind()+'|'+kz2YkSeed(); if(KZ2_CACHE[key]) return KZ2_CACHE[key];
+  const s=kz2Source(); if(!s) return null;
+  const pile=kz2Scrap(s.c, kz2YkSeed()+'scrap', kz2Kind()), b=kz2Bounds(pile); if(!b) return null;
+  const c=kz2Canvas(b.w+4,b.h+4); c.getContext('2d').drawImage(pile, b.x0-2, b.y0-2, b.w+4, b.h+4, 0,0,b.w+4,b.h+4);
+  return KZ2_CACHE[key]={c, px:s.px};
+}
+// かみの いちばん うえ（あたまの てっぺん）
+function kz2Apex(img, sx, sy, sw, sh){
+  const t=kz2Canvas(sw,sh), g=t.getContext('2d',{willReadFrequently:true}); g.drawImage(img,sx,sy,sw,sh,0,0,sw,sh);
+  const d=g.getImageData(0,0,sw,sh).data;
+  // アホげ（ほそい かみ）は むしして、あたまの ふくらみが はじまる ところ
+  for(let y=0;y<sh;y++){ let xs=0,n=0; for(let x=0;x<sw;x++){ if(d[(y*sw+x)*4+3]>120){ xs+=x; n++; } } if(n>=sw*.3) return {x:xs/n, y}; }
+  return {x:sw/2, y:0};
+}
+function kz2Apply(src, mode, seed, kind){
+  if(mode==='torn') return kind==='kotatsu' ? kz2Kota(src, seed) : kind==='shell' ? kz2Crack(src, seed, kind) : kz2Tear(src, seed, kind);
+  if(mode==='burnt') return kz2Burn(src, seed);
+  if(mode==='scrap') return kz2Scrap(src, seed, kind);
+  return src;
+}
+function kz2Mode(){ const s=S.hat && S.hat.st; return s==='torn'||s==='burnt'||s==='scrap' ? s : null; }
+function kz2YkSeed(){ return ((S.yk&&S.yk[YK_I]||{}).id||'k'); }
+
+/* ---------- まりちゃ・れいみゅ：おぼうし／りぼんだけ ぬきだして こわす ---------- */
+function kz2HatOnly(name){
+  const key='h|'+SPX+name; if(KZ2_CACHE[key]!==undefined) return KZ2_CACHE[key];
+  const meta=spriteMeta(name), hat=meta.hat; if(!hat) return KZ2_CACHE[key]=null;
+  const [c,g]=spriteCanvas(name), w=c.width, h=c.height, img=g.getImageData(0,0,w,h), d=img.data;
+  for(let y=0;y<h;y++) for(let x=0;x<w;x++){
+    const i=(y*w+x)*4; if(d[i+3]<20){ d[i+3]=0; continue; }
+    if(y>Math.min(h-1,hat.bottom+2)){ d[i+3]=0; continue; }
+    const r=d[i],gg=d[i+1],b=d[i+2], hair=isHair(r,gg,b), skin=isSkin(r,gg,b);
+    const inBox = x>=hat.x0-2 && x<=hat.x1+2, upper = y < hat.bottom - (hat.bottom-hat.y0)*.3;
+    const keep = inBox && !hair && (upper || (!skin && hatColor(r,gg,b)));
+    if(!keep) d[i+3]=0;
+  }
+  g.putImageData(img,0,0);
+  return KZ2_CACHE[key]=c;
+}
+const _kz2_variantSprite = variantSprite;
+variantSprite = function(name){
+  const mode=kz2Mode();
+  if(!mode || shellKindSafe() ) return _kz2_variantSprite(name);
+  const hatC=kz2HatOnly(name); if(!hatC) return _kz2_variantSprite(name);
+  const key=`v|${SPX}${name}|${mode}|${kz2YkSeed()}|${S.braid}|${S.soot>.05?1:0}|${S.dead?1:0}`;
+  // ゴミおかざりは すこし うえに のるので、え の うえに よゆうを もたせる
+
+  if(VAR_CACHE[key]) return VAR_CACHE[key];
+  // おぼうし なしの からだ
+  const keep=S.hat; S.hat={st:'gone'}; let body; try{ body=_kz2_variantSprite(name); } finally{ S.hat=keep; }
+  const r=SP[name], W=r[2], H=r[3], c=kz2Canvas(W,H), g=c.getContext('2d');
+  if(body){
+    if(body._own){ const spf=body._spf||1, bw=body.width/spf, bh=body.height/spf, ox=(r[4]||0); g.drawImage(body, W/2-ox-bw/2, H-bh, bw, bh); }
+    else g.drawImage(body,0,0);
+  } else { const [sc]=spriteCanvas(name); g.drawImage(sc,0,0); }
+  if(mode==='scrap'){
+    const P=kz2PileCanvas();
+    if(P){ const ap=kz2Apex(c,0,0,W,H), k=(SPF.smile||1)/(SPF[name]||1), pw=P.c.width*k, ph=P.c.height*k;
+      const top=ap.y-ph*.8;
+      if(top<0){
+        // え の うえに はみでる ときは、うえに よゆうを つけた え に する（あしもと・まんなかは そのまま）
+        const ox=r[4]||0, padX=Math.abs(ox), padT=Math.ceil(-top)+2, c2=kz2Canvas(W+padX*2, H+padT), g2=c2.getContext('2d'), offX=padX+ox;
+        g2.drawImage(c, offX, padT); g2.drawImage(P.c, offX+ap.x-pw/2, padT+top, pw, ph);
+        c2._own=true; c2._spf=1; if(S.dead) grayOut(c2); return VAR_CACHE[key]=c2;
+      }
+      g.drawImage(P.c, ap.x-pw/2, top, pw, ph); }
+  } else {
+    const dmg=kz2Apply(hatC, mode, kz2YkSeed()+mode, kz2Kind());
+    g.drawImage(dmg,0,0);
+  }
+  if(S.dead) grayOut(c);
+  return VAR_CACHE[key]=c;
+};
+function shellKindSafe(){ return typeof shellKind==='function' && !!shellKind(); }
+
+/* ---------- つむり・こちゃ：から／こたつの 絵を こわす ---------- */
+function kz2ShellImg(spr){
+  const mode=kz2Mode(), r=SP_RAW[spr]; if(!r) return null;
+  const key=`s|${spr}|${mode}|${kz2YkSeed()}`; if(KZ2_CACHE[key]) return KZ2_CACHE[key];
+  const c=kz2Canvas(r[2],r[3]); c.getContext('2d').drawImage(atlas,r[0],r[1],r[2],r[3],0,0,r[2],r[3]);
+  return KZ2_CACHE[key] = mode ? kz2Apply(c, mode, kz2YkSeed()+mode, shellKind()) : c;
+}
+// からだと いっしょに かいた え：おかざりの ところだけ こわす
+function kz2WholeImg(spr){
+  const mode=kz2Mode(), r=SP_RAW[spr];
+  const key=`w|${spr}|${mode}|${kz2YkSeed()}`; if(KZ2_CACHE[key]) return KZ2_CACHE[key];
+  const full=kz2Canvas(r[2],r[3]), fg=full.getContext('2d',{willReadFrequently:true}); fg.drawImage(atlas,r[0],r[1],r[2],r[3],0,0,r[2],r[3]);
+  if(!mode) return KZ2_CACHE[key]=full;
+  const W=r[2], H=r[3], im=fg.getImageData(0,0,W,H), d=im.data;
+  const kz=kz2Canvas(W,H), kg=kz.getContext('2d'), ki=kg.createImageData(W,H);
+  const body=kz2Canvas(W,H), bg=body.getContext('2d'), bi=bg.createImageData(W,H);
+  const hairM=(r,g,b)=> r>175 && g>135 && b<185 && r-b>40;
+  for(let i=0;i<d.length;i+=4){ if(d[i+3]<10) continue; const r0=d[i],g0=d[i+1],b0=d[i+2];
+    const isBody = (typeof kabiSkin==='function' && kabiSkin(r0,g0,b0)) || hairM(r0,g0,b0);
+    const t = isBody ? bi : ki; t.data[i]=r0; t.data[i+1]=g0; t.data[i+2]=b0; t.data[i+3]=d[i+3]; }
+  kg.putImageData(ki,0,0); bg.putImageData(bi,0,0);
+  const dmg=kz2Apply(kz, mode, kz2YkSeed()+mode, shellKind());
+  const c=kz2Canvas(W,H), g=c.getContext('2d'); g.drawImage(body,0,0); g.drawImage(dmg,0,0);
+  return KZ2_CACHE[key]=c;
+}
+const _kz2_clearVariants = clearVariants;
+clearVariants = function(){ for(const k in KZ2_CACHE) if(k[0]!=='h') delete KZ2_CACHE[k]; return _kz2_clearVariants(); };
+
+/* ---------- ゆかに ちらばった かけら ---------- */
+function kz2Source(){
+  const k=kz2Kind();
+  if(k==='hat'||k==='ribbon'){ const c=kz2HatOnly('smile'); if(!c) return null; const [w]=spriteSize('smile'); return {c, px:w/SP.smile[2]}; }
+  const spr=SHELL_SPR[k].f, r=SP_RAW[spr]; if(!r) return null;
+  const c=kz2Canvas(r[2],r[3]); c.getContext('2d').drawImage(atlas,r[0],r[1],r[2],r[3],0,0,r[2],r[3]);
+  const [bw]=spriteSize('smile'), box=SHELL_BOX[k].f; return {c, px:bw*(box[1]-box[0])/r[2]};
+}
+function kz2Shards(){
+  const key='p|'+SPX+kz2Kind()+'|'+kz2YkSeed(); if(KZ2_CACHE[key]) return KZ2_CACHE[key];
+  const s=kz2Source(); if(!s) return null;
+  return KZ2_CACHE[key]={ps:kz2Pieces(s.c, kz2YkSeed()+'p', kz2Kind()), px:s.px, cw:s.c.width};
+}
+function kz2DrawShards(p, gather){
+  const sh=kz2Shards(); if(!sh) return;
+  const g=ctx, ds=depthScale(p.z), k=sh.px*ds, spread=sh.cw*k*.42*(1-gather*.8);
+  sh.ps.forEach((q,i)=>{
+    const x=p.x+q.dx*spread*1.6, z=p.z+(q.dz-.5)*spread*.45, rot=q.rot*(1-gather*.5);
+    g.save(); g.translate(x, z-q.h*k*.25); g.rotate(rot); g.scale(k*q.s, k*q.s*.8);
+    g.fillStyle='rgba(40,30,20,.18)'; g.beginPath(); g.ellipse(0, q.h*.45, q.w*.45, q.h*.12, 0, 0, 7); g.fill();
+    g.drawImage(q.c, -q.w/2, -q.h/2); g.restore();
+  });
+}
+const _kz2_meanItems = meanItems;
+meanItems = function(){
+  const out=_kz2_meanItems();
+  if(S.hat && (S.hat.st==='shard' || S.hat.st==='rep2') && S.hat.u!==undefined){
+    const p=toW(S.hat.u,S.hat.v), gather = S.hat.st==='rep2' ? clamp((M.kzGatherT||0)/KZ2_REP_T,0,1) : 0;
+    out.push({z:p.z, fn:()=>kz2DrawShards(p, gather)});
+  }
+  return out;
+};
+const KZ2_REP_T = 16;
+// つむり・こちゃ の ゴミおかざり：あたまの てっぺんに のせる
+const KZ2_APEX = {};
+const _kz2_drawShellPart = drawShellPart;
+drawShellPart = function(g, name, bottom, view){
+  if(S.hat && S.hat.st==='scrap'){
+    const A=sprInfo(name), P=kz2PileCanvas(); if(!A || !P) return;
+    const key=name+'|'+(A.img===atlas?'a':'v')+A.sx+'|'+A.sy+'|'+A.sw;
+    const ap=KZ2_APEX[key] || (KZ2_APEX[key]=kz2Apex(A.img, A.sx, A.sy, A.sw, A.sh));
+    const ax=-A.w/2+A.ox+ap.x*A.w/A.sw, ay=bottom-A.h+ap.y*A.h/A.sh, pw=P.c.width*P.px, ph=P.c.height*P.px;
+    g.save(); if(isDead()) g.filter='grayscale(1) brightness(.8)'; g.drawImage(P.c, ax-pw/2, ay-ph*.8, pw, ph); g.restore(); return;
+  }
+  return _kz2_drawShellPart(g, name, bottom, view);
+};
+
+/* ============================================================
+   v1.3.3 ひょうじょう・せりふ・じょうきょう の ずれ なおし
+   ============================================================ */
+
+/* ---- ぐあいが わるい ときの かお：「いきむ かお（strain）」は つかわない ---- */
+sadFace = function(){
+  if(S.health<25) return (T%6<3) ? 'worry' : 'blank';
+  if(S.health<45) return (T%8<4) ? 'worry' : 'blank';
+  if(S.mood<18)   return (T%6<2.5) ? 'cry3' : (T%6<4.5 ? 'worry' : 'angry');
+  return (T%7<3.5) ? 'worry' : (T%7<5.5 ? 'angry' : 'blank');
+};
+// わざと だした ひょうじょう（なおして もらって よろこぶ など）は くらく しない
+const _au_sadRemap = sadRemap;
+sadRemap = function(n){
+  if(M.expr && (M.exprT||0)>0 && (n===M.expr || n===(ALIAS[M.expr]||M.expr))) return n;
+  return _au_sadRemap(n);
+};
+
+/* ---- ないて いる／おかざりが ない ときは ゲスの いばり ゼリフを いわない ---- */
+function auDistress(){
+  if((M.tears||0)>.3) return true;
+  if(['cry3','squish','worry','cry'].includes(M.expr)) return true;
+  if(S.hat && ['gone','lost','held','taken','rep','shard','rep2'].includes(S.hat.st)) return true;
+  return false;
+}
+const AU_BRAG = new Set(['rebelIgnored','gIdle','gIdle2','ggIdle','vKindG','gHello']);
+const _au_say = say;
+say = function(key, opts={}){
+  if(typeof key==='string' && AU_BRAG.has(key) && !isDead() && auDistress()) return;
+  // すいじょう：おぼうしが ない ときに おちても「おぼうしさん まって」とは いわない
+  if(key==='suiFall' && !(S.hat && S.hat.st==='lost')) key='suiFallNoHat';
+  return _au_say(key, opts);
+};
+Object.assign(L, {
+  suiFallNoHat:["ゆぴゃあああ！？ おちた[のじぇ]ぇぇ！！","ごぼっ… たしゅけ… ごぼぼっ…！","おぼうしさんが ないと… うかべない[のじぇ]ぇぇ！"],
+});
+
+/* ---- すいじょう：おぼうしが ない ときは みずに ちかづかない ---- */
+const _au_goTo = goTo;
+goTo = function(x, z, then, speed, gait){
+  if(typeof isSuijo==='function' && isSuijo() && !isDead() && S.hat && S.hat.st!=='ok' && typeof waterAt==='function' && waterAt(x,z) && typeof suiShore==='function'){
+    const p=suiShore(x,z); if(p && !waterAt(p.x,p.z)){ x=p.x; z=p.z; }
+  }
+  return _au_goTo(x, z, then, speed, gait);
+};
+
+/* ---- かくれる ---- */
+// れいみゅは りぼんの なかには はいれない（かおを ふせて かくれる）
+SPECIES.reimu && Object.assign(SPECIES.reimu.L, {
+  hide:["ゆっくり かくれる[よ]… れいみゅは ここに いない[よ]…","み、みえない[よ]… れいみゅは いない[よ]…"],
+});
+// つむり・こちゃ：から／こたつの なかに ひっこむ（かおが かくれる）
+if(typeof drawShellPart==='function'){
+  const _au_drawShellPart = drawShellPart;
+  drawShellPart = function(g, name, bottom, view){
+    if(name==='hide' && typeof shellKind==='function' && shellKind()){
+      const A=sprInfo(name); if(A){ g.save(); g.translate(0, A.h*(shellKind()==='kotatsu'?.3:.26)); g.scale(1.06,1.06); _au_drawShellPart(g, name, bottom, 'f'); g.restore(); return; }
+    }
+    return _au_drawShellPart(g, name, bottom, view);
+  };
+}
+SPECIES.tsumuri && Object.assign(SPECIES.tsumuri.L, { hide:["からさんに ひっこむ[のじぇ]… {me}は いない[のじぇ]…","からさんの なかは あんぜん[なのじぇ]…"] });
+SPECIES.kocha && Object.assign(SPECIES.kocha.L, { hide:["こたちゅしゃんに もぐる[のじぇ]… ぬくぬく…","こちゃは いない[なのじぇ]… こたちゅしゃんの なか[なのじぇ]…"] });
+
+/* ---- から・こたつは「やぶれない」 ---- */
+SPECIES.tsumuri && SPECIES.tsumuri.words.unshift(['やぶけた','ひびが はいった'],['やぶれた','ひびの はいった'],['やぶれ','ひび']);
+SPECIES.kocha && SPECIES.kocha.words.unshift(['やぶけた','こわれた'],['やぶれた','こわれた'],['やぶれ','こわれ']);
+
+/* ---- ふだんの かお：ぐあいが わるくても「いきむ かお」に しない ---- */
+moodFace = function(){
+  if(S.health<25) return (T%6<3) ? 'worry' : 'blank';
+  if(S.health<45) return (T%8<3) ? 'worry' : (T%8<5 ? 'angry' : 'blank');
+  if(S.sleepy>78) return 'doze';
+  if(S.full<12) return 'cry3';
+  if(S.mood>72) return 'smile';
+  if(S.mood>48) return 'relax';
+  if(S.mood>28) return 'worry';
+  return 'angry';
+};
+
+/* ---- せりふに かおを あわせる（ひょうじょうの してい が ない とき だけ） ---- */
+const AU_HAPPY = /しあわ[せし]|うれし|ありがと|ゆわーい|もどっ|なおっ|にゃおっ|えへへ|ゆへへ|♪|💕|ぬくぬく|ぴかぴか|きれいきれい/;
+const AU_SAD = /いた[いぃ]|いちゃ|いだ|ゆんや|ひどい|ごぼ|たしゅけ|たすけ|やめ|どぼじ|ゆぐっ|ゆぇ|かえし|こわい|ゆぴゃ|ゆぎ|あぢゅ|あつ[いぃ]|さむ[いぃ]|ゆびぃ/;
+const AU_SKIP_ST = new Set(['sleep','nap','sink','eat','jitabata','bath','yaki','strain','poop','omo','kzRepair','trapped','box']);
+const _au_say2 = say;
+say = function(key, opts={}){
+  const r = _au_say2(key, opts);
+  try{
+    if(isDead() || AU_SKIP_ST.has(M.state) || (opts && opts.cls==='sleepy')) return r;
+    if(typeof RX==='function' && RX().broken>0) return r;
+    if(M.expr && (M.exprT||0)>0) return r;
+    const t = bubble && bubble.textContent || '';
+    if(AU_SAD.test(t)) express('cry3', 1.8);
+    else if(AU_HAPPY.test(t)) express('joy', 1.8);
+  }catch(e){}
+  return r;
+};
+
+/* ============================================================
+   v1.3.3 ゲスの こうどう
+   1 なかまの ごはんを よこどり
+   2 おうちを せんりょうして なかまを おいだす
+   3 しかられないと ようきゅうが どんどん エスカレート（しかって とおれば もとに もどる）
+   ============================================================ */
+Object.assign(L, {
+  gsSteal:["それは {me}の ごはん[なのじぇ]！ {o}は どけ[なのじぇ]！","ゆっへっへ！ {o}の ごはんは {me}の もの[なのじぇ]！","どけ[なのじぇ]！ {o}なんかに たべさせる ごはんは ない[のじぇ]！"],
+  gsStolenV:["{me}の ごはんさん… とられた[のじぇ]… ゆぇぇ…","かえして[ほしいのじぇ]！ {me}の ごはんさん かえして！","ど、どうして… {me}、おなか すいてる[のじぇ]…"],
+  gsHouse:["ここは {me}の おうちに した[のじぇ]！ {o}は でていけ[なのじぇ]！","おうちは ぜんぶ {me}の もの[なのじぇ]！ {o}は そとで ねる[のじぇ]！ ぷくーっ！","{o}は はいるな[なのじぇ]！ ここは {me}の ゆっくりぷれいす[なのじぇ]！"],
+  gsHouseV:["ゆぇぇ… {me}の おうち…","どうして… いっしょに ねたかった[のじぇ]…","おそと… さむい[のじぇ]…"],
+  // エスカレート（ほうっておかれる たびに ひどく なる）
+  rebelDemand1:["あまあま もってこい[なのじぇ]！ すぐで いいよ！ ぷくーっ！","{you}！ きこえてる[のじぇ]？ {me}を ゆっくり させる[のじぇ]！ すぐで いいよ！"],
+  rebelDemand2:["あまあま たくさん もってこい[なのじぇ]！ たくさんで いいよ！","{you}は {me}の どれい[なのじぇ]！ いうこと きく[のじぇ]！ ぷくーっ！","おうちも ごはんも ぜんぶ {me}の もの[なのじぇ]！ わかった[のじぇ]？"],
+  rebelDemand3:["いうこと きかない くそ{you}は せいっさい[なのじぇ]！ ぷくーっ！","さっさと しないと ゆっくり できなく して やる[のじぇ]！","{me}を おこらせたら どうなるか おしえて やる[のじぇ]！ ゆっへっへ！"],
+  rebelEscOk:["ゆ、ゆぅ… わかった[のじぇ]… もう いわない[のじぇ]…"],
+});
+function gs2On(){ return typeof gsOn==='function' ? gsOn() : (PS().gesu>=45 ? 1 : 0); }
+function gs2Busy(m){ return m.lifted || m.hidden || m.boxed || m.trapped || ['sleep','eat','fight','sink','jitabata','yaki','kzRepair','box','trapped'].includes(m.state); }
+
+/* ---- 3 エスカレート ---- */
+const _gs2_psRebel = psRebel;
+psRebel = function(kind){
+  const p=PS(), esc=p.esc||0;
+  const r=_gs2_psRebel(kind);
+  if(esc>0 && kind!=='food' && !isDead() && (p.rebelT||0)>0){ hush(); say('rebelDemand'+Math.min(3,esc), {cls:'shout'}); if(esc>=2){ M.puff=Math.max(M.puff||0,1); express('puku3',2.8); } }
+  return r;
+};
+// ほうっておいた（はんぱつの じかんぎれ）→ 1だん あがる。3だんめ では なまいきな ことを する
+const _gs2_psTick = psTick;
+psTick = function(dt){
+  const p=PS(), before=(p.rebelT||0)>0;
+  _gs2_psTick(dt);
+  if(before && (p.rebelT||0)<=0 && !p._scolded){
+    p.esc = Math.min(3,(p.esc||0)+1);
+    if(p.esc>=3 && typeof rxNamaiki==='function' && !isDead() && !M.lifted && M.state!=='sleep') setTimeout(()=>{ try{ rxNamaiki(); }catch(e){} }, 1500);
+  }
+  p._scolded=false;
+  // エスカレート ちゅうは わがままが ふえる
+  if((p.esc||0)>0 && p.gesu>=35 && !(p.rebelT>0) && M.state==='idle' && !M.lifted && !M.hidden && Math.random()<dt*p.esc*.004) psRebel(S.full<45?'demand':pick(['demand','refuse']));
+  // なにも ない ひが つづくと すこしずつ おさまる
+  p.escCalm=(p.escCalm||0)+dt; if(p.escCalm>600 && (p.esc||0)>0){ p.esc--; p.escCalm=0; }
+};
+const _gs2_psVoice = psVoice;
+psVoice = function(kind){
+  const p=PS(), rebel=(p.rebelT||0)>0, e0=p.esc||0;
+  const r=_gs2_psVoice(kind);
+  if(rebel){
+    if(kind==='scold'){
+      p._scolded=true;
+      if((p.rebelT||0)<=0 && M.expr==='cry3'){ p.esc=0; p.escCalm=0; if(e0>=2) setTimeout(()=>{ if(!isDead()) say('rebelEscOk',{cls:'soft'}); }, 1800); }   // しかって とおった
+    } else if(kind==='kind'||kind==='special'){ p.esc=Math.min(3,e0+1); }     // あまやかすと ひどくなる
+  }
+  return r;
+};
+// わがまま ちゅうに あまあまを あげる → あまやかし
+const _gs2_giveFood = giveFood;
+giveFood = function(type){ const p=PS(); if(type==='amaama' && (p.rebelT||0)>0){ p.esc=Math.min(3,(p.esc||0)+1); } return _gs2_giveFood(type); };
+
+/* ---- 1 ごはんの よこどり ---- */
+function gs2StealTick(dt){
+  if(S.yk.length<2 || isDead() || !gs2On() || gs2Busy(M) || M.gsTask || !S.food.length) return;
+  if(!['idle','move','graze','admire','explore'].includes(M.state) && !(M.next && /ごはん/.test(M.next.label||''))) return;
+  if(!chance(dt*.35)) return;
+  const me=YK_I, myId=S.yk[me].id;
+  for(let j=0;j<S.yk.length;j++){
+    if(j===me || S.yk[j].dead) continue; const o=MS[j]; if(!o || o.lifted || o.hidden) continue;
+    const eating = o.state==='eat' && o.eatItem;
+    const going = o.next && /ごはん/.test(o.next.label||'');
+    if(!eating && !going) continue;
+    const f = eating ? o.eatItem : (()=>{ let best=null,bd=1e9; for(const q of S.food){ const fp=foodPos(q), d=Math.hypot(fp.x-o.x,fp.z-o.z); if(d<bd){bd=d;best=q;} } return best; })();
+    if(!f || S.food.indexOf(f)<0) continue;
+    const vid=S.yk[j].id, e0 = eating ? {x:clamp(o.x+(M.x>o.x?1:-1)*46,XMIN,XMAX), z:o.z} : eatSpot(f); M.gsTask='steal'; M.gsTaskT=T;
+    express('doya',1.4);
+    goTo(e0.x, e0.z, {fn:()=>{
+      M.gsTask=null; if(isDead() || S.food.indexOf(f)<0){ express('angry',1.6); return; }
+      const vj=S.yk.findIndex(y=>y.id===vid); const myI=YK_I, myN=ykLabel(S.yk[myI]);
+      const vn = vj>=0 ? ykLabel(S.yk[vj]) : '';
+      if(vj>=0) ykDo(vj, ()=>{ if(isDead()) return; const wasEat=M.eatItem===f; if(wasEat) M.eatItem=null; if(wasEat || (M.next && /ごはん/.test(M.next.label||''))){ M.next=null; setState('idle',3); express('cry3',2.8); M.tears=2.2; psAdd('stress',6); psAdd('kyofu',2);
+        goTo(clamp(M.x+(M.x>MS[myI].x?1:-1)*70,XMIN,XMAX), M.z, {fn:()=>{ setState('idle',3); say('gsStolenV',{cls:'soft'}); express('cry3',2.4); M.tears=2; }}, 90, 'hop'); } });
+      if(vj>=0) relAdd(myI, vj, -6, true);
+      const e=eatSpot(f); M.x=e.x; M.z=e.z; M.face=e.face; M.eatItem=f; M.yuckSaid=false; setState('eat', f.type==='amaama'?2.6:3.6);
+      express('doya',2); say('gsSteal',{o:vn||'みんな', cls:'shout'}); SFX.eat && SFX.eat();
+      note(`${myN}が ${vn?vn+'の ':''}ごはんを よこどりした。`);
+    }, label:'ごはんを よこどりしに いく'}, 110, 'hop');
+    return;
+  }
+}
+
+/* ---- 2 おうちの せんりょう ---- */
+let HOUSE_OWNER=null;   // おうちを ひとりじめ している ゲスの id
+function gs2HouseOwnerValid(){
+  if(!HOUSE_OWNER) return false;
+  const i=S.yk.findIndex(y=>y.id===HOUSE_OWNER); if(i<0 || S.yk[i].dead || !objsOf('house').length){ HOUSE_OWNER=null; return false; }
+  const g=(S.yk[i].ps||{}).gesu||0; if(g<45){ HOUSE_OWNER=null; return false; }
+  return true;
+}
+const _gs2_sleepSpot = sleepSpot;
+sleepSpot = function(){
+  const s=_gs2_sleepSpot();
+  if(s.kind==='house' && gs2HouseOwnerValid()){
+    const me=(S.yk[YK_I]||{}).id;
+    if(me===HOUSE_OWNER){ const h=objsOf('house')[0], p=objPos(h); return {x:p.x, z:Math.min(FLOOR_BOT-2,p.z+3), kind:'house'}; }   // まんなかを ひとりじめ
+    // おいだされた子は そとで ねる
+    const h=objsOf('house')[0], p=objPos(h), side=(YK_I%2?1:-1);
+    return {x:clamp(p.x+side*(90+YK_I*14),XMIN,XMAX), z:clamp(p.z+18,FLOOR_TOP+6,FLOOR_BOT-4), kind:'floor'};
+  }
+  return s;
+};
+function gs2HouseTick(dt){
+  if(S.yk.length<2 || isDead() || !gs2On() || gs2Busy(M) || M.gsTask || !['idle','move','graze','admire','explore'].includes(M.state)) return;
+  const h=objsOf('house')[0]; if(!h) return;
+  const me=YK_I, myId=S.yk[me].id, p=objPos(h);
+  // おうちの そばに いる／おうちで ねている なかまを みつけたら おいだしに いく
+  if(!chance(dt*.06)) return;
+  const vic=[]; for(let j=0;j<S.yk.length;j++){ if(j===me||S.yk[j].dead) continue; const o=MS[j]; if(!o||o.lifted||o.hidden) continue; if(Math.hypot(o.x-p.x,(o.z-p.z)*2)<70) vic.push(j); }
+  if(!vic.length && HOUSE_OWNER===myId) return;
+  M.gsTask='house'; M.gsTaskT=T;
+  goTo(p.x, Math.min(FLOOR_BOT-2,p.z+3), {fn:()=>{
+    M.gsTask=null; if(isDead()) return;
+    HOUSE_OWNER=myId;
+    const names=[];
+    for(const j of vic){ if(S.yk[j].dead) continue; names.push(ykLabel(S.yk[j]));
+      ykDo(j, ()=>{ if(M.state==='sleep') setState('idle',2); M.wakeGrace=Math.max(M.wakeGrace||0,20); express('cry3',2.6); M.tears=2; psAdd('stress',7); psAdd('kyofu',2);
+        const side=(M.x>=p.x?1:-1); goTo(clamp(p.x+side*110,XMIN,XMAX), clamp(M.z+14,FLOOR_TOP+6,FLOOR_BOT-4), {fn:()=>{ setState('idle',3); say('gsHouseV',{cls:'soft'}); express('cry3',2.4); M.tears=2; }}, 90, 'hop'); });
+      relAdd(me, j, -5, true); }
+    express('puku3',2.6); M.puff=Math.max(M.puff||0,.9); say('gsHouse',{o:names[0]||'みんな', cls:'shout'});
+    note(`${ykLabel(S.yk[YK_I])}が おうちを ひとりじめ して、${names.length?names.join('・')+'を ':''}おいだした。`);
+  }, label:'おうちを ひとりじめ しに いく'}, 80, 'hop');
+}
+const _gs2_update = update;
+update = function(dt){ _gs2_update(dt); const d=Math.min(dt,.1); ykEach(()=>{ if(M.gsTask && T-(M.gsTaskT||0)>25) M.gsTask=null; gs2StealTick(d); gs2HouseTick(d); }); };
+
+/* ============================================================
+   v1.3.3 おくすり（おせわ → おくすり）
+   ・ゆかび治療薬：ゆかびを なおす（いちばん さいごの「げきつう」は もう まにあわない）
+     ※ ゆかびは 治療薬で しか なおらない（こそげとるは なくした）
+   ・非ゆっくり症防止薬：きいている あいだ 非ゆっくり症（こころが こわれる／おれる）に ならない（7にち）
+   ・ゆかび防止薬：きいている あいだ ゆかびに ならない（7にち）
+   ・表皮硬化薬：あんよの きず・ハンマー などが きき にくく なる（7にち／しなない わけでは ない）
+   ・おくすりは えらぶと どうぐに なり、ゆっくりを タップして つかう（ハンマーと おなじ）
+   ============================================================ */
+const MED_DAYS = 7, MED_MIN = MED_DAYS*1440;
+const MED = {
+  kabiCure:{ic:'🧪', name:'ゆかび<br>治療薬', desc:'ゆかびを なおす'},
+  noBroken:{ic:'💊', name:'非ゆっくり症<br>防止薬', desc:'非ゆっくり症に ならなくなる'},
+  noKabi:{ic:'🛡️', name:'ゆかび<br>防止薬', desc:'ゆかびに ならなくなる'},
+  hard:{ic:'🪨', name:'表皮<br>硬化薬', desc:'あんよの きず・たたかれるのに つよくなる'},
+};
+Object.assign(L, {
+  medDrink:["ゆ…？ にがい[のじぇ]…","おくすりさん… ごっくん[なのじぇ]…","ゆぅ… へんな あじ[なのじぇ]…"],
+  medDrinkG:["にがい[のじぇ]！ こんなの のませるな[なのじぇ]！ ぷくーっ！","ぺっ！ あまあまに しろ[なのじぇ]！"],
+  medKabiOk:["ゆわぁ… かゆく ない[のじぇ]！ ゆっくり できる[のじぇ]！","みどりの ぽつぽつ… なくなった[のじぇ]！"],
+  medHard:["ゆ？ からだが かちかち[なのじぇ]…","{me}、つよく なった[のじぇ]！"],
+});
+function medP(){ const p=PS(); if(!p.med) p.med={}; return p.med; }
+function medOn(k){ return (medP()[k]||0) > 0; }
+function medLeftText(k){ const m=medP()[k]||0; return m>0 ? `のこり ${Math.max(1,Math.ceil(m/1440))}にち` : ''; }
+
+/* ---- のむ ---- */
+function medUse(k){
+  closeSheet();
+  if(isDead()){ toast('もう のめない…'); return; }
+  const p=PS(), hp=headPos(), g=(p.gesu||0)>=45;
+  if(k==='kabiCure'){
+    const st = typeof kabiStage==='function' ? kabiStage(p) : (p.kabi>=100?1:0);
+    if(!st){ toast('いまは ゆかびに なっていない みたい'); return; }
+    if(st>=5){ toast('ゆかびが からだじゅうに まわっていて… もう まにあわない…'); return; }
+    p.kabi=0; p.kbSt=0; p.wet=0; if(typeof KABI_CACHE!=='undefined') for(const x in KABI_CACHE) delete KABI_CACHE[x];
+    express('joy',2.4); jump(220); say('medKabiOk',{cls:'soft'}); burst('spark',hp.x,hp.top+10,10,{up:40});
+    note(`${S.me||'まりちゃ'}に ゆかび治療薬を つかった。ゆかびが きえた。`); save(); return;
+  }
+  medP()[k] = MED_MIN;
+  if(k==='hard'){ express('doya',2); say('medHard'); }
+  else { express(g?'angry':'worry',2); say(g?'medDrinkG':'medDrink',{cls:g?'shout':'soft'}); }
+  fxText('ごくっ', hp.x+26, hp.top, {size:13, color:'#6a73b0'});
+  note(`${S.me||'まりちゃ'}に「${MED[k].name.replace('<br>','')}」を のませた（${MED_DAYS}にち きく）。`); save();
+}
+
+/* ---- じかんで へる ---- */
+const _md_tickStats = tickStats;
+tickStats = function(minutes, awake){
+  const r=_md_tickStats(minutes, awake);
+  if(!isDead()){
+    const m=medP(); for(const k of ['noBroken','noKabi','hard']) if(m[k]>0){ m[k]=Math.max(0,m[k]-minutes); if(!m[k]) note(`${S.me||'まりちゃ'}の「${MED[k].name.replace('<br>','')}」の ききめが きれた。`); }
+    if(m.noKabi>0){ const p=PS(); if((p.kabi||0)<100) p.kabi=0; }
+  }
+  return r;
+};
+/* ---- 非ゆっくり症防止薬・表皮硬化薬 ---- */
+function medTick(dt){
+  if(isDead()) return;
+  const p=PS();
+  if(medOn('noBroken') && !p.broken){ if((p.stress||0)>=99) p.stress=99; if(typeof RX==='function'){ const r=RX(); if(r.fear>=91) r.fear=90.9; } }
+  // ひょうひ こうか：あんよの きずが ふえる ときは はんぶんに
+  if(medOn('hard')){ const a=S.anyo||0, b=M._anyoPrev; if(b!==undefined && a>b) S.anyo = b + (a-b)*.5; }
+  M._anyoPrev=S.anyo||0;
+}
+// 非ゆっくり症防止薬：こころが こわれる（ひゆっくりしょう）／こころが おれる（はんのうの さいごの だんかい）を どちらも ふせぐ
+const _md_byBrokenTick = byBrokenTick;
+byBrokenTick = function(dt){ const p=PS(); if(medOn('noBroken') && !p.broken){ if((p.stress||0)>=99) p.stress=99; return; } return _md_byBrokenTick(dt); };
+const _md_psAdd = psAdd;
+psAdd = function(k, d){ const r=_md_psAdd(k, d); if(k==='stress' && medOn('noBroken')){ const p=PS(); if(!p.broken && p.stress>99) p.stress=99; } return r; };
+if(typeof rxStage==='function'){ const _md_rxStage=rxStage; rxStage=function(r){ const st=_md_rxStage(r); if(st===6 && medOn('noBroken')){ if(r.fear>91) r.fear=91; return 4; } return st; }; }
+const _md_update = update;
+update = function(dt){ _md_update(dt); ykEach(()=>medTick(Math.min(dt,.1))); };
+/* ---- ひょうひ こうか：たたく・さす・でこぴん などが きき にくい ---- */
+const MED_PHYS = new Set(['hammer','flick','pick','stab','braid','hurt','trap','sumo','burn','fall','shock']);
+const _md_hurt = hurt;
+hurt = function(n, cause){
+  if(!isDead() && medOn('hard') && MED_PHYS.has(cause)){
+    n = n*(cause==='burn'?.6:.5);
+    if(cause!=='burn'){ const b=mariBox(); fxText(pick(['かちっ','こつん']), b.x+b.w*.3, b.top+8, {size:12, color:'#7a7a8a'}); }
+  }
+  return _md_hurt(n, cause);
+};
+if(typeof anyoHurt==='function'){ const _md_anyo=anyoHurt; anyoHurt=function(n,cause){ if(!isDead() && medOn('hard') && n>0) n*=.5; return _md_anyo(n,cause); }; }
+
+/* ---- おせわ シートに「おくすり」 ---- */
+const _md_openSubSheet = openSubSheet;
+openSubSheet = function(kind, btn){
+  const r=_md_openSubSheet(kind, btn);
+  if(sheetKind!=='play') return r;
+  // ゆかびは こそげとれない（くすりで なおす）
+  sheet.querySelectorAll('button').forEach(b=>{ if(/こそげ/.test(b.textContent)) b.remove(); });
+  sheet.querySelectorAll('h3.sub').forEach(h=>{ if(/なおして/.test(h.textContent)){ const d=h.nextElementSibling; if(d && d.tagName==='DIV' && !d.querySelector('button')){ d.remove(); h.remove(); } } });
+  if(kind!=='care' || isDead()) return r;
+  const h=document.createElement('h3'); h.className='sub'; h.textContent='おくすり';
+  const box=document.createElement('div'); box.className='care-top';
+  for(const [k,d] of Object.entries(MED)){
+    const x=document.createElement('button'); x.type='button';
+    const sub=d.desc;
+    const nm = d.name.split('<br>').some(t=>t.length>5) ? `<span style="font-size:.86em;letter-spacing:-.02em">${d.name}</span>` : d.name;
+    x.innerHTML=`<span class="ic">${d.ic}</span>${nm}<small>${sub}</small>`;
+    x.addEventListener('click',()=>setTool('med_'+k)); box.appendChild(x);
+  }
+  const top=sheet.querySelector('.care-top');
+  if(top){ top.insertAdjacentElement('afterend', box); box.insertAdjacentElement('beforebegin', h); }
+  else { const help=sheet.querySelector('.edit-help'); help.parentNode.insertBefore(h, help); help.parentNode.insertBefore(box, help); }
+  return r;
+};
+
+/* ---- おくすりの どうぐ：えらぶと カーソルが おくすりに なり、ゆっくりを タップして つかう ---- */
+for(const [k,d] of Object.entries(MED)) TOOL_DEF['med_'+k] = {name:d.name.replace('<br>',''), cat:'med', help:'ゆっくりを タップすると つかいます（'+d.desc+'）'};
+const _md_toolDown = toolDown;
+toolDown = function(e,p){
+  const k=TOOL.cur; if(!k || !k.startsWith('med_')) return _md_toolDown(e,p);
+  TOOL.px=p.x; TOOL.py=p.y; TOOL.over=true;
+  if(isDead()){ toast('もう のめない…'); return; }
+  if(!hitMari(p.x,p.y)) return;
+  medUse(k.slice(4));
+};
+const _md_drawToolCursor = drawToolCursor;
+drawToolCursor = function(g,k,x,y){
+  if(!k || !k.startsWith('med_')) return _md_drawToolCursor(g,k,x,y);
+  const d=MED[k.slice(4)]; g.save(); g.translate(x,y); g.font='36px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif'; g.textAlign='center'; g.textBaseline='middle'; g.fillText(d.ic, 6, -6); g.restore();
+};
+const _md_toolIcon = toolIcon;
+toolIcon = function(k){
+  if(!k || !k.startsWith('med_')) return _md_toolIcon(k);
+  const c=document.createElement('canvas'); c.width=104; c.height=80; const g=c.getContext('2d'); g.font='40px sans-serif'; g.textAlign='center'; g.textBaseline='middle'; g.fillText(MED[k.slice(4)].ic,52,42); return c;
+};
+/* ---- にっし：きいている おくすり ---- */
+if(typeof psHTML==='function'){
+  const _md_psHTML = psHTML;
+  psHTML = function(){
+    const h=_md_psHTML(), on=['noBroken','noKabi','hard'].filter(k=>medOn(k));
+    return h + (on.length ? `<p class="memo" style="font-size:12.5px">おくすり：${on.map(k=>MED[k].name.replace('<br>','')+'（'+medLeftText(k)+'）').join('、')}</p>` : '');
+  };
+}
+
+/* ============================================================
+   v1.3.3 おかざり はそんの ながれ
+   ふつう →（やぶる／ハンマー）→ いちぶ けっそん・ひび →（もういちど）→ ばらばら・こなごな
+   → ぺーろぺーろ かきあつめ → ゴミおかざりを のせる／あきらめる
+   ・おかざりが きずついて いると ふまんげな かおが ずっと おおく なる
+   ============================================================ */
+Object.assign(L, {
+  kzShatter:["おぼうしさんが… ばらばらに なっちゃった[のじぇ]ぇぇ！！ ゆんやぁぁぁ！！","ゆぎゃぁぁ！！ {me}の おぼうしさんがぁぁ！！","うそ[なのじぇ]… うそ[なのじぇ]ぇぇ…！"],
+  kzGather:["ぺーろぺーろ… あつめる[のじぇ]…","おぼうしさん… もとに もどって[ほしいのじぇ]… ぺーろぺーろ…","ひっぐ… ぜんぶ… ひろう[のじぇ]…"],
+  kzScrapOn:["…これで いい[のじぇ]… {me}の おぼうしさん[なのじぇ]…","ゆへ… ゆへへ… おぼうしさん、もどった[のじぇ]…"],
+  kzGiveUp2:["もう… もどらない[のじぇ]… ゆぇぇぇぇん！！","{me}… おぼうしさんの ない ゆっくりに なっちゃった[のじぇ]…"],
+  kzScrapSad:["おぼうしさん… ぼろぼろ[なのじぇ]…","みんなに わらわれちゃう[のじぇ]…","…ゆっくり… できない[のじぇ]…"],
+  kzDmgSad:["おぼうしさん… いたそう[なのじぇ]…","ゆぅ… おぼうしさんが…","{me}の おぼうしさん… もとに もどらない[のじぇ]…？"],
+});
+SPECIES.tsumuri && Object.assign(SPECIES.tsumuri.L, {
+  kzShatter:["からさんが… こなごなに なっちゃった[のじぇ]ぇぇ！！","ゆぎゃぁぁ！！ つむりの からさんがぁぁ！！ はだかんぼ[なのじぇ]ぇ！！"],
+  kzGather:["ぺーろぺーろ… かけらさん… あつめる[のじぇ]…","からさん… くっついて[ほしいのじぇ]…"],
+});
+SPECIES.kocha && Object.assign(SPECIES.kocha.L, {
+  kzShatter:["こたちゅしゃんが… こなごなに なっちゃった[のじぇ]ぇぇ！！","さむい[のじぇ]ぇ！ こたちゅしゃぁぁん！！"],
+  kzGather:["ぺーろぺーろ… こたちゅしゃん… あちゅめる[のじぇ]…"],
+});
+function kz3Kind(){ return typeof shellKind==='function' && shellKind() ? 'shell' : 'cloth'; }
+function kz3Shatter(){
+  if(isDead() || !S.hat) return;
+  const b=mariBox(), side=(M.face||1), fx0=clamp(M.x+side*48*depthScale(M.z),XMIN,XMAX), fz=clamp(M.z+8,FLOOR_TOP+6,FLOOR_BOT-4), uv=toUV(fx0,fz);
+  if(M.state==='kzRepair') setState('idle',1);
+  S.hat={st:'shard', u:uv.u, v:uv.v}; FLOOR_HAT=null; clearVariants();
+  SFX.rip && SFX.rip(); M.shakeScreen=.3;
+  fxText(kz3Kind()==='shell' ? 'ぱりーん！！' : 'びりびりびりっ！！', b.x+rnd(-10,10), b.top-4, {size:20, color:'#3d2f22'});
+  for(let k=0;k<10;k++) fx('scrap', b.x+rnd(-18,18), b.top+rnd(4,14), {vx:rnd(-80,80), vy:-rnd(50,130), g:260, max:1.3, rot:rnd(0,6), vr:rnd(-8,8)});
+  express('cry',5); M.tears=5; jump(260); SFX.cry && SFX.cry(); sad(40); psAdd && psAdd('stress',15);
+  say('kzShatter',{cls:'shout',t:3}); note(`${S.me||'まりちゃ'}の おかざりが ばらばらに なった…。`); save();
+  const id=ykIdNow(); setTimeout(()=>ykDoById(id, ()=>{ if(!isDead() && S.hat && S.hat.st==='shard' && !M.lifted) kz3GatherBegin(); }), 2800);
+}
+function kz3GatherBegin(){
+  const p=toW(S.hat.u,S.hat.v), side=M.x<p.x?-1:1;
+  goTo(clamp(p.x+side*30*depthScale(p.z),XMIN,XMAX), p.z, {fn:()=>{
+    if(isDead() || !S.hat || S.hat.st!=='shard') return;
+    S.hat.st='rep2'; setState('kzRepair2', KZ2_REP_T); M.kzGatherT=0; M.kzLickT=0; M.face=p.x>M.x?1:-1;
+    express('worry',3); say('kzGather',{cls:'soft'}); save();
+  }, label:'ばらばらの おかざりを あつめに いく'}, 40);
+}
+function kz3GatherEnd(){
+  const p=PS(), score=(p.natsu||0)*.5+(p.kashi||0)*.5-(p.gesu||0)*.4-(p.stress||0)*.3+rnd(-15,15);
+  setState('idle',3);
+  if(score>=4){
+    S.hat={st:'scrap'}; clearVariants(); express('worry',3.5); M.tears=2.5;
+    say('kzScrapOn',{cls:'soft',t:3.2}); note(`${S.me||'まりちゃ'}が かきあつめた ゴミみたいな おかざりを あたまに のせた…。`);
+  } else {
+    S.hat={st:'gone'}; clearVariants(); express('cry3',4); M.tears=4.5; jump(120);
+    say('kzGiveUp2',{cls:'shout',t:3.2}); psAdd && psAdd('stress',10); note(`${S.me||'まりちゃ'}は おかざりを あきらめた…。`);
+  }
+  save();
+}
+const _kz3_updateBrain = updateBrain;
+updateBrain = function(dt){
+  if(M.state==='kzRepair2'){
+    if(!S.hat || S.hat.st!=='rep2'){ setState('idle',2); return; }
+    M.stT+=dt; M.kzGatherT=(M.kzGatherT||0)+dt; M.kzLickT-=dt;
+    const p=toW(S.hat.u,S.hat.v); M.face=p.x>M.x?1:-1;
+    M.sq=.04+Math.abs(Math.sin(M.stT*6))*.05; M.tilt=Math.sin(M.stT*6)*.05*M.face;
+    if(M.kzLickT<=0){ M.kzLickT=rnd(.8,1.3); fxText(pick(['ぺーろぺーろ','ぺーろ…','ずり…ずり…']), p.x+rnd(-14,14), p.z-22, {size:12, color:'#c0607a'}); }
+    if(bubbleT<=0 && chance(dt*.22)) say('kzGather',{cls:'soft'});
+    if(M.stT>M.stDur) kz3GatherEnd();
+    return;
+  }
+  return _kz3_updateBrain(dt);
+};
+const _kz3_rawSprite = rawSprite;
+rawSprite = function(){ if(!isDead() && !M.lifted && M.state==='kzRepair2') return 'side'; return _kz3_rawSprite(); };
+const _kz3_statusText = statusText;
+statusText = function(){
+  if(!isDead() && S.hat){
+    if(M.state==='kzRepair2') return 'ばらばらの おかざりを ぺーろぺーろ かきあつめている…';
+    if(S.hat.st==='shard') return 'おかざりが ばらばらに なってしまった…';
+    if(S.hat.st==='scrap') return 'ゴミみたいな おかざりを のせている…';
+  }
+  return _kz3_statusText();
+};
+// もちあげられたり したら また あとで あつめに いく
+const _kz3_tick = update;
+update = function(dt){ _kz3_tick(dt); ykEach(()=>{
+  if(isDead() || !S.hat) return;
+  if(S.hat.st==='shard' && M.state==='idle' && !M.lifted && chance(Math.min(dt,.1)*.15)) kz3GatherBegin();
+  if(S.hat.st==='rep2' && M.state!=='kzRepair2' && !M.lifted && M.state==='idle') S.hat.st='shard';
+  if(S.hat.st==='scrap' && bubbleT<=0 && M.state==='idle' && chance(Math.min(dt,.1)*.012)){ say('kzScrapSad',{cls:'soft'}); express('worry',2.5); }
+  if((S.hat.st==='torn'||S.hat.st==='burnt') && bubbleT<=0 && M.state==='idle' && chance(Math.min(dt,.1)*.01)){ say('kzDmgSad',{cls:'soft'}); express('angry',2.4); }
+}); };
+// おかざりが きずついて いると、ふだんの かおは ほぼ ふまんげ
+const _kz3_sadMode = sadMode;
+sadMode = function(){ return _kz3_sadMode() || (!S.dead && S.hat && ['torn','burnt','scrap','shard','rep2','gone'].includes(S.hat.st)); };
+const _kz3_moodFace = moodFace;
+moodFace = function(){ if(S.hat && ['torn','burnt','scrap'].includes(S.hat.st) && S.health>=25){ const m=T%9; return m<3.5?'worry':m<6?'angry':m<7.5?'blank':'cry3'; } return _kz3_moodFace(); };
+// ほかの ゆっくりから みても「おかざりが ない」（ゴミおかざりも ばかに される）
+if(typeof gyNoKazari==='function'){ const _kz3_no=gyNoKazari; gyNoKazari=function(y){ return (y && y.hat && ['shard','rep2','scrap'].includes(y.hat.st)) || _kz3_no(y); }; }
+// ハンマー：から・こたつに あたると ひび → こなごな（とんでいかない）
+const _kz3_gyHammer = gyHammer;
+gyHammer = function(c){
+  const part = typeof hitPart==='function' ? hitPart() : {part:'face'};
+  const shell = typeof shellKind==='function' && shellKind() && S.hat && (S.hat.st==='ok'||S.hat.st==='torn'||S.hat.st==='burnt');
+  if(!(shell && part.part==='hat' && c>=.35)) return _kz3_gyHammer(c);
+  const hp=hitPart; hitPart=()=>({part:'face', dx:0}); try{ _kz3_gyHammer(c); } finally{ hitPart=hp; }
+  if(isDead()) return;
+  if(S.hat.st==='ok' && c>=.5) tearHat();
+  else if(S.hat.st!=='ok' && c>=.7) kz3Shatter();
+};
+
+/* ============================================================
+   v1.3.3 ライト：ひるまは ライトが きえていても まどの ひかりで あかるい
+   ・くらい ＝ ライトが きえていて、かつ よる
+   ・ひるに ライトを けしても ねない（よるは いままでどおり）
+   ============================================================ */
+isDark = function(){ return !S.lamp && isNight(); };
+const _lt_roomOverlays = roomOverlays;
+roomOverlays = function(){
+  if(!S.lamp && !isNight()){ const keep=S.lamp; S.lamp=true; try{ const o=_lt_roomOverlays(); o.push([60,60,80,.1]); return o; } finally{ S.lamp=keep; } }
+  return _lt_roomOverlays();
+};
+toggleLamp = function(){
+  S.lamp=!S.lamp; SFX.click();
+  toast(S.lamp?'ライトをつけた':'ライトをけした');
+  if(!S.lamp){
+    if(isNight()){ if(!M.lifted && M.state!=='sleep'){ say('dark',{cls:'sleepy'}); setState('idle',1.5); } note('ライトをけした。'); }
+    else note('ライトをけした（ひるまは まどの ひかりで あかるい）。');
+  }
+  else if(M.state==='sleep' && isNight()){ setState('idle',2); M.h=0; express('wary',1.8); say('bright'); note('ライトがついて おきた。'); }
+};
+
+/* ============================================================
+   v1.3.3 じどうそうじき（もようがえ → くらし）
+   ・まるい おそうじロボが うんうんを みつけて すいとる（ゆかが きれいに）
+   ・ステーションの ポンプで、おいけが よごれたら みずを かえる
+   ・るすの あいだも うごく
+   ============================================================ */
+Object.assign(OBJ, {
+  cleaner:{name:'じどうそうじき', cat:'くらし', max:1, s:1.6, fp:[30,10], b:[-24,-44,24,6], dyn:true, desc:'うんうんの そうじと みずかえを じどうで'},
+});
+Object.assign(L, {
+  robotSee:["ゆ？ なんか うごいてる[のじぇ]…","ゆっ！ まるい さん[なのじぇ]！ どこ いく[のじぇ]？","うぃーん… って いってる[のじぇ]…"],
+  robotG:["じゃま[なのじぇ]！ {me}の まえを とおるな[なのじぇ]！ ぷくーっ！"],
+});
+function cleanerObj(){ return objsOf('cleaner')[0] || null; }
+// ロボの いち（ステーションの まえ が ホーム）
+function robotHome(o){ const p=objPos(o); return {x:p.x+30*depthScale(p.z), z:Math.min(FLOOR_BOT-3,p.z+6)}; }
+function robotState(o){ if(!o._r){ const h=robotHome(o); o._r={x:h.x, z:h.z, tx:null, tz:null, t:0, mode:'home', ang:0, pump:0}; } return o._r; }
+
+/* ---- え ---- */
+function drawRobot(g, R, ds){
+  g.save(); g.translate(R.x, R.z); g.scale(ds, ds);
+  g.fillStyle='rgba(30,30,40,.22)'; g.beginPath(); g.ellipse(0,1,15,4.5,0,0,7); g.fill();
+  const gr=g.createLinearGradient(0,-9,0,0); gr.addColorStop(0,'#fbfbfd'); gr.addColorStop(1,'#c9ccd6');
+  g.fillStyle=gr; g.strokeStyle='rgba(70,75,95,.6)'; g.lineWidth=1;
+  g.beginPath(); g.ellipse(0,-3,14,6,0,0,7); g.fill(); g.stroke();
+  g.fillStyle='#d6dae4'; g.fillRect(-14,-3,28,3); g.beginPath(); g.ellipse(0,0,14,6,0,0,Math.PI); g.fill(); g.stroke();
+  g.fillStyle='#55607a'; g.beginPath(); g.ellipse(0,-4.5,6,2.4,0,0,7); g.fill();
+  const on = R.mode!=='home';
+  g.fillStyle = on ? (Math.sin(T*8)>0?'#7fe08a':'#4fb85c') : '#9aa3b5'; g.beginPath(); g.arc(4,-5,1.2,0,7); g.fill();
+  // ブラシ
+  if(on){ g.strokeStyle='rgba(120,110,90,.8)'; g.lineWidth=.8; const a=T*14; for(let k=0;k<3;k++){ const t=a+k*2.1; g.beginPath(); g.moveTo(-11,1); g.lineTo(-11+Math.cos(t)*4, 1+Math.sin(t)*1.5); g.stroke(); } }
+  g.restore();
+}
+DRAW.cleaner = (g,o)=>{
+  const R=robotState(o);
+  g.fillStyle='rgba(40,30,20,.18)'; g.beginPath(); g.ellipse(0,2,22,5,0,0,7); g.fill();
+  // ステーション
+  const gr=g.createLinearGradient(-18,0,18,0); gr.addColorStop(0,'#c9cdd6'); gr.addColorStop(.5,'#f4f5f8'); gr.addColorStop(1,'#bfc3cd');
+  g.fillStyle=gr; g.strokeStyle='rgba(70,75,95,.6)'; g.lineWidth=1;
+  rr(g,-18,-30,36,30,6); g.fill(); g.stroke();
+  // みずの タンク
+  g.fillStyle='rgba(170,215,240,.75)'; rr(g,-13,-40,26,13,4); g.fill(); g.stroke();
+  const lv = .35+.5*(1-Math.min(1,(S.pondDirt||0)/100));
+  g.fillStyle='rgba(90,160,215,.8)'; rr(g,-11,-29-10*lv,22,10*lv,3); g.fill();
+  if(R.pump>0){ g.fillStyle='rgba(255,255,255,.8)'; for(let k=0;k<3;k++){ const y=-30-((T*30+k*6)%12); g.beginPath(); g.arc(-6+k*6,y,1.3,0,7); g.fill(); } }
+  // ひょうじ
+  g.fillStyle='#2f3a48'; rr(g,-12,-22,24,9,2); g.fill();
+  g.fillStyle = R.mode!=='home' ? '#7fe08a' : '#9ad0f0'; g.font='bold 6px sans-serif'; g.textAlign='center';
+  g.fillText(R.mode==='home' ? (R.pump>0?'みず':'ZZZ') : 'おそうじ', 0, -15.6);
+  // ドック
+  g.fillStyle='#8a90a0'; rr(g,-9,-8,18,6,2); g.fill();
+};
+// ロボは ゆかの うえを うごくので、ふかさ じゅんに まぜて かく
+const _cl_meanItems = meanItems;
+meanItems = function(){
+  const out=_cl_meanItems();
+  const o=cleanerObj(); if(o){ const R=robotState(o); if(R.mode!=='home') out.push({z:R.z, fn:()=>drawRobot(ctx, R, depthScale(R.z)*1.5)}); }
+  return out;
+};
+// ステーションに いる ときは ステーションの まえに かく
+const _cl_drawObj = drawObj;
+drawObj = function(o, layer){ const r=_cl_drawObj(o, layer); if(o.type==='cleaner'){ const R=robotState(o); if(R.mode==='home'){ R.x=robotHome(o).x; R.z=robotHome(o).z; drawRobot(ctx, R, depthScale(R.z)*1.5); } } return r; };
+
+/* ---- うごき ---- */
+let CLEAN_T = 0;
+function cleanerTick(dt){
+  const o=cleanerObj(); if(!o) return;
+  const R=robotState(o);
+  if(R.pump>0) R.pump-=dt;
+  // おいけが よごれたら ポンプで みずかえ
+  if((S.pondDirt||0)>45 && R.pump<=0 && objsOf('pond').length){ R.pump=3; SFX.splash && SFX.splash(); const p=objPos(o); fxText('ごぼごぼ…', p.x, p.z-60*depthScale(p.z), {size:12, color:'#2f6f9f'}); setTimeout(()=>{ S.pondDirt=0; note('じどうそうじきが おいけの みずを かえた。'); },1500); }
+  const floor=S.poops.filter(q=>!q.toilet);
+  if(R.mode==='home'){
+    CLEAN_T-=dt; if(CLEAN_T>0 || !floor.length) return;
+    CLEAN_T=6; const q=floor[0], p=toW(q.u,q.v); R.mode='go'; R.tx=p.x; R.tz=p.z; R.target=q;
+    return;
+  }
+  const tx = R.mode==='back' ? robotHome(o).x : R.tx, tz = R.mode==='back' ? robotHome(o).z : R.tz;
+  const dx=tx-R.x, dz=tz-R.z, d=Math.hypot(dx,dz*2), sp=55*dt;
+  if(d>2){ R.x+=dx/d*Math.min(sp,d); R.z+=dz/d*Math.min(sp,d)*.6; return; }
+  if(R.mode==='go'){
+    const i=S.poops.indexOf(R.target); if(i>=0){ removePoop(i,false); fxText('しゅいーん',R.x,R.z-18,{size:11,color:'#55607a'}); }
+    const rest=S.poops.filter(q=>!q.toilet);
+    if(rest.length){ const q=rest[0], p=toW(q.u,q.v); R.tx=p.x; R.tz=p.z; R.target=q; }
+    else { R.mode='back'; if(S.clean<100) S.clean=Math.min(100,S.clean+10); }
+  } else { R.mode='home'; }
+}
+const _cl_update = update;
+update = function(dt){
+  _cl_update(dt); cleanerTick(Math.min(dt,.1));
+  // ゆっくりの はんのう（たまに）
+  const o=cleanerObj(); if(o && robotState(o).mode!=='home' && chance(Math.min(dt,.1)*.03)) ykEach(()=>{ if(isDead()||M.lifted||M.state!=='idle'||bubbleT>0) return; const R=robotState(o); if(Math.hypot(R.x-M.x,R.z-M.z)<140){ say((PS().gesu||0)>=45?'robotG':'robotSee'); express((PS().gesu||0)>=45?'puku3':'oh',1.6); } });
+};
+// るすの あいだ：うんうんは たまらない・おいけも きれい
+let CL_OFF=false;
+const _cl_tickStats = tickStats;
+tickStats = function(minutes, awake){
+  if(CL_OFF && cleanerObj()){ S.poops=S.poops.filter(q=>q.toilet); if((S.pondDirt||0)>45) S.pondDirt=0; S.clean=Math.max(S.clean,80); }
+  return _cl_tickStats(minutes, awake);
+};
+const _cl_offline = offlineCatchup;
+offlineCatchup = function(){
+  const n0=S.poops.filter(q=>!q.toilet).length;
+  CL_OFF=true; let r; try{ r=_cl_offline(); } finally{ CL_OFF=false; }
+  if(r && cleanerObj()){ S.poops=S.poops.filter(q=>q.toilet); S.pondDirt=Math.min(S.pondDirt||0,30); S.clean=Math.max(S.clean,80); if(r>30) note('るすの あいだも じどうそうじきが そうじと みずかえを していた。'); }
+  return r;
+};
+
+/* ============================================================
+   v1.3.3 あそびかた（せってい → あそびかた）
+   ============================================================ */
+const HELP = [
+  ['🐣','きほん',`<p>・<b>クリック／タップ</b>：つつく　<b>ドラッグ</b>：なでなで　<b>ながおし</b>：もちあげる</p>
+   <p>・「にっし」で その子の せいかく（かしこさ・なつき・ゲス・こわがり など）と できごとが みられます</p>
+   <p>・「＋ おむかえ」で なかまを ふやせます（さいだい 8ひき）</p>`],
+  ['🕰️','じかんと るすの あいだ',`<p>・「せってい」の <b>じかんの すすみかた</b>で、ゲーム内の 1日の はやさを かえられます</p>
+   <p>・ゲームを とじている あいだは、せっていに かかわらず <b>げんじつと おなじ はやさ</b>で すすみます（いちばん ながくて ゲーム内 2日ぶん）</p>
+   <p>・ながく あける ときは じどうきゅうじき・じどうそうじきを おいておくと あんしん。「しんでしまう」を OFF に すると しななく なります</p>`],
+  ['🍚','ごはん・じどうきゅうじき',`<p>・ゆっくりフードは しあわせー味／それなりー味／げろまずー味。あまあまは とくべつな おやつ（あげすぎると ゲスに なりやすい）</p>
+   <p>・<b>じどうきゅうじき</b>は ゲーム内の 7じ・12じ・18じに 1ぴき 1こずつ だします。いっぱいで <b>ゆっくりの かず × 2日ぶん</b>。からっぽに なったら「ごはん」から ほじゅう</p>
+   <p>・<b>ゲスが いると ほかの子の ごはんを よこどり</b>します。るすの あいだに よわい子が うえて しまう ことも</p>`],
+  ['🧹','おそうじ・じどうそうじき',`<p>・うんうんは タップでも かたづけられます。よごれたままだと ゆかびの もとに なります</p>
+   <p>・<b>じどうそうじき</b>（もようがえ → くらし）を おくと、ロボが うんうんを かたづけ、おいけが よごれたら みずを かえます。るすの あいだも うごきます</p>`],
+  ['☂','あめ・ゆき',`<p>・ゆっくりは <b>あめに あたると とけます</b>。あめ・こさめ・ゆき（つもった ゆきも）の あいだは、おうち・たおれぎ・しだ・きのこの したで あまやどりして、じぶんからは そとに でません</p>
+   <p>・もちあげて そとに だすと、ぬれて <b>あんよが ふやけて うごけなく</b> なり、そのまま だと <b>とけて しにます</b>。はやく あまやどりの ばしょに もどして、オレンジジュースを かけてあげてね</p>
+   <p>・つむりは みずに つよいので とけません。水上まりちゃは おふねの うえでも とけます</p>`],
+  ['💡','ライトと ねむり',`<p>・よるに ライトを けすと ねむります。ひるまは ライトが きえていても まどの ひかりで あかるいので、あさに なれば じぶんで おきます</p>`],
+  ['💊','びょうき と おくすり',`<p>・<b>ゆかび</b>：しめりけ・よごれ・うんうんで かかります。あんよ から みどりに むしばまれ、<b>あんよの てん → あんよの まわり → おなか → したはんぶん → げきつうで しぬ</b>。なおせるのは <b>ゆかび治療薬</b>だけ（さいごの だんかいは まにあいません）</p>
+   <p>・<b>非ゆっくり症</b>：ストレスと こわがりが げんかいを こえると こころが こわれ「ゆっくり…」しか いわなく なります</p>
+   <p>・「おせわ → おくすり」：<b>非ゆっくり症防止薬</b>・<b>ゆかび防止薬</b>（7日 きく）、<b>表皮硬化薬</b>（あんよの きずや たたかれるのに つよく なる。しなない わけでは ない）。おくすりを えらんだら、つかいたい ゆっくりを タップ</p>
+   <p>・けが・やけど・ふやけには オレンジジュース</p>`],
+  ['🎩','おかざり',`<p>・おかざりは いのちと おなじくらい だいじ。きずつくと ふまんげな かおが ふえ、ほかの子にも ばかに されます</p>
+   <p>・<b>いちぶ けっそん／ひび</b> →（さらに こわすと）<b>ばらばら・こなごな</b> → ぺーろぺーろ かきあつめて <b>ゴミみたいな おかざりを のせる</b> か <b>あきらめる</b></p>
+   <p>・「おせわ → なおしてあげる」から あたらしい おかざりを あげられます</p>`],
+  ['😈','せいかく と ゲス',`<p>・あまやかすと ゲスに なりやすく、しかると なおります。こえかけ（やさしく・とくべつ・しかる・クズあつかい）で せいかくが かわります</p>
+   <p>・ゲスは わがままを いい、<b>ほうっておくと ようきゅうが どんどん エスカレート</b>。ごはんの よこどり・おうちの ひとりじめ も します</p>
+   <p>・ゆっくりショップに あずけると せいかくを なおせます</p>`],
+  ['🔨','いじわる',`<p>・「いじわる」の どうぐを えらんで タップ。ゆっくりは せいかくや そのときの じょうたいで いろいろ はんのう します</p>
+   <p>・「せってい」で いじわる どうぐを かくせます</p>`],
+  ['💾','セーブ',`<p>・セーブは じどう です。ブラウザの データは きえることが あるので、「せってい → セーブの バックアップ」で ときどき かきだして おいてね</p>`],
+];
+function openHelp(btn){
+  openSheet('help', `<div class="sheet-h"><h2>あそびかた</h2><button class="x" type="button" aria-label="とじる">✕</button></div>
+  <div class="help-list">${HELP.map(([ic,t,b],i)=>`<details ${i===0?'open':''} style="border:1px solid #e3d3b8;border-radius:12px;margin:0 0 8px;background:#fffaf0"><summary style="cursor:pointer;padding:10px 12px;font-weight:700;font-size:15px;list-style:none"><span style="margin-right:6px">${ic}</span>${t}</summary><div style="padding:0 14px 10px;font-size:13px;line-height:1.7">${b}</div></details>`).join('')}</div>`, btn);
+}
+const _hp_openSettings = openSettings;
+openSettings = function(btn){
+  _hp_openSettings(btn);
+  if(sheetKind!=='set') return;
+  const h=sheet.querySelector('.sheet-h'); if(!h) return;
+  const row=document.createElement('div'); row.className='row';
+  row.innerHTML=`<span>あそびかた<small>くすり・きゅうじき・じかんの すすみかた など</small></span><button class="btn" type="button" id="set-help">ひらく</button>`;
+  h.insertAdjacentElement('afterend', row);
+  row.querySelector('#set-help').addEventListener('click', ()=>openHelp());
+};
+
+/* ============================================================
+   v1.3.3 いたに しばった とき
+   ・しばられて いる あいだは でこぴん・ハンマー などで うごかない（いちを こてい）
+   ・こころが おれて いる（非ゆっくり症）ときは しばられていても ふつうに しゃべらない
+   ============================================================ */
+function v133TrapLock(){
+  if(!M.trapped || isDead() || M.lifted) return;
+  if(M.trapped.x===undefined){ M.trapped.x=M.x; M.trapped.z=M.z; }
+  M.x=M.trapped.x; M.z=M.trapped.z; M.h=0; M.vh=0; M.thrownVx=0; M.tumbleT=0; M.target=null;
+}
+const _tp_update = update;
+update = function(dt){ ykEach(()=>v133TrapLock()); _tp_update(dt); ykEach(()=>v133TrapLock()); };
+const _tp_kyTrap = kyTrap;
+kyTrap = function(){ const r=_tp_kyTrap.apply(this, arguments); if(M.trapped){ M.trapped.x=M.x; M.trapped.z=M.z; } return r; };
+const _tp_say = say;
+say = function(key, opts={}){
+  if(!isDead() && typeof RX==='function' && RX().broken>0 && (key==='trapStay' || key==='studyDo' || key==='trapOut')) key='rx6';
+  return _tp_say(key, opts);
+};
+
+/* ============================================================
+   v1.3.3 あめ・ゆきで とける
+   ・ゆっくりは あめに あたると とけるので、あめ・こさめ・ゆき（つもった ゆきも）の あいだは
+     じぶんから あまやどりの そとに でない
+   ・もちあげて そとに だすと：ぬれる → あんよが ふやけて うごけない → とけて しぬ
+     （「しんでしまう」OFF なら とけかけで とまる。オレンジジュースで もどる）
+   ・「あめさんは ゆっくり できない…」。ゲスは あめ・ゆきに ぷくー
+   ・つむり（みずに つよい）は とけない。すいじょうは おふねの うえでも とける
+   ============================================================ */
+Object.assign(DEATH_CAUSE, {rainmelt:'あめに うたれて とけて'});
+Object.assign(L, {
+  wxRain:["あめさんは ゆっくり できない[のじぇ]…","ゆわぁぁ！ あめさん[なのじぇ]！ とけちゃう[のじぇ]！","あめさん… はやく やんで[ほしいのじぇ]…"],
+  wxDrizzle:["ゆ…？ ぽつぽつ… あめさん[なのじぇ]…","こさめさんも ゆっくり できない[のじぇ]…"],
+  wxSnow:["ゆきさん… つめたくて とけちゃう[のじぇ]…","ゆきさんも ゆっくり できない[のじぇ]…"],
+  wxShelter:["ここなら ぬれない[のじぇ]…","あめさんは ゆっくり できない[のじぇ]…","おそとには でない[のじぇ]… とけちゃう[のじぇ]…"],
+  wxStay:["あめさんは ゆっくり できない[のじぇ]…","ゆきさんが きえるまで ここに いる[のじぇ]…","おそと… こわい[のじぇ]…"],
+  wxPukuG:["あめさん！ {me}の ゆっくりぷれいすに ふるんじゃない[のじぇ]！ ぷくーっ！","ぷくーっ！ あめさんは どっか いく[のじぇ]！","ぷくーっ！ ぷくーっ！ …ぜんぜん やまない[のじぇ]…"],
+  wxPukuGSnow:["ゆきさん！ {me}の ゆっくりぷれいすに ふるんじゃない[のじぇ]！ ぷくーっ！","ぷくーっ！ ゆきさんは どっか いく[のじぇ]！","ぷくーっ！ …ゆきさん、ぜんぜん きえない[のじぇ]…"],
+  rainHit:["つめたい[のじぇ]！ とけちゃう[のじぇ]ぇ！","あめさん いやぁぁ！ たすけて[ほしいのじぇ]ぇ！","ゆぴぃぃ！ ぬれちゃう[のじぇ]ぇ！"],
+  rainStuck:["あんよが… ふやけて… うごけない[のじぇ]ぇ…","たすけて… とけちゃう[のじぇ]ぇ…","ゆ… ゆっくり… できない… [のじぇ]…"],
+  rainMelt:["と… け… る……","…もっど… ゆっぐり… じだがっだ…"],
+});
+function rainBad(){ const w=wxNow(); return w==='rain' || w==='drizzle' || w==='snow' || ENV().snow>.3; }
+function rainImmune(){ return typeof isTsumuri==='function' && isTsumuri(); }   // すいじょうも とける（つむりだけ みずに つよい）
+function rainRate(){
+  const w=wxNow(); let r = w==='rain' ? 3.2 : w==='drizzle' ? 1.1 : w==='snow' ? 1.6 : 0;
+  if(ENV().snow>.3 && !M.lifted) r = Math.max(r, .7);   // つもった ゆきの うえ
+  return r;
+}
+function rainR(){ const p=PS(); return p.rainR||0; }
+function rainExposed(){ return !isDead() && !M.hidden && !M.boxed && rainBad() && !rainImmune() && !isSheltered(); }
+
+function rainTick(dt){
+  if(isDead()) return;
+  const p=PS();
+  if(rainExposed()){
+    const before=p.rainR||0;
+    p.rainR = Math.min(100, before + dt*rainRate());
+    if(before<5 && p.rainR>=5){ say('rainHit',{cls:'shout'}); express('cry3',2.5); M.tears=3; }
+    if(chance(dt*3)){ const b=mariBox(); fx('drop', b.x+rnd(-b.w*.35,b.w*.35), b.bot-rnd(0,b.h*.5), {vy:rnd(10,40), g:300, max:.6}); }
+    if(p.rainR>=100){
+      if(deathOn()){ say('rainMelt',{cls:'sleepy'}); die('rainmelt'); return; }
+      p.rainR=95;
+    }
+  } else if((p.rainR||0)>0){
+    // あまやどり できれば すこしずつ かわく（ふやけた あんよは かわくまで うごけない）
+    p.rainR = Math.max(0, p.rainR - dt*(p.rainR>=10 ? .25 : .8));
+  }
+  const R=p.rainR||0;
+  // とけかけの みため（あんよが しろく ふやける・ひらべったく なる）
+  if(R>=10 && !M.lifted) M.soak = Math.max(M.soak||0, 15 + R*.1);
+  if(R>=60 && !M.lifted) M.sq = Math.max(M.sq||0, .08 + (R-60)/40*.22);
+  // ふやけて うごけない
+  if(R>=10 && !M.lifted){
+    if(M.state!=='rainStuck' && M.state!=='sleep'){ setState('rainStuck', 99); express('cry3',3); M.tears=3; say('rainStuck',{cls:'shout'}); note(`${S.me||'まりちゃ'}の あんよが ふやけて うごけなく なった！ はやく あまやどり させて！`); }
+  } else if(M.state==='rainStuck') setState('idle',2);
+}
+const _rn_update = update;
+update = function(dt){ _rn_update(dt); const d=Math.min(dt,.1); ykEach(()=>{ rainTick(d); rainMindTick(d); }); };
+
+/* ---- じぶんからは そとに でない ---- */
+let RN_WARN_T = 0;
+function rainMindTick(dt){
+  if(isDead() || M.lifted || M.hidden || !rainBad() || rainImmune()) return;
+  const p=PS();
+  if((p.rainR||0)>=10) return;
+  if(isSheltered()){
+    if(M.state==='idle' || M.state==='move'){ if(M.state==='move' && M.target && !rainSafeAt(M.target.x, M.target.z)){ M.next=null; setState('shelter',99); } else if(M.state==='idle') setState('shelter',99); }
+    if(M.state==='shelter' && bubbleT<=0 && chance(dt*.03)){
+      if((p.gesu||0)>=45){ say(wxNow()==='snow'||ENV().snow>.3?'wxPukuGSnow':'wxPukuG',{cls:'shout'}); express('puku3',2.4); M.puff=Math.max(M.puff||0,.9); }
+      else { say('wxStay',{cls:'soft'}); express('worry',2.4); }
+    }
+  } else if(['idle','move','graze','admire','explore'].includes(M.state) && !(M.next && /あまやどり/.test(M.next.label||''))){
+    if(!goShelter()){ // あまやどり できる ところが ない：その ばで ちぢこまる
+      if(M.state!=='shelter'){ setState('shelter',99); say('wxRain',{cls:'shout'}); express('cry3',2.5); M.tears=2; } }
+  }
+}
+function rainSafeAt(x,z){ for(const s of shelterSpots()) if(Math.abs(x-s.x)<s.r && Math.abs(z-s.z)<14) return true; return false; }
+// あめの あいだ：あまやどりの そとへ いく いどうは しない（ごはん・あそび なども がまん）
+const _rn_goTo = goTo;
+goTo = function(x, z, then, speed, gait){
+  if(!isDead() && !M.lifted && rainBad() && !rainImmune()){
+    if((PS().rainR||0)>=10){ setState('rainStuck',99); return; }
+    const toShelter = then && /あまやどり/.test(then.label||'');
+    if(!toShelter && !rainSafeAt(x,z)){ if(isSheltered()){ setState('shelter',99); return; } }
+  }
+  return _rn_goTo(x, z, then, speed, gait);
+};
+// あめ・ゆき・つもった ゆき でも あまやどりに いく（まえは あめ だけ）
+const _rn_decide = decide;
+decide = function(){
+  if(!isDead() && !M.lifted && rainBad() && !rainImmune()){
+    if(sleepTime() || S.sleepy>92) return _rn_decide();   // ねるのは いい（おうちは あまやどりの なか）
+    if(isSheltered()){ setState('shelter',99); return; }
+    if(goShelter()) return;
+  }
+  return _rn_decide();
+};
+// あまやどり ちゅうは あめ・ゆきが おわるまで でない
+const _rn_updateBrain = updateBrain;
+updateBrain = function(dt){
+  if(M.state==='rainStuck'){
+    M.stT+=dt; M.rot=Math.sin(M.stT*9)*.03;
+    if(bubbleT<=0 && chance(dt*.25)) say(rainR()>=70?'rainMelt':'rainStuck',{cls:rainR()>=70?'sleepy':'shout'});
+    if(chance(dt*1.2)) fxText(pick(['ふやふや…','とろ…','じわ…']), M.x+rnd(-20,20), M.z-14, {size:12, color:'#3d6d94'});
+    return;
+  }
+  if(M.state==='shelter' && rainBad() && !rainImmune()){ M.stT+=dt; if(chance(dt*.05)) express((PS().gesu||0)>=45?'angry':'worry',2); return; }
+  return _rn_updateBrain(dt);
+};
+const _rn_rawSprite = rawSprite;
+rawSprite = function(){ if(!isDead() && !M.lifted && !M.expr && M.state==='rainStuck') return 'cry3'; return _rn_rawSprite(); };
+const _rn_statusText = statusText;
+statusText = function(){
+  if(!isDead()){
+    const R=rainR();
+    if(M.state==='rainStuck') return R>=70 ? 'あめで とけかけている…！' : 'あんよが ふやけて うごけない…';
+    if(M.state==='shelter' && rainBad()) return 'あまやどり ちゅう（そとには でない）';
+  }
+  return _rn_statusText();
+};
+// てんきが かわった ときの はんのう（ゲスは ぷくー）
+const _rn_wxSet = wxSet;
+wxSet = function(k, quiet){
+  const old=wxNow(); const r=_rn_wxSet(k, quiet);
+  if(!quiet && (k==='rain'||k==='drizzle'||k==='snow') && old!==k) ykEach(()=>{ if(!isDead() && !M.lifted && (PS().gesu||0)>=45 && !rainImmune()) setTimeout(()=>{ try{ say(k==='snow'?'wxPukuGSnow':'wxPukuG',{cls:'shout'}); express('puku3',2.4); M.puff=Math.max(M.puff||0,.9); }catch(e){} }, 1600); });
+  return r;
+};
+// ゆきで あそばない（ゆきを たべる・ゆきだるまは なし）
+L.snowEat=["ゆきさん… こわい[のじぇ]…"]; L.snowMan=["ゆきさんが きえるまで まつ[のじぇ]…"];
+// オレンジジュースで ふやけが もどる
+const _rn_giveOJ = giveOJ;
+giveOJ = function(){ const r=_rn_giveOJ.apply(this, arguments); if(!isDead()){ const p=PS(); p.rainR=Math.min(p.rainR||0, 10); if(M.state==='rainStuck') setState('idle',2); } return r; };
+
+// あめで とけた しにがおは、みずで とけた ときと おなじ みため
+const _rn_anyoDecor = anyoDecor;
+anyoDecor = function(A){ if(S.dead && S.dead.cause==='rainmelt'){ S.dead.cause='melt'; try{ return _rn_anyoDecor(A); } finally{ S.dead.cause='rainmelt'; } } return _rn_anyoDecor(A); };
+const _rn_rawSprite2 = rawSprite;
+rawSprite = function(){ if(S.dead && S.dead.cause==='rainmelt'){ S.dead.cause='melt'; try{ return _rn_rawSprite2(); } finally{ S.dead.cause='rainmelt'; } } return _rn_rawSprite2(); };
 
 </script>
