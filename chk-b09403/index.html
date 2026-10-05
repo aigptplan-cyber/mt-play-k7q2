@@ -12916,6 +12916,7 @@ anyoDecor = function(A){
    v1.3.4 がめんの ズーム と ついていく カメラ
    ・＋／－ ボタン、マウスホイール（もようがえ いがい）、スマホは 2本ゆびで ひろげる／つまむ
    ・「ついていく」：いま えらんでいる 子を カメラが おいかける（タブで 子を かえると その子に）
+     v1.3.5：オフに するまで ずっと おいかける（2本ゆびズーム・×1 に もどしても きれない。きるのは ボタン・もとにもどす・みぎドラッグ／やじるし）
    ・ズーム中に ついていかない ときは、2本ゆび／みぎドラッグ／やじるしキーで うごかせる
    ============================================================ */
 const CAM = {z:1, tz:1, x:null, y:null, follow:false};
@@ -12968,7 +12969,7 @@ update = function(dt){
   const d=Math.min(dt,.1);
   const z0=CAM.z; CAM.z += (CAM.tz-CAM.z)*Math.min(1,d*8); if(Math.abs(CAM.tz-CAM.z)<.002) CAM.z=CAM.tz;
   if(CAM.anchor && z0!==CAM.z){ const a=CAM.anchor; CAM.x = a.wx - (a.sx-W/2)/CAM.z; CAM.y = a.wy - (a.sy-H/2)/CAM.z; }
-  if(CAM.follow && camOn() && MS[YK_I]){
+  if(CAM.follow && camOn() && MS[YK_I] && !MS[YK_I].hidden){
     const m=MS[YK_I]; let tx, ty;
     if(m.lifted){ tx=m.lx; ty=m.ly-40; } else { tx=m.x; ty=(m.z-(m.h||0))-30*depthScale(m.z); }
     CAM.x += (tx-CAM.x)*Math.min(1,d*4); CAM.y += (ty-CAM.y)*Math.min(1,d*4);
@@ -12980,7 +12981,7 @@ function camZoom(f, sx, sy){
   const nz = clamp(CAM.tz*f, 1, CAM_MAX);
   if(sx!==undefined && !CAM.follow){ const w=camInv({x:sx,y:sy}); CAM.anchor={wx:w.x, wy:w.y, sx, sy}; } else CAM.anchor=null;
   if(CAM.tz<=1.001 && nz>1.001 && CAM.follow===false && sx===undefined && MS[YK_I]){ CAM.x=MS[YK_I].x; CAM.y=MS[YK_I].z-30; }
-  CAM.tz = nz; if(nz<=1.001){ CAM.follow=false; CAM.anchor=null; }
+  CAM.tz = nz; if(nz<=1.001){ CAM.anchor=null; }
 }
 function camFollow(on){
   CAM.follow = on===undefined ? !CAM.follow : !!on;
@@ -13017,7 +13018,7 @@ let _camUIk='';
 function camUI(){
   const k=`${CAM.tz.toFixed(2)}|${CAM.follow}|${ED.on}|${offX}|${offY}|${scale}|${LK}`; if(k===_camUIk) return; _camUIk=k;
   $('#cam-lv').textContent='×'+(Math.round(CAM.tz*10)/10);
-  $('#cam-out').disabled = CAM.tz<=1.001; $('#cam-in').disabled = CAM.tz>=CAM_MAX-.001; $('#cam-reset').disabled = CAM.tz<=1.001;
+  $('#cam-out').disabled = CAM.tz<=1.001; $('#cam-in').disabled = CAM.tz>=CAM_MAX-.001; $('#cam-reset').disabled = CAM.tz<=1.001 && !CAM.follow;
   $('#cam-follow').setAttribute('aria-pressed', String(CAM.follow));
   // もようがえ ちゅうは ズームを もどす（ものを ならべにくい ため）
   const ui=$('#camui'); ui.style.display = ED.on ? 'none' : '';
@@ -13053,7 +13054,7 @@ window.addEventListener('keydown', e=>{
     pts.set(e.pointerId, lp(e));
     if(pts.size===2){
       const [a,b]=[...pts.values()]; g0={d:Math.hypot(a.x-b.x,a.y-b.y), z:CAM.tz, m:{x:(a.x+b.x)/2,y:(a.y+b.y)/2}, w:camInv({x:(a.x+b.x)/2,y:(a.y+b.y)/2})};
-      CAM.follow=false; CAM.anchor=null;
+      CAM.anchor=null;
       // 1本めの ゆびで はじまった「さわる」は とりけす
       cv.dispatchEvent(new PointerEvent('pointercancel', {pointerId:[...pts.keys()][0], bubbles:true}));
       e.stopImmediatePropagation();
@@ -13066,7 +13067,8 @@ window.addEventListener('keydown', e=>{
     if(g0 && pts.size>=2){
       const [a,b]=[...pts.values()], d=Math.hypot(a.x-b.x,a.y-b.y), m={x:(a.x+b.x)/2,y:(a.y+b.y)/2};
       CAM.tz = CAM.z = clamp(g0.z*d/Math.max(10,g0.d), 1, CAM_MAX);
-      CAM.x = g0.w.x - (m.x-W/2)/CAM.z; CAM.y = g0.w.y - (m.y-H/2)/CAM.z; camClamp();
+      if(!CAM.follow){ CAM.x = g0.w.x - (m.x-W/2)/CAM.z; CAM.y = g0.w.y - (m.y-H/2)/CAM.z; }
+      camClamp();
       e.stopImmediatePropagation();
     }
   }, true);
@@ -13282,15 +13284,22 @@ body.phl .act svg{width:16px!important; height:16px!important;}
 body.phl .act kbd, body.phl .keys{display:none!important;}
 body.phl #hint{display:none!important;}
 body.phl #side{display:none!important;}
-body.phl #sheet{left:auto!important; right:6px!important; top:6px!important; bottom:6px!important; width:min(330px, 52%)!important; max-height:none!important; z-index:8!important;}
-body.phl #qbar{left:50%!important; top:3px!important; gap:2px!important; padding:2px 3px!important; border-radius:10px;}
-body.phl #qbar .qb{width:38px!important; height:36px!important; padding-bottom:9px!important; border-radius:8px;}
-body.phl #qbar .qb canvas{width:24px!important; max-height:19px!important;}
-body.phl #qbar .qb-emo{font-size:15px!important;}
-body.phl #qbar .qb small{font-size:7.5px!important; line-height:9px!important; bottom:1px!important;}
-body.phl #qbar .qb i{font-size:8px!important;}
-body.phl #qbar .qb-ed{width:30px!important;}
-body.phl #toolbar{top:44px!important; flex-wrap:nowrap!important; padding:3px 4px 3px 10px!important; gap:6px!important; font-size:10.5px; max-width:calc(100% - 12px);}
+body.phl #sheet{left:auto!important; right:6px!important; top:4px!important; bottom:4px!important; width:min(320px, 50%)!important; max-height:none!important; z-index:8!important; padding:7px 9px 9px!important; border-radius:14px!important;}
+body.phl #sheet > *{zoom:.74;}
+/* てもとの ボタン：すいそうの ひだりの よはくに たてに ちいさく ならべる（ばしょ・おおきさは resize で きめる） */
+body.phl #qbar{left:var(--qx,4px)!important; top:var(--qy,4px)!important; transform:none!important; display:grid!important; grid-template-columns:repeat(var(--qc,1), var(--qw,30px)); grid-auto-rows:var(--qh,26px); gap:3px!important; padding:3px!important; border-radius:10px; max-width:none!important;}
+body.phl #qbar .qb, body.phl #qbar .qb-ed{width:var(--qw,30px)!important; height:var(--qh,26px)!important; padding:0!important; border-radius:7px; border-width:1px;}
+body.phl #qbar .qb canvas{width:calc(var(--qw,30px) - 8px)!important; max-height:calc(var(--qh,26px) - 6px)!important;}
+body.phl #qbar .qb-emo{font-size:calc(var(--qh,26px) * .5)!important;}
+body.phl #qbar .qb small, body.phl #qbar .qb i{display:none!important;}
+body.phl #qbar .qb.on{box-shadow:0 0 0 1.5px rgba(217,165,74,.6);}
+/* カメラの ボタン：すいそうの みぎの よはくに */
+body.phl #camui{gap:4px;}
+body.phl [data-b]{max-width:calc(150px * var(--bs,1));}
+body.phl #camui button{width:var(--cb,34px); height:var(--cb,34px); border-radius:10px; font-size:17px; border-width:1.5px;}
+body.phl #camui button svg{width:18px; height:18px;}
+body.phl #camui .lv{font-size:10px; padding:2px 0;}
+body.phl #toolbar{top:4px!important; flex-wrap:nowrap!important; padding:3px 4px 3px 10px!important; gap:6px!important; font-size:10.5px; max-width:calc(100% - 12px);}
 body.phl #toolbar b{font-size:13px;}
 body.phl #toolbar span{order:0!important; flex:1 1 auto!important; min-width:0!important; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 body.phl #toolbar .btn{padding:2px 9px!important; font-size:12px;}
@@ -13320,10 +13329,39 @@ resize = function(){
   cv.style.width = cw+'px'; cv.style.height = ch+'px';
   cv.style.left = offX+'px'; cv.style.top = offY+'px';
   stage.style.setProperty('--tt', (offY + LY.tableY*scale)+'px');
-  stage.style.setProperty('--bs', clamp(scale, 1, 1.2).toFixed(3));
+  stage.style.setProperty('--bs', '.8');          // よこがめんは すいそうが ひくいので ふきだしを ちいさく
   cv.width = Math.round(cw*dpr); cv.height = Math.round(ch*dpr);
   buildLayers();
+  phlPlace();
 };
+// よはくの はば に あわせて てもとボタン（ひだり）と カメラ（みぎ）を おく
+function phlPlace(){
+  const bar=document.getElementById('qbar'); if(!bar || !document.body.classList.contains('phl')) return;
+  const r=stage.getBoundingClientRect(), lm=offX+TANK.x0*scale, n=bar.children.length||9;
+  const cols = lm>=78 ? 2 : 1, rows=Math.ceil(n/cols);
+  const qw=Math.max(22, Math.min(40, Math.floor((lm-12-(cols-1)*3)/cols)));
+  const qh=Math.max(20, Math.min(36, Math.floor((r.height-14-(rows-1)*3)/rows)));
+  const bw=cols*qw+(cols-1)*3+6, bh=rows*qh+(rows-1)*3+6;
+  bar.style.setProperty('--qc', cols); bar.style.setProperty('--qw', qw+'px'); bar.style.setProperty('--qh', qh+'px');
+  bar.style.setProperty('--qx', Math.max(2, Math.round((lm-bw)/2))+'px');
+  bar.style.setProperty('--qy', Math.max(2, Math.round((r.height-bh)/2))+'px');
+  _camUIk='';
+}
+const _phl_camUI = camUI;
+camUI = function(){
+  const k0=_camUIk; _phl_camUI(); if(_camUIk===k0) return;
+  const ui=document.getElementById('camui'); if(!ui) return;
+  ui.style.transform='';
+  if(!document.body.classList.contains('phl')) return;
+  const r=stage.getBoundingClientRect(), rm=r.width-(offX+TANK.x1*scale);
+  if(rm<32) return;                                  // よはくが ない ときは いままで どおり すいそうの なか
+  const cb=Math.max(28, Math.min(36, Math.floor(rm-10)));
+  ui.style.setProperty('--cb', cb+'px');
+  ui.style.transform='translate(-50%,-50%)';
+  ui.style.left=(offX+TANK.x1*scale+rm/2)+'px';
+  ui.style.top=(r.height/2)+'px';
+};
+if(typeof qbRender==='function'){ const _q=qbRender; qbRender=function(){ const v=_q.apply(this, arguments); try{ phlPlace(); }catch(e){} return v; }; }
 setTimeout(()=>{ try{ resize(); }catch(e){} }, 0);
 
 /* ============================================================
