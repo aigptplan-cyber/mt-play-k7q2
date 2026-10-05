@@ -10621,10 +10621,14 @@ function drawPortrait(){
    ============================================================ */
 function frame(now){
   const dt = Math.min(.05,(now-lastT)/1000); lastT=now;
-  update(dt); draw(); updateUI(dt);
-  ykEach(()=>{ if(bubble.classList.contains('on')) placeBubble(); });
+  // v1.3.5a: どこかで エラーが でても がめんが とまらないように（つぎの コマも かならず よぶ）
   requestAnimationFrame(frame);
+  try{ update(dt); }catch(e){ frameErr(e); }
+  try{ draw(); }catch(e){ frameErr(e); }
+  try{ updateUI(dt); ykEach(()=>{ if(bubble.classList.contains('on')) placeBubble(); }); }catch(e){ frameErr(e); }
 }
+let _frameErrN=0;
+function frameErr(e){ if(_frameErrN++ < 5) console.error('[まりテラ]', e); }
 setInterval(()=>{ drawPortrait(); save(); }, 10000);
 document.addEventListener('visibilitychange', ()=>{ if(document.hidden) save(); else { const m=offlineCatchup(); if(m>10) say('away'); lastT=performance.now(); } });
 window.addEventListener('pagehide', save);
@@ -10634,10 +10638,15 @@ window.addEventListener('resize', ()=>{ clearTimeout(window._rz); window._rz=set
 if(window.ResizeObserver){ let _sw=0,_sh=0; new ResizeObserver(()=>{ const r=stage.getBoundingClientRect(); if(Math.abs(r.width-_sw)>1||Math.abs(r.height-_sh)>1){ _sw=r.width; _sh=r.height; cancelAnimationFrame(window._rzf); window._rzf=requestAnimationFrame(resize); } }).observe(stage); }
 
 function start(){
+  try{ startInner(); } catch(e){ console.error('[まりテラ] start', e); } finally { kickLoop(); }
+}
+let _loopOn=false;
+function kickLoop(){ if(_loopOn) return; _loopOn=true; requestAnimationFrame(t=>{ lastT=t; frame(t); }); }
+function startInner(){
   const had = load();
   ykInit(); renderYkTabs();
   let away = 0;
-  if(had) away = offlineCatchup();
+  if(had){ try{ away = offlineCatchup(); }catch(e){ console.error('[まりテラ] offlineCatchup', e); } }
   else note('まりちゃが テラリウムに やってきた！');
   S.food.forEach(f=>{ delete f.y; });
   resize();
@@ -10650,7 +10659,7 @@ function start(){
     else { say('hello',{cls:'shout'}); jump(240); }
   }, 600);
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(()=>{ buildLayers(); });
-  requestAnimationFrame(t=>{ lastT=t; frame(t); });
+  kickLoop();
 }
 async function boot(){
   if(NATIVE && NATIVE.prefs){
@@ -11191,7 +11200,7 @@ openSettings = function(btn){
    4 したはんぶんが ぜんぶ みどり
    5 げきつうで のたうち → しぬ（しぬ せっていが ON のとき）
    ============================================================ */
-const KABI_V2 = true;
+var KABI_V2 = true;   // v1.3.5a: const だと きどう ちょくごの「るすの あいだ」の けいさんで エラーに なる（TDZ）ので var に
 function kabiStage(p){ p=p||BY(); const k=p.kabi||0; return k<100?0 : k<140?1 : k<185?2 : k<235?3 : k<285?4 : 5; }
 
 Object.assign(L, {
@@ -11297,7 +11306,7 @@ if(typeof statusText==='function'){
    ※ 絵は もとの おかざりの 絵を くだいて つくる（どの むき・どの ひょうじょうでも ずれない）
    S.hat.st: 'torn'(lv1) / 'shard'(ばらばら：ゆかに ちらばる) / 'rep2'(かきあつめ ちゅう) / 'scrap'(ゴミおかざり) / 'burnt' / 'gone'
    ============================================================ */
-const KZ2 = true;
+var KZ2 = true;   // v1.3.5a: きどう ちょくごに typeof で みても エラーに ならないよう var に
 const KZ2_CACHE = {};
 function kz2Kind(){ const k = typeof shellKind==='function' ? shellKind() : null; return k || (S.sp==='reimu' ? 'ribbon' : 'hat'); }
 function kz2Seed(s){ let h=2166136261; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619); } return mulberry(h>>>0); }
@@ -13243,7 +13252,7 @@ setTimeout(()=>{ try{ ykEach(()=>{ if(uwOn()){ if(uwOk()){ M.uwAct='rest'; M.uwT
    ============================================================ */
 // スマホの よこむき：がめんの みじかい ほうが 540 いか で よこむき（はみだしで innerWidth が ふくらんでも はんていが ぶれないように screen で みる）
 function phlWant(){
-  try{ const sw=Math.min(screen.width, screen.height), land = matchMedia('(orientation: landscape)').matches; return land && sw<=540 && (matchMedia('(pointer: coarse)').matches || sw<=540); }catch(e){ return false; }
+  try{ const sw=Math.min(screen.width, screen.height), land = matchMedia('(orientation: landscape)').matches; return land && sw<=540 && (matchMedia('(pointer: coarse)').matches || matchMedia('(hover: none)').matches); /* v1.3.5a: がめんの ちいさい パソコンは スマホあつかい しない */ }catch(e){ return false; }
 }
 const _phl_wantLayout = wantLayout;
 wantLayout = function(){ return phlWant() ? 'landscape' : _phl_wantLayout(); };
