@@ -13548,4 +13548,35 @@ let V136_PTYPE='mouse';
 cv.addEventListener('pointerdown', e=>{ V136_PTYPE=e.pointerType||'mouse'; }, true);
 window.addEventListener('contextmenu', e=>{ if(e.target===cv && V136_PTYPE!=='mouse'){ e.preventDefault(); e.stopImmediatePropagation(); } }, true);   /* window で さきに とめる */
 
+/* ============================================================
+   すてた おかざり（こたつ・から）が もどせない（X より・万獣 咲世さん）
+   「おせわ → なおしてあげる」に「あたらしい ○○を あげる」が でていなかった
+   （すてた ときの ボタンが「ことば」の わくに はいって、おせわでは けされていた）
+   ・ボタンの ことばを しゅぞくに あわせる（こたつ・から・りぼん）
+   ・すてた ときに どこで もどせるか おしえる
+   ============================================================ */
+function kzPartName(){ return (SPECIES[S.sp||'maricha']||{}).part || 'おかざり'; }
+function kzNeedNew(){ return S.hat && ['burnt','torn','scrap','shard','gone'].includes(S.hat.st); }
+{ const _f=fixHat;
+  fixHat=function(){ const n=note; note=function(t){ return n(String(t).replace('あたらしい おぼうし','あたらしい '+kzPartName())); };
+    try{ return _f.apply(this, arguments); } finally{ note=n; } }; }
+function kzFixLabel(){ const p=kzPartName(), st=S.hat.st;
+  const why = st==='gone' ? 'すてた' : st==='burnt' ? 'こげた' : st==='scrap' ? 'ゴミの' : st==='shard' ? 'ばらばらに なった' : 'こわれた';
+  return `あたらしい ${p}を あげる<small style="display:block;font-weight:500;font-size:11px;color:var(--ink-soft)">（${why} ${p}の かわり）</small>`; }
+{ const _d=kzDiscard;
+  kzDiscard=function(){ const r=_d.apply(this, arguments); setTimeout(()=>toast(`「おせわ」→「なおしてあげる」で あたらしい ${kzPartName()}を あげられます`), 900); return r; }; }
+
+{ const _ss=openSubSheet;
+  openSubSheet=function(kind, btn){ const r=_ss(kind, btn); if(sheetKind!=='play' || kind!=='care' || isDead()) return r;
+    // すてた ときの ボタンが ないなら つくる
+    let fixH=[...sheet.querySelectorAll('h3.sub')].find(h=>/なおして/.test(h.textContent)), fixD=fixH && fixH.nextElementSibling;
+    if(S.hat && S.hat.st==='gone' && !(fixD && [...fixD.querySelectorAll('button')].some(b=>/あたらしい/.test(b.textContent)))){
+      if(!fixH){ fixH=document.createElement('h3'); fixH.className='sub'; fixH.textContent='なおしてあげる'; fixD=document.createElement('div'); fixD.className='fix'; const help=sheet.querySelector('.edit-help'); help.parentNode.insertBefore(fixH, help); help.parentNode.insertBefore(fixD, help); }
+      const b=document.createElement('button'); b.type='button'; b.className='btn'; b.textContent='あたらしい おかざりを あげる'; b.addEventListener('click',()=>{ fixHat(); closeSheet(); }); fixD.appendChild(b);
+    }
+    if(fixD) fixD.querySelectorAll('button').forEach(b=>{ if(/^あたらしい (おかざり|おぼうし|りぼん)を あげる$/.test(b.textContent.trim())) b.innerHTML=kzFixLabel(); });
+    // こわれた・すてた ときは いちばん うえ（おくすりの まえ）に
+    if(kzNeedNew() && fixH && fixD){ const top0=sheet.querySelector('.care-top'); if(top0){ top0.insertAdjacentElement('afterend', fixD); top0.insertAdjacentElement('afterend', fixH); } }
+    return r; }; }
+
 </script>
