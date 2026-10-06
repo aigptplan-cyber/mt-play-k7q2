@@ -14516,4 +14516,12 @@ setInterval(()=>{ try{ realDaySync(); }catch(e){} }, 60000);
     }catch(e){}
     return r; }; }
 
+/* ---------- v1.3.6d みずの うえで したに おしつけても つぶれない ----------
+   もちあげて みずうみ・おいけの うえで したへ おしつけると、みずめんを ゆかの ように あつかって
+   「ちゅぶれる」で けんこうが へっていた。みずの うえでは おしつけ あつかいに しない（はなすと みずに おちる） */
+{ const _ct = fxCrushTick;
+  fxCrushTick = function(dt){
+    try{ if(M.lifted && typeof waterAt==='function'){ const bz=FLOOR_BOT-6; if(waterAt(M.lx, bz) || waterAt(M.lx, bz-14)) M.crushIn=0; } }catch(e){}
+    return _ct(dt); }; }
+
 </script>
