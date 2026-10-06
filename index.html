@@ -2100,7 +2100,9 @@ function offlineCatchup(){
     else { const t=t0+(done+step)*60000; const d=new Date(t); day=dayIndex(t); hour=d.getHours()+d.getMinutes()/60; }
     feederCheck(day, hour, true);
     ykEach(()=>{
-    tickStats(step, true);
+    // v1.3.6c るすの あいだも よる（22〜6じ）は ねる。ひるでも ねむけ 92 こえたら ねて、4 まで さがったら おきる
+    if(hour>=22 || hour<6 || S.sleepy>92) M._offSleep = true; else if(M._offSleep && S.sleepy<4) M._offSleep = false;
+    tickStats(step, !M._offSleep);
     if(S.poopNeed>=100){
       const t=objsOf('toilet')[0];
       let uv, onT=false; if(t && chance(.6)){ const p=objPos(t); uv=toUV(p.x+rnd(-8,8),p.z+rnd(-1,2)); onT=true; } else { const p=randomFloor(); uv=toUV(p.x,p.z); }
@@ -2109,6 +2111,7 @@ function offlineCatchup(){
     });
     offlineEatPass();
   }
+  ykEach(()=>{ delete M._offSleep; });
   if(S.set.daySpeed && realMins>gm) advanceClock((realMins-gm)/rate);
   { const g=S.yk.filter(y=>y._offGreedy), v=S.yk.filter(y=>y.ps && y.ps.offStarved && !y._offGreedy);
     if(g.length && v.length) note(`るすの あいだ、${g.map(ykLabel).join('・')}が ${v.map(ykLabel).join('・')}の ごはんを よこどり していた…。`);
@@ -14485,6 +14488,32 @@ setInterval(()=>{ try{ realDaySync(); }catch(e){} }, 60000);
   openDiary=function(btn){ const r=_od.apply(this, arguments); if(sheetKind!=='diary') return r;
     const days=Math.max(1, (S.gameDay||0)-(S.bornDay||0)+1);
     const memo=sheet.querySelector('.memo'); if(memo) memo.innerHTML=memo.innerHTML.replace(/<b>\d+日め<\/b>/, `<b>${days}日め</b>`);
+    return r; }; }
+
+/* ============================================================
+   v1.3.6c Xの ほうこくから
+   ・オレンジジュースを あげても ふやけた あんよが もどらない
+     （ふやけ 10 で とめていたが、10 いじょうは うごけない あつかい → 10 みまんに もどす）
+   ・あめの ひ、もちあげて おうちや ふきの うえで はなしても あまやどりの ばしょに はいらない
+     （おく おくゆきが ずれると ±14 から はずれていた → ちかくの あまやどりの ばしょに すいよせる）
+   ※ るすの あいだの ねむけ（ひるに 6じかん ねる）は e_care.js の offlineCatchup で なおした
+   ============================================================ */
+{ const _oj = giveOJ;
+  giveOJ = function(){ const r=_oj.apply(this, arguments);
+    try{ if(!isDead()){ const p=PS(); if((p.rainR||0)>=6) p.rainR=6; if(M.state==='rainStuck') setState('idle',2); } }catch(e){}
+    return r; }; }
+{ const _rl = release;
+  release = function(){ const was=M.lifted; const r=_rl.apply(this, arguments);
+    try{
+      if(was && !isDead() && rainBad() && !rainImmune() && !isSheltered()){
+        let best=null, bd=1e9;
+        const bot = M.ly - M.grabDy;   // はなした ところ（がめんの たかさ）
+        for(const s of shelterSpots()){ const d0 = s.o ? ods(s.o) : 1, dx=Math.abs(M.lx-s.x);
+          // あまやどりの ものの え（うえ 170・した 30）の なかで はなしたら すいよせる
+          if(dx < s.r*1.35 && bot > s.z-170*d0 && bot < s.z+30){ const d=dx+Math.abs(bot-s.z)*.3; if(d<bd){ bd=d; best=s; } } }
+        if(best){ M.z=best.z; M.x=clamp(best.x+clamp(M.x-best.x,-best.r*.5,best.r*.5), XMIN, XMAX); M.thrownVx=0; }
+      }
+    }catch(e){}
     return r; }; }
 
 </script>
