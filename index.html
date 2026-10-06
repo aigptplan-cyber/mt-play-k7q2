@@ -14511,7 +14511,7 @@ setInterval(()=>{ try{ realDaySync(); }catch(e){} }, 60000);
         for(const s of shelterSpots()){ const d0 = s.o ? ods(s.o) : 1, dx=Math.abs(M.lx-s.x);
           // あまやどりの ものの え（うえ 170・した 30）の なかで はなしたら すいよせる
           if(dx < s.r*1.35 && bot > s.z-170*d0 && bot < s.z+30){ const d=dx+Math.abs(bot-s.z)*.3; if(d<bd){ bd=d; best=s; } } }
-        if(best){ M.z=best.z; M.x=clamp(best.x+clamp(M.x-best.x,-best.r*.5,best.r*.5), XMIN, XMAX); M.thrownVx=0; }
+        if(best){ M.z=best.z; M.x=clamp(best.x+clamp(M.x-best.x,-best.r*.5,best.r*.5), XMIN, XMAX); M.thrownVx=0; M.vh=0; M.h=Math.min(Math.max(0, best.z-bot), 30); }   // そっと いれる（たかさは あたらしい ばしょから はかりなおす）
       }
     }catch(e){}
     return r; }; }
