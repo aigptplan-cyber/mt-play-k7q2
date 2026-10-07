@@ -101,10 +101,10 @@ body{
 #sheet .fix{display:flex; flex-wrap:wrap; gap:8px;}
 [data-b]{
   position:absolute; left:0; top:0; z-index:3;
-  width:max-content; max-width:min(calc(158px * var(--bs,1)), 62vw); min-width:36px; box-sizing:border-box;
+  width:max-content; max-width:min(calc(158px * var(--bs,1)), 62vw); min-width:calc(36px * var(--bs,1)); box-sizing:border-box;
   padding:calc(4px * var(--bs,1)) calc(9px * var(--bs,1)) calc(5px * var(--bs,1));
   background:#fffdf8; color:var(--ink);
-  border:1.5px solid #5b4634; border-radius:14px;
+  border:1.5px solid #5b4634; border-radius:calc(14px * var(--bs,1));
   font-family:var(--hand); font-size:calc(12px * var(--bs,1)); line-height:1.3;
   text-align:center; white-space:pre-wrap;
   pointer-events:none;
@@ -115,8 +115,8 @@ body{
 }
 [data-b].on{opacity:1; transform:translate(-50%,-100%) scale(1);}
 [data-b]::after{
-  content:""; position:absolute; left:var(--tail,50%); bottom:-7px;
-  width:10px; height:10px; margin-left:-5px;
+  content:""; position:absolute; left:var(--tail,50%); bottom:calc(-7px * var(--bs,1));
+  width:calc(10px * var(--bs,1)); height:calc(10px * var(--bs,1)); margin-left:calc(-5px * var(--bs,1));
   background:#fffdf8; border-right:1.5px solid #5b4634; border-bottom:1.5px solid #5b4634;
   transform:rotate(45deg) skew(8deg,8deg);
 }
@@ -764,7 +764,8 @@ function resize(){
   cv.style.left = offX+'px'; cv.style.top = offY+'px';
   stage.style.setProperty('--tt', (offY + LY.tableY*scale)+'px');
   // 吹き出しの大きさは水槽の表示サイズに合わせる
-  stage.style.setProperty('--bs', clamp(scale, 1, 1.2).toFixed(3));
+  // v1.3.7a スマホ（たてがめん）は ふきだしが おおきすぎる → 6わり に（Nexus Atelier 10/7）
+  stage.style.setProperty('--bs', (innerWidth<=600 ? .6 : clamp(scale, 1, 1.2)).toFixed(3));
   cv.width = Math.round(cw*dpr); cv.height = Math.round(ch*dpr);
   buildLayers();
 }
@@ -1576,7 +1577,7 @@ function decide(){
   }
   if(S.poopNeed>=100){
     const t=objsOf('toilet')[0];
-    if(t && chance(.75)){ const p=objPos(t); goTo(p.x, p.z+2, {fn:()=>startPoop(true), label:'トイレに むかってる', obj:t.id}, 50); }
+    if(t && chance(typeof smartToiletP==='function' ? smartToiletP() : .75)){ const p=objPos(t); goTo(p.x, p.z+2, {fn:()=>startPoop(true), label:'トイレに むかってる', obj:t.id}, 50); }
     else startPoop(false);
     return;
   }
@@ -1589,7 +1590,7 @@ function decide(){
   if(TRY_ACT){ const a=TRY_ACT; TRY_ACT=null; if(ACTS[a] && objsOf(ACTS[a].obj).length && ACTS[a].w()>0){ startObjAct(a); return; } }
   const w = [
     ['wander', 26], ['idle', 16], ['spin', (SP.mv_spin_1 && S.braid!=='torn')?5:0], ['explore', 10], ['look', 7], ['sing', 6], ['stretch', 5],
-    ['sun', S.lamp?9:0], ['bath', S.pondDirt<60?6:0], ['play', S.marbles.length?8:0], ['social', ykSocialW()]
+    ['sun', S.lamp?9:0], ['bath', (S.pondDirt<60 && !(typeof smartNoBath==='function' && smartNoBath()))?6:0], ['play', S.marbles.length?8:0], ['social', ykSocialW()]
   ];
   for(const [k,a] of Object.entries(ACTS)){ if(objsOf(a.obj).length) w.push([k, a.w()]); }
   let tot=w.reduce((a,b)=>a+b[1],0), r=Math.random()*tot, act='idle';
@@ -1704,7 +1705,10 @@ cv.addEventListener('pointermove', e=>{
   if(!press || e.pointerId!==press.id) return;
   const now=performance.now();
   const dt = Math.max(.008,(now-lastPointer.t)/1000);
-  if(press.mode==='press' && Math.hypot(p.x-press.x0,p.y-press.y0)>9) press.mode='stroke';
+  // v1.3.7a うごいたと みなす きょりは がめんの 10px（スマホでは ろんり座標の 9 だと ゆびの ぶれで すぐ なでなでに なっていた）
+  if(press.mode==='press' && Math.hypot(p.x-press.x0,p.y-press.y0)>pressMoveThresh()) press.mode='stroke';
+  // おぼれている・ながされている 子は、なでようと しても すぐ すくいあげる（X まくらやさん 10/7）
+  if(press.mode==='stroke' && !M.lifted && ykInDanger()) startLift();
   if(press.mode==='lift'){
     const nx=clamp(p.x,XMIN-6,XMAX+6), ny=clamp(p.y,TANK.glassTop+14,FLOOR_BOT+4);
     M.pvx = lerp(M.pvx,(nx-M.lx)/dt,.5); M.pvy = lerp(M.pvy,(ny-M.ly)/dt,.5);
@@ -1728,6 +1732,13 @@ function endPress(e){
 cv.addEventListener('pointerup', endPress);
 cv.addEventListener('pointercancel', e=>{ if(ED.on){ editCancel(); return; } if(TOOL.hold||TOOL.pull){ toolUp(e, toLogical(e)); return; } if(press && press.mode==='lift') release(); press=null; });
 cv.addEventListener('pointerleave', e=>{ TOOL.over=false; if(ED.on && ED.pick && !ED.drag) ED.ghost=null; });
+function pressMoveThresh(){ try{ const r=cv.getBoundingClientRect(); return Math.max(9, 10*W/Math.max(1,r.width)); }catch(e){ return 9; } }
+function ykInDanger(){
+  if(isDead() || M.lifted) return false;
+  if(['sink','drift'].includes(M.state)) return true;
+  try{ if(typeof waterAt==='function' && waterAt(M.x,M.z) && !(typeof inBoat==='function' && inBoat()) && (M.soak||0)>2) return true; }catch(e){}
+  return false;
+}
 function checkLongPress(){ if(press && press.mode==='press' && performance.now()-press.t0>320) startLift(); }
 
 function poke(rel){
@@ -3097,6 +3108,22 @@ function variantSprite(name){
         else { d[i]=120+n*20; d[i+1]=108+n*14; d[i+2]=98+n*10; }
         if(n>.985){ d[i]=255; d[i+1]=150+rand()*60; d[i+2]=40; }
       }
+    }
+    // v1.3.7a おぼうしの つば が はこ（hat.x0〜x1）より そとに はみでている 絵が ある → のこった つばを けす
+    //  のこった こんいろ から つながっている おぼうしいろ（こんいろ・ふちの くろ・しろい おび）だけを たどって けす
+    if(false && hs==='nohat' && !REI()){
+      const yMax=Math.min(h-1, Math.round(hat.bottom+h*.25)), seen=new Uint8Array(w*h), st=[];
+      for(let y=0;y<=yMax;y++) for(let x=0;x<w;x++){ const i=at(x,y); if(d[i+3]>20 && isNavy(d[i],d[i+1],d[i+2])){ st.push(x,y); seen[y*w+x]=1; } }
+      while(st.length){ const y=st.pop(), x=st.pop(), i=at(x,y); d[i+3]=0;
+        for(let dy=-1;dy<=1;dy++) for(let dx=-1;dx<=1;dx++){ const nx=x+dx, ny=y+dy; if(nx<0||ny<0||nx>=w||ny>yMax||seen[ny*w+nx]) continue; seen[ny*w+nx]=1;
+          const j=at(nx,ny); if(d[j+3]<=20) continue; const r=d[j],gg=d[j+1],b=d[j+2]; if(isHair(r,gg,b)||isSkin(r,gg,b)) continue; if(hatColor(r,gg,b) || d[j+3]<160) st.push(nx,ny); } }
+      // のこった ちいさな かけら（おびの はし・ふちの せん）を けす：かみ・はだ を ふくまない ちいさな かたまり
+      const lab=new Int32Array(w*h), lim=Math.max(30, w*h*.004); let L=0;
+      for(let y0=0;y0<=yMax;y0++) for(let x0=0;x0<w;x0++){ const k0=y0*w+x0; if(lab[k0] || d[k0*4+3]<=20) continue;
+        L++; const q=[k0], px=[]; lab[k0]=L; let core=0;
+        while(q.length){ const k=q.pop(); px.push(k); const i=k*4; if(isHair(d[i],d[i+1],d[i+2])||isSkin(d[i],d[i+1],d[i+2])) core++;
+          const x=k%w, y=(k/w)|0; for(let dy=-1;dy<=1;dy++) for(let dx=-1;dx<=1;dx++){ const nx=x+dx, ny=y+dy; if(nx<0||ny<0||nx>=w||ny>yMax) continue; const kk=ny*w+nx; if(lab[kk]||d[kk*4+3]<=20) continue; lab[kk]=L; q.push(kk); } }
+        if(px.length<lim && core<px.length*.25) for(const k of px) d[k*4+3]=0; }
     }
   }
   g.putImageData(img,0,0);
@@ -5376,7 +5403,7 @@ function boatTick(dt){
   M.landT=0;
   if(w.kind==='fall'){ boatFall('fall'); return; }
   // ながれ（ゆっくり ながされる）
-  if(w.kind==='river'){ const nx=M.x+w.vx*dt*.3, nz=M.z+w.vz*dt*.3; if(waterAt(nx,nz)){ M.x=nx; M.z=nz; } if(chance(dt*.0015)){ M.fallAt=T+.3; say('suiWobble',{cls:'shout'}); } }
+  if(w.kind==='river'){ const nx=M.x+w.vx*dt*.3, nz=M.z+w.vz*dt*.3; if(waterAt(nx,nz)){ M.x=nx; M.z=nz; } if(chance(dt*.00075)){ M.fallAt=T+.3; say('suiWobble',{cls:'shout'}); } }
   // こぐ
   if(!M.boatTo){
     M.boatMv=false; M.boatWait-=dt;
@@ -5394,7 +5421,7 @@ function boatTick(dt){
   }
   // なかまの ふねと ぶつかる
   for(let j=0;j<MS.length;j++){ if(j===YK_I) continue; const o=MS[j]; if(o.lifted||o.hidden) continue;
-    if(Math.hypot(o.x-M.x,(o.z-M.z)*2.2)<34*YKS && chance(dt*.2)){ fxText('ごつん！',(o.x+M.x)/2,M.z-40,{size:14}); say('suiWobble',{cls:'shout'}); M.boatJolt=.5; if(chance(.2)) M.fallAt=T+.35; } }
+    if(Math.hypot(o.x-M.x,(o.z-M.z)*2.2)<34*YKS && chance(dt*.2)){ fxText('ごつん！',(o.x+M.x)/2,M.z-40,{size:14}); say('suiWobble',{cls:'shout'}); M.boatJolt=.5; if(chance(.1)) M.fallAt=T+.35; } }
   S.mood=Math.min(100,S.mood+dt*.05);
   if(M.stT>M.stDur) decide();
 }
@@ -5551,7 +5578,7 @@ updateBrain = function(dt){
   if(S.hat.st!=='ok' && !M.lifted && !waterAt(px,pz) && waterAt(M.x,M.z)){
     M.x=px; M.z=pz; setState('idle', 2); if(bubbleT<=0) say('suiNoHat',{cls:'sleepy'}); express('worry',2);
   }
-  if(M.state==='sleep' && inBoat() && chance(dt*.0004)){ say('suiSleepRoll',{cls:'sleepy'}); M.fallAt=T+.6; }
+  if(M.state==='sleep' && inBoat() && chance(dt*.0002)){ say('suiSleepRoll',{cls:'sleepy'}); M.fallAt=T+.6; }
 };
 
 const _sui_decide = decide;
@@ -5566,7 +5593,8 @@ decide = function(){
   return _sui_decide();
 };
 
-const SUI_FALL_P = {surprise:.12, oh:.1, shock:.2, squish:.15, happy:.03, joy:.03, laugh:.02, cry:.06, angry:.04, puku:.03, nobi:.05, excited:.03, dizzy:.25};
+// v1.3.7a おちる かくりつを はんぶんに（Nexus Atelier 10/7「今より半減させて」）
+const SUI_FALL_P = {surprise:.06, oh:.05, shock:.1, squish:.075, happy:.015, joy:.015, laugh:.01, cry:.03, angry:.02, puku:.015, nobi:.025, excited:.015, dizzy:.125};
 const _sui_express = express;
 express = function(e, t){
   _sui_express(e, t);
@@ -5574,7 +5602,7 @@ express = function(e, t){
 };
 const _sui_jump = jump;
 jump = function(v){
-  if(inBoat()){ M.boatJolt=Math.min(1.2,(M.boatJolt||0)+v/300); if(v>=260 && !M.fallAt && chance(.08)) M.fallAt=T+.3; return; }
+  if(inBoat()){ M.boatJolt=Math.min(1.2,(M.boatJolt||0)+v/300); if(v>=260 && !M.fallAt && chance(.04)) M.fallAt=T+.3; return; }
   _sui_jump(v);
 };
 
@@ -5608,7 +5636,7 @@ waterTick = function(dt){
 const _sui_land = land;
 land = function(impact){
   const r=_sui_land(impact);
-  if(isSuijo() && inBoat() && impact>380 && chance(.25)) M.fallAt=T+.2;
+  if(isSuijo() && inBoat() && impact>380 && chance(.125)) M.fallAt=T+.2;
   return r;
 };
 
@@ -6326,7 +6354,7 @@ function relTick(dt){
     const v=relGetId(A.id,B.id); if(v<0) relAdd(i,j,.03,true);
     // けんかに なる？
     if(v<-25 && d<320 && (RL_COOL[key]||0)<T && ykFree(i) && ykFree(j) && !sleepTime()){
-      const p=Math.pow((-v-25)/75,1.5)*.035 + ((A.mood<25||B.mood<25)?.01:0);
+      const p=(Math.pow((-v-25)/75,1.5)*.035 + ((A.mood<25||B.mood<25)?.01:0)) * .5;   // v1.3.7a はんぶんに（ころされすぎ）
       if(chance(p)){
         RL_COOL[key]=T+rnd(25,45);
         const atk = A.mood<=B.mood ? i : j, def = atk===i ? j : i;
@@ -8718,9 +8746,9 @@ function kyStudyStart(forced){
 function kyStudyEnd(){
   const p=PS(), forced=!!M.studyForced, day=psDayKey();
   if(p.studyDay!==day){ p.studyDay=day; p.studyCnt=0; }
-  const dim = 1/(1+(p.studyCnt||0)*.6); p.studyCnt=(p.studyCnt||0)+1;
+  const dim = 1/(1+(p.studyCnt||0)*.35); p.studyCnt=(p.studyCnt||0)+1;   // v1.3.7a へりかたを ゆるく（.6→.35）
   const doze = !forced && Math.random() < clamp(.25-(p.kashi||0)*.003,.04,.25);
-  let gain = (2.2 + (p.natsu||0)*.02) * dim * (doze?.4:1) * (forced?1.35:1);
+  let gain = (4.5 + (p.natsu||0)*.03) * dim * (doze?.4:1) * (forced?1.35:1);
   psAdd('kashi', gain); psAdd('stress', forced?9:4); S.mood=Math.max(0,S.mood-(forced?8:3));
   if(forced){ psAdd('kyofu',3); psAdd('natsu',-2); psAdd('gesu',-1.5); }
   else psAdd('natsu', .4);
@@ -10802,7 +10830,7 @@ const QB_ACTS = {
   k_study:{cat:'しつけ', name:'おべんきょう', run:()=>kyStudy(), icon:()=>{ const c=document.createElement('canvas'); c.width=92; c.height=80; const g=c.getContext('2d'); g.translate(46,74); kyDrawSpr(g,'p_desk',70,0); return c; }},
   k_harisen:{cat:'しつけ', name:'ハリセン', tool:'harisen', run:()=>setTool(TOOL.cur==='harisen'?null:'harisen'), icon:()=>{ const c=document.createElement('canvas'); c.width=92; c.height=80; const g=c.getContext('2d'); g.translate(46,40); g.rotate(-.5); kyDrawSpr(g,'p_harisen',50,30); return c; }},
   k_trap:{cat:'いじわる', mean:true, name:'いたに しばる', tool:'trap', run:()=>setTool(TOOL.cur==='trap'?null:'trap'), icon:()=>{ const c=document.createElement('canvas'); c.width=92; c.height=80; const g=c.getContext('2d'); g.translate(46,72); kyDrawBindIcon(g,76); return c; }},
-  edit:   {cat:'そのほか', name:'もようがえ',  run:()=>{ ED.on ? exitEdit() : enterEdit(); }, emo:'🪴'},
+  edit:   {cat:'そのほか', name:'もようがえ',  run:()=>{ ED.on ? exitEdit() : enterEdit(); }, emo:'🌿'},
   diary:  {cat:'そのほか', name:'にっし',      run:()=>openDiary(document.querySelector('#b-diary')), emo:'📖'},
 };
 // いじわる どうぐ（せっていで OFF の ときは つかえない）
@@ -11722,7 +11750,7 @@ moodFace = function(){
 };
 
 /* ---- せりふに かおを あわせる（ひょうじょうの してい が ない とき だけ） ---- */
-const AU_HAPPY = /しあわ[せし]|うれし|ありがと|ゆわーい|もどっ|なおっ|にゃおっ|えへへ|ゆへへ|♪|💕|ぬくぬく|ぴかぴか|きれいきれい/;
+const AU_HAPPY = /(?<!ふ)しあわ[せし]|うれし|ありがと|ゆわーい|もどっ|なおっ|にゃおっ|えへへ|ゆへへ|♪|💕|ぬくぬく|ぴかぴか|きれいきれい/;
 const AU_SAD = /いた[いぃ]|いちゃ|いだ|ゆんや|ひどい|ごぼ|たしゅけ|たすけ|やめ|どぼじ|ゆぐっ|ゆぇ|かえし|こわい|ゆぴゃ|ゆぎ|あぢゅ|あつ[いぃ]|さむ[いぃ]|ゆびぃ/;
 const AU_SKIP_ST = new Set(['sleep','nap','sink','eat','jitabata','bath','yaki','strain','poop','omo','kzRepair','trapped','box']);
 const _au_say2 = say;
@@ -11893,7 +11921,7 @@ const MED = {
   kabiCure:{ic:'🧪', name:'ゆかび<br>治療薬', desc:'ゆかびを なおす'},
   noBroken:{ic:'💊', name:'非ゆっくり症<br>防止薬', desc:'非ゆっくり症に ならなくなる'},
   noKabi:{ic:'🛡️', name:'ゆかび<br>防止薬', desc:'ゆかびに ならなくなる'},
-  hard:{ic:'🪨', name:'表皮<br>硬化薬', desc:'あんよの きず・たたかれるのに つよくなる'},
+  hard:{ic:'🛡️', name:'表皮<br>硬化薬', desc:'あんよの きず・たたかれるのに つよくなる'},
 };
 Object.assign(L, {
   medDrink:["ゆ…？ にがい[のじぇ]…","おくすりさん… ごっくん[なのじぇ]…","ゆぅ… へんな あじ[なのじぇ]…"],
@@ -12265,13 +12293,14 @@ const HELP = [
    <p>・ゲームを とじている あいだは、せっていに かかわらず <b>げんじつと おなじ はやさ</b>で すすみます（いちばん ながくて ゲーム内 2日ぶん）</p>
    <p>・ながく あける ときは じどうきゅうじき・じどうそうじきを おいておくと あんしん。「しんでしまう」を OFF に すると しななく なります</p>`],
   ['🍚','ごはん・じどうきゅうじき',`<p>・ゆっくりフードは しあわせー味／それなりー味／げろまずー味。あまあまは とくべつな おやつ（あげすぎると ゲスに なりやすい）</p>
-   <p>・<b>じどうきゅうじき</b>は ゲーム内の 7じ・12じ・18じに 1ぴき 1こずつ だします。いっぱいで <b>ゆっくりの かず × 2日ぶん</b>。からっぽに なったら「ごはん」から ほじゅう</p>
+   <p>・<b>じどうきゅうじき</b>は ゲーム内の 7じ・12じ・18じに 1ぴき 1こずつ だします。いっぱいで <b>ゆっくりの かず × 2日ぶん</b>。からっぽに なったら <b>したの「ごはん」ボタン → じどうきゅうじきの「ほじゅう」</b>で ほじゅうできます（きゅうじきを タップすると すぐ 1こ だせます）</p>
    <p>・<b>ゲスが いると ほかの子の ごはんを よこどり</b>します。るすの あいだに よわい子が うえて しまう ことも</p>`],
   ['🧹','おそうじ・じどうそうじき',`<p>・うんうんは タップでも かたづけられます。よごれたままだと ゆかびの もとに なります</p>
    <p>・<b>じどうそうじき</b>（もようがえ → くらし）を おくと、ロボが うんうんを かたづけ、おいけが よごれたら みずを かえます。るすの あいだも うごきます</p>`],
   ['☂','あめ・ゆき',`<p>・ゆっくりは <b>あめに あたると とけます</b>。あめ・こさめ・ゆき（つもった ゆきも）の あいだは、おうち・たおれぎ・しだ・きのこの したで あまやどりして、じぶんからは そとに でません</p>
    <p>・もちあげて そとに だすと、ぬれて <b>あんよが ふやけて うごけなく</b> なり、そのまま だと <b>とけて しにます</b>。はやく あまやどりの ばしょに もどして、オレンジジュースを かけてあげてね</p>
-   <p>・つむりは みずに つよいので とけません。水上まりちゃは おふねの うえでも とけます</p>`],
+   <p>・つむりは みずに つよいので とけません。水上まりちゃは おふねの うえでも とけます</p>
+   <p>・<b>みずに おちた子・ながされた子を たすける</b>：その子を <b>ながおし</b>して もちあげ、みずの ない ゆかに おろします。そのあと オレンジジュース（「おせわ」）を かけると あんよが なおります</p>`],
   ['💡','ライトと ねむり',`<p>・よるに ライトを けすと ねむります。ひるまは ライトが きえていても まどの ひかりで あかるいので、あさに なれば じぶんで おきます</p>`],
   ['💊','びょうき と おくすり',`<p>・<b>ゆかび</b>：しめりけ・よごれ・うんうんで かかります。あんよ から みどりに むしばまれ、<b>あんよの てん → あんよの まわり → おなか → したはんぶん → げきつうで しぬ</b>。なおせるのは <b>ゆかび治療薬</b>だけ（さいごの だんかいは まにあいません）</p>
    <p>・<b>非ゆっくり症</b>：ストレスと こわがりが げんかいを こえると こころが こわれ「ゆっくり…」しか いわなく なります</p>
@@ -13787,7 +13816,7 @@ function drawRoomWindow(groups){
   slots.forEach((kind,si)=>{
     g.save(); g.setTransform(k,0,0,k,0,0); g.clearRect(0,0,RW,RH+30);
     g.fillStyle='#fdf6e6'; g.fillRect(0,0,RW,RH+30);
-    g.fillStyle='#6b4a2c'; g.font='bold 15px "Zen Maru Gothic",sans-serif'; g.textAlign='left'; g.fillText((kind==='cave'?'⛰ ':'🏠 ')+ROOM_NAME[kind]+((groups[kind]||[]).length?`（${groups[kind].length}ひき）`:''), 8, 20);
+    g.fillStyle='#6b4a2c'; g.font='bold 15px "Zen Maru Gothic",sans-serif'; g.textAlign='left'; g.fillText((String(kind).startsWith('cave')?'⛰ ':'🏠 ')+ROOM_NAME[kind]+((groups[kind]||[]).length?`（${groups[kind].length}ひき）`:''), 8, 20);
     g.save(); g.translate(0,28); rr(g,0,0,RW,RH,10); g.clip(); drawRoomInside(g,kind,groups[kind]||[],RW,RH,1.9); g.restore();
     g.restore();
     pc.clearRect(0,si*SH,SW,SH); pc.drawImage(cv,0,0,SW,SH,0,si*SH,SW,SH);
@@ -14148,7 +14177,7 @@ const FIND_LIST = [
   ['📚','おべんきょう・ハリセン','あそぶ', ()=>openPlaySheet()],
   ['🔨','いじわる どうぐ・いたに しばる・おかざりを すてる','いじわる', ()=>openMeanSheet(), ()=>meanOn()],
   ['🏠','おうち・トイレ・おさら・きゅうじきを おく','もようがえ（くらし）', ()=>{ closeSheet(); enterEdit(); ED.cat='くらし'; renderEditPanel(); }],
-  ['🪟','しきり（ガラス）・はいけい・ステージ','もようがえ（はいけい）', ()=>{ closeSheet(); enterEdit(); ED.cat='はいけい'; renderEditPanel(); }],
+  ['🔲','しきり（ガラス）・はいけい・ステージ','もようがえ（はいけい）', ()=>{ closeSheet(); enterEdit(); ED.cat='はいけい'; renderEditPanel(); }],
   ['✏️','なまえを かえる','にっし／うえの ＋', ()=>{ closeSheet(); openRenameSheet(YK_I); }],
   ['📖','できごと・せいかく・ショップ','にっし', ()=>openDiary(document.querySelector('#b-diary'))],
   ['➕','なかまを むかえる・おわかれ','うえの ＋', ()=>{ closeSheet(); openAdoptSheet(); }],
@@ -14578,7 +14607,8 @@ try{ _camUIk=''; camUI(); }catch(e){}
    ・みている すいそう だけが うごく。ほかの すいそうは、みに いったときに「るすの あいだ」と おなじ ように じかんが すすむ
    ・おひっこし：①もちあげて、うえの「すいそう」ボタンの うえで はなす ②「おむかえ」シートの「すいそう」から えらぶ
      （どちらかが うまく うごかない ときの ために 2とおり）
-   ・すいそうには かならず 1ぴき いる（さいごの 1ぴきは うつせない）
+   ・v1.3.7a さいごの 1ぴきも うつせる（いっしょに うつりさきへ いく。もとの すいそうは からっぽ＝0ぴき に なる）
+     からっぽの すいそうを みに いくと「だれを すまわせる？」を きく（みている すいそうには かならず 1ぴき いる）
    セーブ：S.tanks = [{id, seen, snap}]、S.tankI = みている ばんごう。みている すいそうの なかみは いままでどおり S に ある
    ============================================================ */
 const TANK_MAX = 6;
@@ -14600,7 +14630,7 @@ function tankName(i){
   return STAGE_DEF[k].name + (same.length>1 ? '①②③④⑤⑥⑦⑧'[n] : '');
 }
 function tankShort(i){ const k=tankStage(i), same=S.tanks.map((t,j)=>j).filter(j=>tankStage(j)===k); return (STAGE_SHORT[k]||STAGE_DEF[k].name) + (same.length>1 ? '①②③④⑤⑥⑦⑧'[same.indexOf(i)] : ''); }
-function tankIcon(i){ return STAGE_ICON[tankStage(i)] || '🪟'; }
+function tankIcon(i){ return STAGE_ICON[tankStage(i)] || '🔲'; }
 // あたらしい すいそうの なかみ（DEF から へやの ものを のぞいた もの）
 function tankFresh(stage){
   const d=DEF(), s={};
@@ -14624,16 +14654,20 @@ function tankLoadIn(snap){
   Object.assign(S, snap);
 }
 // みている すいそうを きりかえる
-function tankGo(j, quiet){
+function tankGo(j, quiet, carryId){
   if(j===S.tankI || !S.tanks[j]) return false;
+  { const sn=S.tanks[j].snap; if(carryId===undefined && sn && !(sn.yk||[]).length && !sn._newSp){ tankEmptyAsk(j); return false; } }
   try{ if(typeof ED!=='undefined' && ED.on) exitEdit(); }catch(e){}
   try{ if(typeof closeSheet==='function' && sheetKind) closeSheet(); }catch(e){}
   if(M.lifted){ try{ release(); }catch(e){} }
   if(typeof press!=='undefined') press=null;
   const cur=S.tanks[S.tankI];
   cur.snap = tankSnapOut(); cur.seen = Date.now();
-  const t=S.tanks[j];
-  tankLoadIn(t.snap || tankFresh('normal')); t.snap=null; S.tankI=j;
+  const t=S.tanks[j], dst=t.snap || tankFresh('normal');
+  // carryId：いまの すいそうの その子を いっしょに つれていく（さいごの 1ぴきの おひっこし）
+  if(carryId!==undefined){ const k=(cur.snap.yk||[]).findIndex(y=>y.id===carryId);
+    if(k>=0){ const y=cur.snap.yk.splice(k,1)[0]; y.dead=y.dead||null; cur.snap.focus=0; (dst.yk=dst.yk||[]).push(y); dst.focus=dst.yk.length-1; } }
+  tankLoadIn(dst); t.snap=null; S.tankI=j;
   tankRebuild();
   if(!quiet) tankBanner(`${tankIcon(j)} ${tankName(j)}`);
   save();
@@ -14677,12 +14711,19 @@ function tankRebuild(){
   tankBar();
 }
 // いま みている すいそうの i ばんめの 子を j ばんめの すいそうへ
-function tankMove(i, j){
+function tankMove(i, j, follow){
   if(j===S.tankI || !S.tanks[j] || !S.yk[i]) return false;
-  if(S.yk.length<2){ toast('この すいそうの さいごの 1ぴきは うつせません'); return false; }
   const dst=S.tanks[j].snap || (S.tanks[j].snap=tankFresh('normal'));
   if((dst.yk||[]).length >= YK_MAX){ toast(`${tankName(j)}は いっぱいです`); return false; }
   if(S.yk[i].sp==='suijo' && !tankHasSuiWater(j)){ toast(`${tankName(j)}には みずが ないので 水上まりちゃは すめません`); return false; }
+  if(follow || S.yk.length<2){
+    // さいごの 1ぴき（または からっぽの すいそうへ）：その子と いっしょに うつりさきへ いく
+    const y=S.yk[i], label=ykLabel(y), dname=tankName(j);
+    if(!tankGo(j, true, y.id)) return false;
+    note(`${label}を「${dname}」へ おひっこし させた。`);
+    tankBanner(`${label} → ${tankIcon(j)} ${dname}`);
+    return true;
+  }
   if(M.lifted){ try{ release(); }catch(e){} }
   ykSave();
   const y=S.yk[i], label=ykLabel(y), dname=tankName(j);
@@ -14705,7 +14746,6 @@ function tankNew(stage, first){
   if(!STAGE_DEF[stage]) stage='normal';
   if(first.sp==='suijo' && stage==='normal'){ toast('水上まりちゃは みずの ある ステージで むかえてね'); return false; }
   if(first.move!==undefined){
-    if(S.yk.length<2){ toast('この すいそうの さいごの 1ぴきは うつせません'); return false; }
     if(S.yk[first.move] && S.yk[first.move].sp==='suijo' && stage==='normal'){ toast('水上まりちゃは みずの ある ステージへ つれていってね'); return false; }
   }
   const snap=tankFresh(stage);
@@ -14726,6 +14766,30 @@ function tankBanner(text){
   b.style.cssText=`position:fixed;left:${Math.round(x)}px;top:${Math.round(y)}px;transform:translate(-50%,-50%);z-index:30;background:rgba(74,58,44,.9);color:#fff7e8;font-weight:700;font-size:16px;padding:10px 18px;border-radius:14px;pointer-events:none;white-space:nowrap;transition:opacity .4s;box-shadow:0 6px 16px rgba(0,0,0,.2)`;
   document.body.appendChild(b);
   setTimeout(()=>{ b.style.opacity='0'; }, 1400); setTimeout(()=>{ b.remove(); }, 1900);
+}
+
+/* ---------- からっぽの すいそう：だれを すまわせる？ ---------- */
+function tankEmptyAsk(j){
+  try{ if(typeof closeSheet==='function' && sheetKind) closeSheet(); }catch(e){}
+  const old=document.getElementById('tk-empty'); if(old) old.remove();
+  const water=tankHasSuiWater(j);
+  const mv=S.yk.map((y,i)=>`<button type="button" class="btn" data-em="${i}">${ykLabel(y)}を つれていく</button>`).join('');
+  const nw=Object.entries(SPECIES).filter(([k,v])=>!v.spx || SP_RAW[v.spx+'smile'] || window.__YK_ALL).filter(([k])=>k!=='suijo' || water)
+    .map(([k,v])=>`<button type="button" class="btn" data-en="${k}">あたらしい ${v.name}</button>`).join('');
+  const w=document.createElement('div'); w.id='tk-empty';
+  w.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;z-index:9000;padding:16px';
+  w.innerHTML=`<div style="background:#fffaf0;border-radius:18px;padding:16px 18px;width:min(400px,100%);max-height:90vh;overflow:auto;box-shadow:0 8px 30px rgba(0,0,0,.3);color:#3b2a1c">
+   <h2 style="margin:0 0 6px;font-size:17px">${tankIcon(j)} ${tankName(j)}は からっぽ です</h2>
+   <p style="margin:0 0 10px;font-size:13px;line-height:1.6">だれを すまわせる？（えらんだ子と いっしょに この すいそうへ いきます）</p>
+   <div class="fix" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px">${mv}</div>
+   <div class="fix" style="display:flex;flex-wrap:wrap;gap:6px">${nw}</div>
+   <div style="display:flex;justify-content:flex-end;margin-top:12px"><button type="button" class="btn" data-ex>やめる</button></div></div>`;
+  document.body.appendChild(w);
+  const close=()=>w.remove();
+  w.addEventListener('click',e=>{ if(e.target===w) close(); });
+  w.querySelector('[data-ex]').addEventListener('click', close);
+  w.querySelectorAll('[data-em]').forEach(b=>b.addEventListener('click',()=>{ if(tankMove(+b.dataset.em, j, true)) close(); }));
+  w.querySelectorAll('[data-en]').forEach(b=>b.addEventListener('click',()=>{ const sn=S.tanks[j].snap; if(!sn) return; sn._newSp=b.dataset.en; close(); tankGo(j); }));
 }
 
 /* ---------- うえの「すいそう」ボタン ---------- */
@@ -14795,16 +14859,16 @@ cv.addEventListener('pointercancel', ()=>{ TANK_HOT=-1; tankHint(-1); document.b
     if(sheetKind!=='adopt' || !S.tanks) return;
     const box=document.createElement('div'); box.id='tank-sec';
     const others=S.tanks.map((t,j)=>j).filter(j=>j!==S.tankI);
-    const stOpt=Object.keys(STAGE_DEF).map(k=>`<button type="button" class="btn" data-newst="${k}">${STAGE_ICON[k]||'🪟'} ${STAGE_DEF[k].name}</button>`).join('');
-    const firstOpt = S.yk.map((y,i)=>`<button type="button" class="btn" data-first="m${i}" ${S.yk.length<2?'disabled':''}>${ykLabel(y)}を つれていく</button>`).join('')
+    const stOpt=Object.keys(STAGE_DEF).map(k=>`<button type="button" class="btn" data-newst="${k}">${STAGE_ICON[k]||'🔲'} ${STAGE_DEF[k].name}</button>`).join('');
+    const firstOpt = S.yk.map((y,i)=>`<button type="button" class="btn" data-first="m${i}" >${ykLabel(y)}を つれていく</button>`).join('')
       + Object.entries(SPECIES).filter(([k,v])=>!v.spx || SP_RAW[v.spx+'smile'] || window.__YK_ALL).map(([k,v])=>`<button type="button" class="btn" data-first="s${k}">あたらしい ${v.name}</button>`).join('');
     box.innerHTML = `<h3 class="sub">すいそう</h3>
       <div class="fix">${S.tanks.map((t,j)=>`<button type="button" class="btn${j===S.tankI?' on':''}" data-gotank="${j}" ${j===S.tankI?'disabled':''}>${tankIcon(j)} ${tankName(j)}（${tankYks(j).length}ひき）${j===S.tankI?' ← いま みている':''}</button>`).join('')}</div>
-      ${others.length ? `<h3 class="sub">おひっこし（すいそうを うつす）</h3>` + S.yk.map((y,i)=>`<div class="tk-mv" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:4px 0;font-size:13px"><b style="min-width:6em">${ykLabel(y)}</b>${others.map(j=>`<button type="button" class="btn" data-mv="${i}:${j}" style="padding:3px 8px;font-size:12px" ${S.yk.length<2?'disabled':''}>${tankIcon(j)} ${tankName(j)}へ</button>`).join('')}</div>`).join('') : ''}
+      ${others.length ? `<h3 class="sub">おひっこし（すいそうを うつす）</h3>`  + S.yk.map((y,i)=>`<div class="tk-mv" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:4px 0;font-size:13px"><b style="min-width:6em">${ykLabel(y)}</b>${others.map(j=>`<button type="button" class="btn" data-mv="${i}:${j}" style="padding:3px 8px;font-size:12px">${tankIcon(j)} ${tankName(j)}へ</button>`).join('')}</div>`).join('') : ''}
       ${S.tanks.length<TANK_MAX ? `<h3 class="sub">すいそうを ふやす（${S.tanks.length}／${TANK_MAX}）</h3>
       <p class="edit-help">① ステージを えらぶ</p><div class="fix" id="tk-st">${stOpt}</div>
       <p class="edit-help">② さいしょに すむ 子を えらぶ</p><div class="fix" id="tk-first">${firstOpt}</div>` : `<p class="edit-help">すいそうは ${TANK_MAX}こ まで です</p>`}
-      <p class="edit-help">・もちあげて、うえの「すいそう」の ボタンの うえで はなしても おひっこし できます<br>・ほかの すいそうに いる 子も じかんは すすみます（みに いった ときに まとめて すすみます。ごはん・そうじは じどうきゅうじき・じどうそうじきが あると あんしん）<br>・すいそうには かならず 1ぴき います（さいごの 1ぴきは うつせません）</p>`;
+      <p class="edit-help">・もちあげて、うえの「すいそう」の ボタンの うえで はなしても おひっこし できます<br>・ほかの すいそうに いる 子も じかんは すすみます（みに いった ときに まとめて すすみます。ごはん・そうじは じどうきゅうじき・じどうそうじきが あると あんしん）<br>・さいごの 1ぴきを うつすと、その子と いっしょに うつりさきの すいそうへ いきます（もとの すいそうは からっぽに なります）</p>`;
     const ref=sheet.querySelector('h3.sub') || sheet.querySelector('.edit-help'); ref.parentNode.insertBefore(box, ref);
     box.querySelectorAll('[data-gotank]').forEach(b=>b.addEventListener('click',()=>{ tankGo(+b.dataset.gotank); }));
     box.querySelectorAll('[data-mv]').forEach(b=>b.addEventListener('click',()=>{ const [i,j]=b.dataset.mv.split(':').map(Number); if(tankMove(i,j)) closeSheet(); }));
@@ -14975,7 +15039,7 @@ Object.assign(L, {
 });
 const NAKA_GAMES = [
   ['kari','🦗','かりごっこ','ばったさんを みんなで つかまえる'],
-  ['tan','🪵','まりちゃ たんけんたい','いっれつで「どらごん」たいじ'],
+  ['tan','🚩','まりちゃ たんけんたい','いっれつで「どらごん」たいじ'],
   ['un','🍑','うんうん たいそう','ごうれいを かける（きくかは その子しだい）'],
 ];
 const NAKA_BUSY = ['sleep','nap','stuck','rainStuck','sink','boat','bath','eat','poop','fight','social','dead','reach','hide','cave','tunnel','tramp','slide','away','naka','shelter'];
@@ -15721,5 +15785,630 @@ function nsShow(){
 try{
   if(window.__mtHadSave===false && !DESKTOP && !NATIVE) setTimeout(nsShow, 900);
 }catch(e){ console.warn('[newsave]', e); }
+
+/* ============================================================
+   v1.3.8 作業ボードの 対応
+   ・かしこい子は トイレで する（かしこさ 80 いじょうは かならず トイレへ）
+   ・かしこい子は みずに つかりすぎない（あんよが ふやける まえに 自分で でる・ふやけ ぎみの ときは おいけに はいらない）
+   ・ほかの子に ころされにくく（X ガクですさん 10/7）：よける・かみかえす・おしらせと あかい わっか・けんかの おきやすさ はんぶん
+     かみつかれて しぬまでは やく 20びょう（zz_v138.js。Nexus Atelier 10/7）
+   ・たんけんたい の ふぐあい 2つ／セリフと かおの ちぐはぐ
+   ============================================================ */
+function ykKashi(){ try{ return (PS().kashi||0); }catch(e){ return 0; } }
+function smartToiletP(){ const k=ykKashi(); return k>=80 ? 1 : clamp(.6 + k*.005, .6, 1); }
+function smartNoBath(){ return ykKashi()>=40 && (M.soak||0)>4; }
+// みずから じぶんで でる
+{ const _sb_waterTick = waterTick;
+  waterTick = function(dt){
+    _sb_waterTick(dt);
+    if(isDead() || M.lifted || M.trapped || M.boxed) return;
+    const k=ykKashi(); if(k<35) return;
+    const lim = 18 - Math.min(10, (k-35)*.2);          // かしこいほど はやく でる（18びょうで ふやけはじめ）
+    if((M.soak||0) < lim) return;
+    if(!waterAt(M.x, M.z)) return;
+    if(['stuck','drift','sink','fight','trapped','sleep'].includes(M.state) || (S.anyo||0)>=30) return;
+    if(M.next && M.next.dry) return;
+    let p=null; for(let i=0;i<20;i++){ const q=randomFloor(); if(!waterAt(q.x,q.z)){ p=q; if(Math.hypot(q.x-M.x,q.z-M.z)<260) break; } }
+    if(!p) return;
+    if(M.state==='bath') { M.z=Math.min(FLOOR_BOT-3,POND.z+POND.rz+14); M.x=POND.x+POND.rx*.6; }
+    goTo(p.x, p.z, {fn:()=>setState('idle',2), label:'みずから あがってる', dry:true}, 60, 'hop');
+    if(bubbleT<=0) say(['あんよが ふやけちゃう[のじぇ]！ あがる[のじぇ]！','おみずは ほどほどが いい[のじぇ]！']);
+  }; }
+
+/* ---------- けんか：ころされにくく ---------- */
+// たたかいの じかんを ながく（そのあいだに ひきはなせる）
+{ const _sb_fightTick = fightTick;
+  fightTick = function(dt){ const F=M.fight; if(F && F.kind==='stick') dt*=.45; return _sb_fightTick(dt); }; }   // きのぼうは 2.2ばい ゆっくり（かみつきは zz_v138.js で しぬまで 20びょう）
+{ const _sb_fightBegin = fightBegin;
+  fightBegin = function(i, j, kind){
+    _sb_fightBegin(i, j, kind);
+    if(kind==='bite' || kind==='stick'){
+      // ゆっくり すすめる ぶん、じょうたいの じかんも のばす（ぼうぎょがわ が さきに ぬけないように）
+      const sl = kind==='bite' ? BITE_SLOW : 1/.45;
+      if(M.state==='fight') M.stDur=(M.stDur||0)*sl;
+      ykDo(j, ()=>{ if(M.state==='fight') M.stDur=(M.stDur||0)*sl; });
+      const b=ykLabel(S.yk[j]);
+      toast(`⚠ ${b}が おそわれてる！ ながおしで ひきはなして`);
+      try{ SFX.cry && SFX.cry(); }catch(e){}
+      FIGHT_ALERT[S.yk[j].id]=T+FIGHT_DUR[kind]*sl+1;
+    }
+  }; }
+const FIGHT_ALERT={};
+// おそわれている子に あかい わっか（ゆんみっしゅうでも わかる）
+{ const _sb_drawMari = drawMari;
+  drawMari = function(){
+    const id=S.yk && S.yk[YK_I] && S.yk[YK_I].id, until=id && FIGHT_ALERT[id];
+    if(until && T<until && !isDead() && M.state==='fight'){
+      const b=mariBox(), g=ctx, a=.55+.35*Math.sin(T*12);
+      g.save(); g.strokeStyle=`rgba(232,60,60,${a})`; g.lineWidth=4; g.setLineDash([10,6]);
+      g.beginPath(); g.ellipse(b.x, b.cy, b.w*.75, b.h*.75, 0, 0, Math.PI*2); g.stroke(); g.restore();
+    }
+    return _sb_drawMari();
+  }; }
+// かいひ・はんげき・ダメージ
+{ const _sb_fightHit = fightHit;
+  fightHit = function(j, dmg, cause, words, col, anko){
+    let dodge=false, counter=false, k=0, kyofu=50, hard=false;
+    ykDo(j, ()=>{ const p=PS(); k=p.kashi||0; kyofu=p.kyofu||0; hard=medOn('hard'); });
+    const pDodge = clamp(k*.004 + (hard?.25:0), 0, .55);
+    if(chance(pDodge)) dodge=true;
+    if(dodge){
+      ykDo(j, ()=>{ const b=mariBox(); fxText(hard?'かちっ！ きかない[のじぇ]！':'ひょいっ！', b.x, b.top-8, {size:16, color:'#2f6f9f'}); M.sq=-.15; jump(160); });
+      return;
+    }
+    if(hard) dmg*=.5;
+    _sb_fightHit(j, dmg, cause, words, col, anko);
+    // はんげき：こわがりで なく、まだ げんき なら かみかえす
+    let alive=false, hp=0; ykDo(j, ()=>{ alive=!isDead(); hp=S.health||0; });
+    if(alive && kyofu<45 && hp>25 && chance(.3)){
+      counter=true;
+      const atk=YK_I;
+      ykDo(j, ()=>{ say(['やり かえす[のじぇ]！','ゆっくり できない子は せいさい[なのじぇ]！'],{cls:'shout'}); express('angry',1.5); });
+      const b=mariBox(); fxText('がぶっ！（はんげき）', b.x, b.top-10, {size:16, color:'#b8452f'});
+      loseHealth(14, 'bite'); express('cry',1.2); M.tears=Math.max(M.tears,2);
+      if(M.fight){ M.fight.t = FIGHT_DUR[M.fight.kind]+.1; }    // ひるんで おわり
+    }
+  }; }
+
+
+/* ---------- たんけんたい：あんよを やかれた子・しばられた子は さんか しない／おいけが みちの とちゅうに ない ときは とびこまない（X ペンもどきさん 10/7） ---------- */
+{ const _tb_nakaOk = nakaOk;
+  nakaOk = function(){ if(typeof BY==='function' && BY().yaki) return false; if(M.trapped) return false; return _tb_nakaOk(); }; }
+{ const _tb_wp = tanWaterPoint;
+  tanWaterPoint = function(lead){
+    const w=_tb_wp(lead); if(!w || !NAKA || !NAKA.dragon) return w;
+    // たいちょうから どらごんまでの みちの はば（よこ）に おいけが ない ときは とびこまない
+    const x0=Math.min(lead.x, NAKA.dragon.x)-70, x1=Math.max(lead.x, NAKA.dragon.x)+70;
+    return (w.x>=x0 && w.x<=x1) ? w : null;
+  }; }
+
+/* ---------- セリフと かおの ちぐはぐを なくす（作業ボード：Nexus Atelier 10/7） ----------
+   かおを きめずに しゃべった ときは、きもちの かお（ごきげん）の まま に なっていた。
+   （れい：にこにこ がおで「いだい…」、ないた かおで「しあわせー」）
+   → とまっている ときに、かおが きまっていなければ、セリフの ないようで かおを あわせる。
+     さきに／あとから express() で かおを きめている ところは そのまま */
+const SAY_NEG = /いだい|いたい|いだっ|こわい|こわく|たすけ|やめて|ゆんやー|ゆぎ|ゆぐ|どぼじ|かなしい|さみしい|くるし|あぢゅ|あづ|ゆえーん|しにたく|ゆっくり できない|ゆっくり できな|ひどい|つらい|ごめんなさい|ゆるして|おなか すいた|ひもじ|さむい|つめたい|ふやけ|くさい|きらい|とけちゃ|いたんじゃ|ぐったり|かぴかぴ|ゆっくり できない|ふしあわせ/;
+const SAY_ANG = /ぷくー|ゆるさない|くそ|せいっさい|じじい|ばばあ|どれい|ばか|うるさい|ゆっくり しね|おこ[っる]/;
+const SAY_POS = /(?<!ふ)しあわせ|ゆっくり できる|ゆっくり できた|うれしい|だいすき|やった|すごい|たのしい|♪|💕|ゆっへん|えらい|おいしい|ありがと/;
+const SAY_FACE_ST = ['idle','look','shelter','admire','beg','sun'];
+{ const _sf_say = say;
+  say = function(key, opts){
+    const r=_sf_say.apply(this, arguments);
+    try{
+      if(isDead() || M.lifted || !SAY_FACE_ST.includes(M.state)) return r;
+      if(M.expr && (M.exprT||0)>0) return r;                 // もう かおが きまっている
+      if(opts && opts.cls==='sleepy') return r;              // ねむい セリフは ねむい かおの まま
+      const t=(bubble && bubble.textContent)||''; if(!t) return r;
+      // あかちゃんことばに なおす まえの もとの セリフで しらべる（いま でた セリフに いちばん にている もとの セリフ）
+      const LS=SPECIES[S.sp||'maricha'].L;
+      const src = Array.isArray(key) ? key : (typeof key==='string' && (LS[key]||L[key])) ? (LS[key]||L[key]) : [t];
+      const bg=s=>{ const o=new Set(); for(let i=0;i<s.length-1;i++) o.add(s.substr(i,2)); return o; };
+      const tb=bg(t); let best=String(src[0]), bs=-1;
+      for(const x of src){ let tx=''; try{ tx=talk(String(x), opts&&opts.o); }catch(e){ tx=String(x); } const xb=bg(tx); let c=0; for(const q of xb) if(tb.has(q)) c++; const sc=c/Math.max(1,xb.size+tb.size-c); if(sc>bs){ bs=sc; best=String(x); } }
+      const neg=SAY_NEG.test(best), ang=SAY_ANG.test(best), pos=SAY_POS.test(best);
+      const dur=Math.min(4, 1.6+t.length*.06);
+      if(ang && !pos) express('puku3', dur);
+      else if(neg && !pos) express(/いだい|いたい|ゆぎ|たすけ|ゆんやー|ゆえーん/.test(t)?'cry3':'worry', dur);
+      else if(pos && !neg) express(/♪|💕|だいすき/.test(t)?'love':'joy', dur);
+    }catch(e){}
+    return r;
+  }; }
+
+/* ============================================================
+   v1.3.7a おうちが 2つ いじょう ある とき（作業ボード req121：Nexus Atelier「直す」10/7）
+   ・いままでは ねる ばしょが いつも 1つめの おうち だけ だった（2つめの おうちは つかわれない）
+   ・ゲスが 1つめの おうちを ひとりじめ しても、ほかの子は 2つめ（いじょう）の おうちで ねる
+   ・おうちの なかの ようす（insideKind）も、いちばん ちかい おうちで みる
+   ============================================================ */
+function h2Houses(){ return objsOf('house'); }
+function h2Owned(){ try{ return (typeof gs2HouseOwnerValid==='function' && gs2HouseOwnerValid()) ? objsOf('house')[0] : null; }catch(e){ return null; } }
+const H2_OFF = n => n<2 ? [[0,0]] : n<3 ? [[-18,0],[18,0]] : [[-32,0],[32,0],[-12,7],[20,7]];
+{ const _h2_sleepSpot = sleepSpot;
+  sleepSpot = function(){
+    const hs=h2Houses(); if(hs.length<2) return _h2_sleepSpot();
+    const own=h2Owned(), me=(S.yk[YK_I]||{}).id;
+    if(own && me===HOUSE_OWNER) return _h2_sleepSpot();          // ゲスは 1つめの おうちを ひとりじめ
+    const avail = own ? hs.filter(h=>h!==own) : hs;
+    const sleepers=[]; S.yk.forEach((y,i)=>{ if(y && !y.dead && !(own && y.id===HOUSE_OWNER)) sleepers.push(i); });
+    let k=sleepers.indexOf(YK_I); if(k<0) k=0;
+    const per=Math.min(4, Math.max(1, Math.ceil(sleepers.length/avail.length)));
+    const hi=Math.floor(k/per), slot=k%per;
+    if(hi>=avail.length) return _h2_sleepSpot();                 // はいりきらない 子は いままで どおり
+    const h=avail[hi], p=objPos(h), ds=depthScale(p.z)*osc(h);
+    const cnt=Math.min(per, sleepers.length-hi*per), o=H2_OFF(cnt)[Math.min(slot,H2_OFF(cnt).length-1)];
+    return {x:p.x+o[0]*ds, z:Math.min(FLOOR_BOT-2,p.z+3+o[1]), kind:'house', o:h};
+  }; }
+// おうちの なかに いるか：いちばん ちかい おうちで みる
+homeObj = function(){
+  const hs=h2Houses(); if(hs.length<2) return hs[0]||null;
+  let b=null, bd=1e9;
+  for(const h of hs){ const p=objPos(h), d=Math.abs(p.x-M.x)+Math.abs(p.z-M.z)*2; if(d<bd){ bd=d; b=h; } }
+  return b;
+};
+
+/* ============================================================
+   v1.3.7a 見本チェックで OK が でた もの（Nexus Atelier 10/7）
+   ・req48 もようがえ：とじる「✕」が スマホで 画面の 右外に はみでていた → タイトルの よこに「✓ おわる」
+   ・req30 おてんきさん そうち：あさ・ひる・ゆうがた・よる ごとに おてんきを よやく できる
+   ============================================================ */
+
+/* ---------- req48 もようがえの「✓ おわる」 ---------- */
+(function(){
+  const st=document.createElement('style');
+  st.textContent=`#sheet.edit .sheet-h{justify-content:flex-start; gap:8px; min-width:0}
+  #sheet.edit .sheet-h h2{flex:none}
+  #sheet.edit .sheet-h .x.ok-done{order:0; position:static; flex:none; width:auto; height:auto; min-width:0; padding:6px 14px; border-radius:999px; border:none; background:#5f8f4e; color:#fff; font-family:var(--ui); font-weight:800; font-size:14px; line-height:1.2; white-space:nowrap; cursor:pointer; box-shadow:0 2px 0 rgba(0,0,0,.12)}
+  #sheet.edit .sheet-h .cat-tabs{flex:1 1 auto; min-width:0; flex-wrap:nowrap; overflow-x:auto; scrollbar-width:thin; padding-bottom:2px}
+  #sheet.edit .sheet-h .cat-tabs button{flex:none; white-space:nowrap}`;
+  document.head.appendChild(st);
+})();
+{ const _ok_rep = renderEditPanel;
+  renderEditPanel = function(){
+    const r=_ok_rep.apply(this, arguments);
+    try{
+      const h=sheet.querySelector('.sheet-h'), x=h && h.querySelector('.x'), h2=h && h.querySelector('h2');
+      if(x && h2 && !x.classList.contains('ok-done')){ x.classList.add('ok-done'); x.textContent='✓ おわる'; h2.after(x); }
+    }catch(e){ console.warn('[req48]',e); }
+    return r;
+  }; }
+// スマホの せまい はばで タイトルが かくれる ルールが あるので、おわるボタンは いつも みえるように
+(function(){ const st=document.createElement('style'); st.textContent=`@media (max-width:370px){ #sheet.dock.edit .sheet-h h2{display:none;} }`; document.head.appendChild(st); })();
+
+/* ---------- req30 じかんたいの おてんき（よやく） ---------- */
+const WXP_SLOTS = [
+  {k:'asa',  name:'あさ',   icon:'🌅', from:6,  to:11, range:'6じ〜11じ'},
+  {k:'hiru', name:'ひる',   icon:'🌞', from:11, to:17, range:'11じ〜17じ'},
+  {k:'yu',   name:'ゆうがた', icon:'🌇', from:17, to:20, range:'17じ〜20じ'},
+  {k:'yoru', name:'よる',   icon:'🌙', from:20, to:30, range:'20じ〜6じ'},
+];
+function wxpPlan(){ const e=ENV(); if(!e.wxPlan) e.wxPlan={asa:'auto',hiru:'auto',yu:'auto',yoru:'auto'}; return e.wxPlan; }
+function wxpSlot(h){ h=(h===undefined?gameHour():h); const hh=h<6?h+24:h; return WXP_SLOTS.find(s=>hh>=s.from && hh<s.to) || WXP_SLOTS[3]; }
+function wxpOn(){ const e=ENV(); return e.wxMode==='auto'; }
+function wxpWant(){ if(!wxpOn()) return null; const v=wxpPlan()[wxpSlot().k]; return v && v!=='auto' ? v : null; }
+function wxpNext(){
+  const p=wxpPlan(), cur=wxpSlot(), i=WXP_SLOTS.indexOf(cur);
+  const s=WXP_SLOTS[(i+1)%4]; return {s, v:p[s.k]||'auto'};
+}
+// おてんきの きめかた：よやくが ある じかんたいは その おてんき
+{ const _wxp_now = wxNow;
+  wxNow = function(){ const w=wxpWant(); return w || _wxp_now(); }; }
+// じかんたいが かわった ときに おしらせ（いつもの「おてんきが かわった」と おなじ）
+let WXP_LAST=null;
+{ const _wxp_env = envTick;
+  envTick = function(dt){
+    const before = WXP_LAST;
+    _wxp_env(dt);
+    const now = wxNow();
+    if(before && before!==now && wxpOn()) { try{ wxAnnounce(before, now); }catch(e){} }
+    WXP_LAST = now;
+  }; }
+// シートに よやくらんを たす
+{ const _wxp_open = openWxSheet;
+  openWxSheet = function(){
+    _wxp_open();
+    try{
+      const p=wxpPlan(), opts=[['auto','じどう'],...['sun','cloud','drizzle','rain','snow'].map(k=>[k, WX_ICON[k]+' '+WX_NAME[k]])];
+      const sel=(slot)=>`<select data-wxp="${slot}" style="font:inherit;font-size:14px;padding:4px 6px;border-radius:8px;border:1.5px solid var(--line);background:#fffdf6;color:var(--ink)">${opts.map(([v,t])=>`<option value="${v}" ${p[slot]===v?'selected':''}>${t}</option>`).join('')}</select>`;
+      const row=s=>`<div style="display:flex;align-items:center;gap:10px;padding:5px 2px;border-bottom:1px dashed var(--line)"><span style="width:92px;font-weight:800">${s.icon} ${s.name}</span><small style="width:84px;opacity:.7">${s.range}</small>${sel(s.k)}</div>`;
+      const nx=wxpNext();
+      const note2 = !wxpOn() ? '<br>・いまは うえの「おてんき」で こてい しているので、よやくは おやすみ ちゅう'
+        : `<br>・つぎの きりかわり：<b>${nx.s.from%24}じ → ${nx.v==='auto'?'じどう':WX_ICON[nx.v]+' '+WX_NAME[nx.v]}</b>`;
+      const html=`<h3 class="sub">じかんたいの おてんき（よやく）</h3><div class="wxp">${WXP_SLOTS.map(row).join('')}
+        <p class="edit-help" style="margin:6px 0 0">・その じかんに なると おてんきが かわります（「じどう」の ところは いままで どおり）。うえの「おてんき」で こていすると こちらは おやすみ${note2}</p></div>`;
+      const h=[...sheet.querySelectorAll('h3.sub')].find(x=>x.textContent.includes('きせつ'));
+      if(h) h.insertAdjacentHTML('beforebegin', html);
+      sheet.querySelectorAll('[data-wxp]').forEach(el=>el.addEventListener('change',()=>{
+        const old=wxNow(); p[el.dataset.wxp]=el.value; const now=wxNow();
+        if(old!==now) wxAnnounce(old, now); WXP_LAST=now;
+        const s=WXP_SLOTS.find(x=>x.k===el.dataset.wxp);
+        note(`おてんきさん装置：${s.name}の おてんきを ${el.value==='auto'?'じどう':WX_NAME[el.value]}に よやく した。`);
+        SFX.click&&SFX.click(); save(); sheetKind=null; openWxSheet();
+      }));
+    }catch(e){ console.warn('[req30]',e); }
+  }; }
+
+/* ---------- req120 おうち・どうくつの なかの まどを ひとつずつ ----------
+   いままでは 1つめの おうちだけ。おうち（ダンボール ふくむ）・どうくつ ごとに まどを ならべる（PCの べつウインドウも おなじ） */
+function rmSorted(type){ return objsOf(type).slice().sort((a,b)=>objPos(a).x-objPos(b).x); }
+function rmKeyOf(o){
+  const base = o.type==='cave' ? 'cave' : (o.type==='danbo' ? 'danbo' : 'house');
+  const list = o.type==='cave' ? rmSorted('cave') : rmSorted('house');
+  const i = list.indexOf(o); return i<=0 ? base : base+'#'+(i+1);
+}
+function rmBase(key){ return String(key).split('#')[0]; }
+function rmName(key){
+  const base=rmBase(key), list = base==='cave' ? rmSorted('cave') : rmSorted('house'), n=list.length;
+  const nm = {house:'おうちの なか', cave:'どうくつの なか', danbo:'ダンボールハウスの なか'}[base] || 'なか';
+  if(n<2) return nm;
+  const i = key.includes('#') ? (+key.split('#')[1])-1 : 0;
+  const pos = n===2 ? ['ひだり','みぎ'][i] : n===3 ? ['ひだり','まんなか','みぎ'][i] : String(i+1);
+  return `${nm}（${pos}）`;
+}
+insideKind = function(){
+  if(M.lifted || isDead()) return null;
+  if(M.state==='cave' || (M.hidden && M.actObj)){
+    const o = M.actObj ? objById(M.actObj) : null;
+    if(o && o.type==='cave') return rmKeyOf(o);
+    if(M.state==='cave'){ const c=nearestOf('cave',M.x,M.z); return c ? rmKeyOf(c) : 'cave'; }
+  }
+  if(M.state==='sleep' || M.state==='shelter'){
+    for(const h of objsOf('house')){ const p=objPos(h), ds=depthScale(p.z)*osc(h); if(Math.abs(M.x-p.x)<50*ds && Math.abs(M.z-p.z)<14) return rmKeyOf(h); }
+  }
+  return null;
+};
+{ const _rm_bg = drawRoomBg; drawRoomBg = function(g,kind,w,h,t){ return _rm_bg(g, rmBase(kind), w,h,t); }; }
+{ const _rm_in = drawRoomInside; drawRoomInside = function(g,kind,list,w,h,yk){ return _rm_in(g, rmBase(kind)==='cave'?'cave':kind, list,w,h,yk); }; }
+roomSlots = function(){ const out=[]; for(const h of rmSorted('house')) out.push(rmKeyOf(h)); for(const c of rmSorted('cave')) out.push(rmKeyOf(c)); return out; };
+{ const _rm_groups = roomGroups;
+  roomGroups = function(){ const g=_rm_groups(); for(const k of Object.keys(g)) ROOM_NAME[k]=rmName(k); for(const k of roomSlots()) ROOM_NAME[k]=rmName(k); return g; }; }
+// スマホ：まどを ならべる（はばが たりなければ 2だんめへ）
+drawRoomPanels = function(groups){
+  const kinds=roomSlots().filter(k=>groups[k] && groups[k].length).reverse(); if(!kinds.length) return;   // みぎから じゅんに おくので、ひだりの おうちが ひだりに くるように
+  const g=ctx, k=scale*dpr; g.save(); g.setTransform(k,0,0,k,0,0);
+  const PW=150, PH=86, x0=TANK.x1-100-PW; let px=x0, py=TANK.glassTop+30;
+  for(const kind of kinds){
+    if(px < TANK.x0+8){ px=x0; py+=PH+30; }
+    g.save(); g.shadowColor='rgba(40,25,10,.35)'; g.shadowBlur=8; g.shadowOffsetY=2;
+    g.fillStyle='#fdf6e6'; rr(g,px-4,py-18,PW+8,PH+22,10); g.fill(); g.restore();
+    g.strokeStyle='#c9a46a'; g.lineWidth=1.6; rr(g,px-4,py-18,PW+8,PH+22,10); g.stroke();
+    g.fillStyle='#6b4a2c'; g.font='bold 10px "Zen Maru Gothic",sans-serif'; g.textAlign='left'; g.fillText((rmBase(kind)==='cave'?'⛰ ':'🏠 ')+rmName(kind),px+3,py-6);
+    g.save(); rr(g,px,py,PW,PH,6); g.clip(); g.translate(px,py);
+    drawRoomInside(g,kind,groups[kind],PW,PH,.82);
+    g.restore();
+    g.strokeStyle='#8a6440'; g.lineWidth=2; rr(g,px,py,PW,PH,6); g.stroke();
+    px -= PW+18;
+  }
+  g.restore();
+};
+// PC：べつウインドウ（へやの かずが かわったら たかさを あわせる）
+{ const _rm_win = drawRoomWindow;
+  drawRoomWindow = function(groups){
+    try{ const n=Math.max(1,roomSlots().length), want=n*(RH+34)+60; if(ROOM_WIN && ROOM_WIN._rmN!==n){ ROOM_WIN._rmN=n; ROOM_WIN.resizeTo(RW+40, want); } }catch(e){}
+    // アイコンの はんてい（cave#2 も ⛰）は なまえで
+    return _rm_win(groups);
+  }; }
+
+/* ============================================================
+   v1.3.8 かみつき：かみつかれてから しぬまで およそ 20びょう（Nexus Atelier 10/7）
+   ・いままでは 2.5びょうで 3かいめの かみつき（くいやぶり）まで いっていた
+   ・1かいめ（がぶっ）は いままでどおり 0.5びょう。そこから 2かいめ・3かいめ までを ひきのばし、3かいめが 20びょうごろ
+   ・あいだに ながおしで もちあげれば ひきはなせる
+   ============================================================ */
+const BITE_DEATH_SEC = 20;
+const BITE_SLOW = (BITE_DEATH_SEC-.5)/(2.5-.5);   // 0.5びょう いこうの のびかた（やく 9.75ばい）
+{ const _b8_fightTick = fightTick;
+  fightTick = function(dt){
+    const F=M.fight;
+    if(F && F.kind==='bite' && F.t>=.5){ dt /= BITE_SLOW; }
+    return _b8_fightTick(dt);
+  }; }
+
+const RMN_SRC='data:image/webp;base64,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';
+
+/* ============================================================
+   v1.3.9 ラムネスプレー（おせわ → ラムネスプレー）
+   ・えらぶと どうぐに なり、ねかせたい子を タップ → その子だけ ゲーム内 3じかん ぐっすり
+     （もういちど かけると そこから 3じかん に もどる）
+   ・つついても・だっこしても おきない（だっこから おろすと また すやすや）
+   ・いじわる（いじわるの どうぐ・ハンマー など）を すると むりやり おきる
+   ・おきた あとの ぼーっと は なし（ききめが きれたら ふつうに めを さます）
+   ・餡サイクロペディア：ラムネで ゆっくりは ねむる／ラムネスプレーは 加工所製
+   ============================================================ */
+const RMN_MIN = 180;   // ゲーム内の ふん
+Object.assign(L, {
+  rmnSleep:["ゆ…？ あまい におい[なのじぇ]…","しゅわしゅわ… ねむねむ[にゃのじぇ]…","ゆぅ… まぶた… おもい[のじぇ]…"],
+  rmnMumble:["むにゃ… すーやすーや…","ゆぅ… らむね… さん…","…すぴー…"],
+  rmnMeanWake:["ゆびゃっ！？ な、なに[なのじぇ]！？","いちゃい！！ ゆっくり ねてたのに[のじぇ]ぇ！！"],
+});
+function rmnLeft(){ return PS().rmn || 0; }
+function rmnOn(){ return rmnLeft() > 0 && !isDead(); }
+function rmnClear(){ const p=PS(); p.rmn=0; M.rmLift=false; }
+// ねかせられない ところ（あぶない・とちゅう）
+const RMN_NG = new Set(['fight','sink','jitabata','stuck','trapped','box','yaki','poop','bath','sumo','corpseEat','ununEat','rainStuck','omo','shock','bitan','tunnel','slide','broom','cave','kzRepair','jisei','strain','social']);
+
+/* ---- きりの つぶ ---- */
+function rmnMist(x0, y0, x1, y1){
+  for(let i=0;i<34;i++){
+    const t=Math.random(), sp=rnd(.7,1.3);
+    fx('rmist', x0, y0, {vx:(x1-x0)*1.6*sp + rnd(-26,26), vy:(y1-y0)*1.6*sp + rnd(-26,20), max:rnd(.9,1.6), size:rnd(.6,1.4), life:-t*.18, g:-6});
+  }
+  for(let i=0;i<14;i++) fx('rmist', x1+rnd(-30,30), y1+rnd(-24,18), {vx:rnd(-10,10), vy:rnd(-14,-4), max:rnd(1.6,2.6), size:rnd(1.2,2.2), g:0, bub:chance(.45)});
+}
+const _rm_drawParticles = drawParticles;
+drawParticles = function(){
+  const r=_rm_drawParticles(), g=ctx;
+  for(const p of P){
+    if(p.type!=='rmist' || p.life<0) continue;
+    const k=p.life/p.max, a=(1-k)*(k<.12?k/.12:1);
+    g.save(); g.globalAlpha=Math.max(0,a)*.9;
+    if(p.bub){ g.strokeStyle='rgba(120,190,230,.9)'; g.lineWidth=1; g.beginPath(); g.arc(p.x,p.y,2.2*p.size,0,Math.PI*2); g.stroke(); }
+    else { const rr=(5+k*13)*p.size, gr=g.createRadialGradient(p.x,p.y,0,p.x,p.y,rr); gr.addColorStop(0,'rgba(225,245,255,.95)'); gr.addColorStop(1,'rgba(160,215,245,0)'); g.fillStyle=gr; g.beginPath(); g.arc(p.x,p.y,rr,0,Math.PI*2); g.fill(); }
+    g.restore();
+  }
+  ctx.globalAlpha=1;
+  return r;
+};
+
+/* ---- かける ---- */
+function rmnUse(p){
+  if(isDead()){ toast('…もう うごかない'); return; }
+  const b=mariBox(), hp=headPos();
+  rmnMist(p.x+17, p.y-32, hp.x, hp.top+hp.h*.5); TOOL.strike=.25;
+  SFX.whoosh && SFX.whoosh();
+  if(M.lifted) return;
+  if(M.burnT>0 || RMN_NG.has(M.state) || M.boxed || M.trapped){ toast('いまは ねかせられない みたい'); return; }
+  const again = M.state==='sleep' && rmnOn();
+  PS().rmn = RMN_MIN; M.rmLift=false;
+  S.sleepy = Math.max(S.sleepy, 60);
+  if(M.state!=='sleep'){
+    M.next=null; endActivity();
+    setState('sleep', 9999); M.h=0; M.vh=0; M.rot=0; M.rotV=0; M.puffT=0; M.tears=0; M.expr=null; M.exprT=0; M.sulk=0; M.hideT=0;
+    say('rmnSleep',{cls:'sleepy'});
+    fxText('しゅっ…', b.x+b.w*.4, b.top, {size:14, color:'#5b8fb8'});
+  } else fxText(again?'しゅっ（ききめ のびた）':'しゅっ', b.x+b.w*.4, b.top, {size:13, color:'#5b8fb8'});
+  note(`${S.me||'まりちゃ'}に ラムネスプレーを かけた。すやすや…（3じかん）`);
+  save();
+}
+
+/* ---- どうぐ ---- */
+TOOL_DEF.ramune = {name:'ラムネスプレー', cat:'care', help:'ねかせたい子を タップ（その子だけ 3じかん ぐっすり）'};
+const _rm_toolDown = toolDown;
+toolDown = function(e,p){
+  if(TOOL.cur!=='ramune'){
+    // いじわるの どうぐが ラムネで ねている子に あたったら むりやり おこす
+    if(TOOL.cur && rmnOn() && hitMari(p.x,p.y)) rmnMeanWake();
+    return _rm_toolDown(e,p);
+  }
+  TOOL.px=p.x; TOOL.py=p.y; TOOL.over=true;
+  if(!hitMari(p.x,p.y)){ rmnMist(p.x+17, p.y-32, p.x-30, p.y-6); TOOL.strike=.25; SFX.whoosh && SFX.whoosh(); return; }
+  rmnUse(p);
+};
+const _rm_drawToolCursor = drawToolCursor;
+drawToolCursor = function(g,k,x,y){
+  if(k!=='ramune') return _rm_drawToolCursor(g,k,x,y);
+  g.save(); g.translate(x+34,y-6);
+  if(RMN_IMG.ok){ const h=58, w=h*RMN_IMG.im.width/RMN_IMG.im.height; g.rotate(TOOL.strike>0 ? -.12 : 0); g.drawImage(RMN_IMG.im, -w/2, -h/2, w, h); }
+  else { g.font='34px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif'; g.textAlign='center'; g.textBaseline='middle'; g.fillText('🫧',0,0); }
+  g.restore();
+};
+const _rm_toolIcon = toolIcon;
+toolIcon = function(k){
+  if(k!=='ramune') return _rm_toolIcon(k);
+  const c=document.createElement('canvas'); c.width=104; c.height=80; const g=c.getContext('2d');
+  if(RMN_IMG.ok){ const s=Math.min(70/RMN_IMG.im.width, 70/RMN_IMG.im.height); g.drawImage(RMN_IMG.im, 52-RMN_IMG.im.width*s/2, 41-RMN_IMG.im.height*s/2, RMN_IMG.im.width*s, RMN_IMG.im.height*s); }
+  else { g.font='40px sans-serif'; g.textAlign='center'; g.textBaseline='middle'; g.fillText('🫧',52,42); }
+  return c;
+};
+// ボトルの え（ないときは 🫧）
+const RMN_IMG = {ok:false, im:null};
+if(typeof RMN_SRC==='string' && RMN_SRC){ const im=new Image(); im.onload=()=>{ RMN_IMG.ok=true; }; im.src=RMN_SRC; RMN_IMG.im=im; }
+
+/* ---- おせわ シートに タイル ---- */
+const _rm_openSubSheet = openSubSheet;
+openSubSheet = function(kind, btn){
+  const r=_rm_openSubSheet(kind, btn);
+  if(kind!=='care' || sheetKind!=='play') return r;
+  const top=sheet.querySelector('.care-top'); if(!top) return r;
+  const x=document.createElement('button'); x.type='button';
+  const ic = RMN_IMG.ok ? `<span class="ic"><img src="${RMN_IMG.im.src}" alt="" style="height:1.6em;vertical-align:middle"></span>` : '<span class="ic">🫧</span>';
+  const left = rmnOn() ? `ききめ のこり ${Math.max(1,Math.ceil(rmnLeft()/60))}じかん` : 'えらんだ子を 3じかん ねかせる';
+  x.innerHTML = `${ic}ラムネ<br>スプレー<small>${left}</small>`;
+  x.addEventListener('click', ()=>{ if(isDead()){ toast('もう…'); return; } setTool('ramune'); });
+  top.appendChild(x);
+  return r;
+};
+
+/* ---- つついても おきない ---- */
+const _rm_poke = poke;
+poke = function(rel){
+  if(rmnOn() && M.state==='sleep' && !M.lifted){
+    SFX.poke && SFX.poke();
+    const hp=headPos(); M.sq=Math.max(M.sq||0,.12);
+    fxText(pick(['むにゃ…','すぴー…','ぷにっ']), hp.x+rnd(-14,14), hp.top-4, {size:13, color:'#6a73b0'});
+    if(bubbleT<=0 && chance(.35)) say('rmnMumble',{cls:'sleepy'});
+    return;
+  }
+  return _rm_poke(rel);
+};
+/* ---- だっこ：もちあげても おきない（おろすと また ねむる） ---- */
+const _rm_startLift = startLift;
+startLift = function(){
+  const z = rmnOn() && M.state==='sleep';
+  const r=_rm_startLift();
+  if(z){ M.rmLift=true; bubbleT=0; say('rmnMumble',{cls:'sleepy'}); }
+  return r;
+};
+/* ---- ライトを つけても おきない ---- */
+const _rm_toggleLamp = toggleLamp;
+toggleLamp = function(){
+  const z = rmnOn() && M.state==='sleep';
+  const r=_rm_toggleLamp();
+  if(z && M.state!=='sleep'){ setState('sleep', 9999); M.h=0; bubbleT=0; }
+  return r;
+};
+/* ---- いじわる → むりやり おきる ---- */
+function rmnMeanWake(){
+  if(!rmnOn()) return;
+  rmnClear();
+  if(M.state==='sleep' || M.state==='nap'){ setState('idle',3); M.h=0; }
+  M.wakeGrace=Math.max(M.wakeGrace||0,10);
+  S.sleepy=Math.min(S.sleepy,30);
+  express('cry3',2.4); M.tears=2; jump(220);
+  const hp=headPos(); fxText('ゆびゃっ！？', hp.x+26, hp.top, {size:17, color:'#3d2f22'});
+  setTimeout(()=>{ try{ if(!isDead()) say('rmnMeanWake',{cls:'shout'}); }catch(e){} }, 0);
+  note(`${S.me||'まりちゃ'}が いじわるされて むりやり おこされた。`);
+}
+const _rm_meanCount = meanCount;
+meanCount = function(){ if(rmnOn()) rmnMeanWake(); return _rm_meanCount(); };
+const _rm_hurt = hurt;
+const RMN_HURT = new Set(['hammer','flick','pick','stab','braid','trap','burn','yaki','hair','harisen','bite','stick','shock','water']);
+hurt = function(n, cause){ if(rmnOn() && n>0 && RMN_HURT.has(cause)) rmnMeanWake(); return _rm_hurt(n, cause); };
+
+/* ---- じかんで へる ---- */
+const _rm_tickStats = tickStats;
+tickStats = function(minutes, awake){
+  const r=_rm_tickStats(minutes, awake);
+  const p=PS();
+  if(p.rmn>0 && !isDead()){
+    p.rmn=Math.max(0, p.rmn-minutes);
+    if(!p.rmn){ M.rmLift=false; if(M.state==='sleep') S.sleepy=Math.min(S.sleepy,3); note(`${S.me||'まりちゃ'}の ラムネスプレーの ききめが きれた。`); }
+  }
+  return r;
+};
+/* ---- まいフレーム ---- */
+function rmnTick(dt){
+  if(!rmnOn()) { if(M.rmLift) M.rmLift=false; return; }
+  if(M.state==='sleep'){ S.sleepy=Math.max(S.sleepy,45); M.wakeGrace=0; return; }
+  if(M.lifted) return;
+  // だっこから おろされた → ゆかに ついたら また すやすや
+  if(M.rmLift){
+    if(M.h<=.5 && Math.abs(M.vh||0)<1 && ['idle','move','explore','stretch','admire','land','dizzy'].includes(M.state) && !M.burnT){
+      M.rmLift=false; M.next=null; endActivity(); setState('sleep', 9999); M.h=0; bubbleT=0;
+      fxText('すやぁ…', M.x+20, M.z-46, {size:13, color:'#6a73b0'});
+    } else if(RMN_NG.has(M.state)) rmnClear();
+    return;
+  }
+  // それ いがいで おきた（みずに おちた など）→ ききめは おわり
+  rmnClear();
+}
+const _rm_update = update;
+update = function(dt){ _rm_update(dt); ykEach(()=>rmnTick(Math.min(dt,.1))); };
+
+/* ---- にっし ---- */
+if(typeof psHTML==='function'){
+  const _rm_psHTML = psHTML;
+  psHTML = function(){ const h=_rm_psHTML(); return h + (rmnOn() ? `<p class="memo" style="font-size:12.5px">ラムネスプレー：ぐっすり（のこり ${Math.max(1,Math.ceil(rmnLeft()/60))}じかん）</p>` : ''); };
+}
+// ステータスの ひとこと
+if(typeof statusText==='function'){
+  const _rm_statusText = statusText;
+  statusText = function(){ if(rmnOn() && M.state==='sleep' && !M.lifted) return 'ラムネスプレーで ぐっすり ねている'; return _rm_statusText(); };
+}
+/* ---- よみこみ：ききめが のこっている子は ねたまま はじめる ---- */
+try{ ykEach(()=>{ if(rmnOn() && !M.lifted){ M.next=null; endActivity(); setState('sleep', 9999); M.h=0; } }); }catch(e){ console.warn('[ramune load]', e); }
+
+/* ============================================================
+   v1.3.9 しゅうせい
+   ・水上まりちゃが あさい おいけ（すいそうの おいけ・わきみずの いずみ）で おぼれない
+     （X 謎ハテナさん 10/7「あさい おさらでも おぼれる」）
+     → ふねが ひっくりかえっても、あさいので ばちゃっと ぬれるだけ。きしに はいあがる
+     ふかい みず（かわ・たき・ステージの みずうみ）は いままでどおり おちると とける
+   ============================================================ */
+Object.assign(L, {
+  suiShallow:["ゆぴゃっ！？ …あ、あしが つく[のじぇ]…","ばちゃっ… あさくて たすかった[のじぇ]…","つめたい[のじぇ]ぇ… でも しずまない[のじぇ]…"],
+});
+function suiShallowAt(x, z){
+  const w = waterAt(x, z);
+  if(!w || w.kind!=='pond') return false;
+  if(!w.o) return true;                       // すいそうの おいけ
+  return w.o.type==='lake';                   // わきみずの いずみ
+}
+const _v139_boatFall = boatFall;
+boatFall = function(cause){
+  if(M.state==='sink' || isDead() || cause==='fall' || !suiShallowAt(M.x, M.z)) return _v139_boatFall(cause);
+  if((M._shlwT||0) > T) return;               // いま はいあがって いる ところ
+  M._shlwT = T + 2.5; M.fallAt = 0; M.dropped = false; M.thrownVx = 0;
+  SFX.splash && SFX.splash(); burst('drop', M.x, M.z-12, 12, {up:80, g:320});
+  fxText(pick(['ばちゃっ！','ぱしゃっ！']), M.x+20, M.z-46, {size:16, color:'#2f6f9f'});
+  // おぼうしが ある子は ふねを なおして そのまま、ない子は きしへ
+  if(!(S.hat && S.hat.st==='ok')){
+    const p=suiShore(M.x, M.z); M.x=p.x; M.z=p.z; M.h=0; jump(180);
+  }
+  setState('idle', 3); express('cry', 2); M.tears = 2;
+  S.mood = Math.max(0, S.mood-4);
+  say('suiShallow', {cls:'shout'});
+  note('あさい おいけで ひっくりかえった。ぬれただけで ぶじ。');
+};
+
+/* ------------------------------------------------------------
+   もようがえ中は、水上まりちゃが びっくりしても ふねから おちない
+   （X 碧さん 10/7「もようがえの タップで おぼれて しんでる」）
+   もようがえで ものを おく → みんなが「ゆっ！？」と びっくり（express surprise＋jump）→
+   そのとき ふねが ひっくりかえって かわに おちていた
+   ------------------------------------------------------------ */
+let V139_NOCAP = 0;
+function v139NoCapsize(){ return (typeof ED!=='undefined' && ED.on) || T < V139_NOCAP; }
+{ const _e = express; express = function(e, t){ const f=M.fallAt; const r=_e(e, t); if(v139NoCapsize() && !f && M.fallAt){ M.fallAt=0; M.boatJolt=Math.min(M.boatJolt||0,.6); } return r; }; }
+{ const _j = jump; jump = function(v){ const f=M.fallAt; const r=_j(v); if(v139NoCapsize() && !f && M.fallAt){ M.fallAt=0; } return r; }; }
+{ const _n = noticeObj; noticeObj = function(o, key){ V139_NOCAP = Math.max(V139_NOCAP, T + 2); return _n(o, key); }; }
+
+/* ============================================================
+   v1.3.9 しんだ子も うごかせる（X ベーグル眠りさん 10/7・Nexus Atelier OK）
+   ・しんだ子を ながおし → もちあげて、すきな ところに おける（ドラッグで うごかす）
+   ・みじかく タップしたときは いままでどおり「おわかれ」の メニュー
+   ============================================================ */
+cv.addEventListener('pointerdown', e=>{
+  if(ED.on || TOOL.cur || press) return;
+  const p = toLogical(e);
+  const hit = hitMari(p.x, p.y);
+  if(!hit || !isDead()) return;
+  e.stopImmediatePropagation();
+  audio(); touch();
+  cv.setPointerCapture(e.pointerId);
+  press = {id:e.pointerId, t0:performance.now(), x0:p.x, y0:p.y, x:p.x, y:p.y, mode:'press', rel:hit.rel, path:0, dead:true};
+}, {capture:true});
+const _dd_poke = poke;
+poke = function(rel){
+  if(isDead()){ const hp=headPos(); fxText('……', hp.x, hp.top-6, {size:14, color:'#6b6b7a'}); openDeathSheet(); return; }
+  return _dd_poke(rel);
+};
+const _dd_startLift = startLift;
+startLift = function(){
+  if(!isDead()) return _dd_startLift();
+  press.mode='lift';
+  M.lifted=true; M.liftT=0; M.shake=0; M.dangle=0; M.dangleV=0; M.pvx=0; M.pvy=0;
+  const [w,h]=spriteSize(currentSprite()); const s=depthScale(M.z);
+  const bottom = M.z-M.h;
+  M.grabDy = clamp(press.y - bottom, -h*s*.95, -h*s*.3);
+  M.lx=press.x; M.ly=press.y; M.h=0; M.vh=0;
+  haptic && haptic('LIGHT');
+  note(`${S.me||'まりちゃ'}の なきがらを もちあげた。`);
+};
+// まわりの子が「おそらを とんでる」と おもわないように、しんだ子の だっこでは こえを ださない
+const _dd_release = release;
+release = function(){
+  if(!M.lifted || !isDead()) return _dd_release();
+  const r=_dd_release();
+  M.h=0; M.vh=0; M.rot=0; M.rotV=0; M.thrownVx=0; M.dizzy=0;
+  fxText('どさっ', M.x+18, M.z-30, {size:13, color:'#6b6b7a'});
+  try{ save(); }catch(e){}
+  return r;
+};
+
+/* ============================================================
+   v1.3.7a セーブの もどしで きえる どうぐ（X さつま揚げ@ゆ虐さん 10/7「浮島や ハスの おうちが 再起動で きえる」）
+   ・b_core.js の load() は「OBJ に ない どうぐ」を けす。load() は h_ui.js の boot()→start() で
+     うごくので、そのあとに つくられた どうぐ（ハスの おうち・ホテイアオイ＝zz_v137_r123.js など）が まいかい けされていた
+     （zz_v136b_fix の B8 と おなじ げんいん。B8 は それより まえの どうぐ しか もどせなかった）
+   ・いちばん さいごに よむ ファイルで、セーブの なかみから いまは OBJ に ある どうぐを もどす
+   ============================================================ */
+try{
+  const raw = localStorage.getItem(SAVE_KEY);
+  if(raw){
+    const d = JSON.parse(raw), have = new Set(S.objects.map(o=>o.id));
+    const back = (d.objects||[]).filter(o=>o && OBJ[o.type] && !have.has(o.id));
+    if(back.length){ S.objects.push(...back); if(typeof buildLayers==='function') try{ buildLayers(); }catch(e){} if(typeof OBJ_CACHE!=='undefined') try{ OBJ_CACHE={}; }catch(e){} }
+  }
+}catch(e){ console.warn('[restore objects]', e); }
 
 </script>
