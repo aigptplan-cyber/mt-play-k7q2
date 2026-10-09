@@ -19657,6 +19657,21 @@ function tankDelAsk(j){
     return h.replace(/<h3 class="sub">おいけ<\/h3><div class="fix look">[\s\S]*?<\/div>/, '<h3 class="sub">おいけ</h3><p class="edit-help">この ステージでは おいけは おけません（みずべで みずあび します）</p>');
   }; }
 
+// ===== v1.4.0e iPhone（Safari・WebKit）で パックを 入れると おちる =====
+// 1.4.0c の カクつき対策（パックの 絵を ImageBitmap に 切りわける）は、切りわけの とちゅうで 2048×15648 の 絵を まるごと
+// ImageBitmap に するので 一時的に 約 128MB、切りわけ後も 約 110MB を つかう。iPhone の Safari は canvas／画像バッファの
+// 合計に 上限（iOS 15 以降 384MB・それより 前は 224MB）が あり、ゲーム本体の canvas（約 110MB）と あわせると こえて しまう。
+// → iPhone・iPad・Mac の Safari（WebKit）では 切りわけを しない（1.4.0b までと おなじ 描き方に もどす）。
+const IS_APPLE_WEBKIT = (()=>{ try{
+  const ua=navigator.userAgent||'';
+  if(/iP(hone|od|ad)/.test(ua)) return true;                                   // iOS は どの ブラウザでも WebKit
+  if(navigator.platform==='MacIntel' && navigator.maxTouchPoints>1) return true; // iPadOS の デスクトップ表示
+  return /Safari/.test(ua) && !/Chrome|Chromium|CriOS|Edg|FxiOS|OPR|Android/.test(ua);   // Mac の Safari
+}catch(e){ return false; } })();
+if(IS_APPLE_WEBKIT && typeof packBmpBuild==='function'){
+  packBmpBuild = async function(){ /* WebKit では つかわない */ };
+}
+
 /* ============================================================
    v1.3.7a セーブの もどしで きえる どうぐ（X さつま揚げ@ゆ虐さん 10/7「浮島や ハスの おうちが 再起動で きえる」）
    ・b_core.js の load() は「OBJ に ない どうぐ」を けす。load() は h_ui.js の boot()→start() で
