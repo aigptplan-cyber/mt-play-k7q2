@@ -3943,14 +3943,18 @@ function drawStuckTunnel(){
   g.fillStyle='rgba(240,150,140,.13)'; g.beginPath(); g.ellipse(cx+f*rx*.35, cy+ry*.3, rx*.35, ry*.28, 0, 0, Math.PI*2); g.fill();
   // うしろがみ（あなの ほうから かぶさる きんぱつ）
   const hy0=cy-ry*.99, len=rx*1.02;
-  const REIH=S.sp==='reimu'; const hg=g.createLinearGradient(0,hy0,0,hy0+ry*1.1); hg.addColorStop(0,REIH?'#4a3b3c':'#f6dc86'); hg.addColorStop(1,REIH?'#241b1c':'#e2b95a');
-  g.fillStyle=hg; g.strokeStyle=REIH?'#120c0c':'#a07a33'; g.lineWidth=Math.max(.9,1*m.od);
+  // しゅぞくの かみの いろ（v1.4.0c：パックの 子が きんぱつに なっていた）：[うえ, した, ふち, すじ]
+  const HC={reimu:['#4a3b3c','#241b1c','#120c0c','rgba(110,90,90,.5)'], arisu:['#fbe8a6','#e9c96e','#a88a3e','rgba(170,135,60,.45)'],
+    myon:['#f1f2f6','#c9ccd6','#7d8190','rgba(120,125,140,.45)'], pachu:['#c8a2e8','#9a6fc4','#5d3f80','rgba(95,60,130,.45)'],
+    chen:['#9b6440','#6b3f24','#3c2312','rgba(70,40,20,.45)']}[S.sp] || ['#f6dc86','#e2b95a','#a07a33','rgba(160,120,50,.45)'];
+  const hg=g.createLinearGradient(0,hy0,0,hy0+ry*1.1); hg.addColorStop(0,HC[0]); hg.addColorStop(1,HC[1]);
+  g.fillStyle=hg; g.strokeStyle=HC[2]; g.lineWidth=Math.max(.9,1*m.od);
   g.beginPath(); g.moveTo(-f*rx*.2, hy0-ry*.1);
   g.quadraticCurveTo(f*len*.5, hy0-ry*.12, f*len*.92, hy0+ry*.3);
   const n=6;
   for(let i=0;i<=n;i++){ const t=1-i/n; g.lineTo(f*len*.92*t, hy0+ry*(.3+(i%2?.4:.18)*(1-.3*t)+.28*(1-t))); }
   g.lineTo(-f*rx*.2, hy0+ry*.8); g.closePath(); g.fill(); g.stroke();
-  g.strokeStyle=REIH?'rgba(110,90,90,.5)':'rgba(160,120,50,.45)'; g.lineWidth=Math.max(.6,.7*m.od);
+  g.strokeStyle=HC[3]; g.lineWidth=Math.max(.6,.7*m.od);
   for(let i=1;i<5;i++){ const x=f*len*.17*i; g.beginPath(); g.moveTo(x, hy0); g.quadraticCurveTo(x+f*len*.05, hy0+ry*.25, x+f*len*.02, hy0+ry*.55); g.stroke(); }
   // あなに はさまれている ところは くらく
   const sg=g.createLinearGradient(-f*m.hrx, 0, f*rx*.55, 0); sg.addColorStop(0,'rgba(40,22,8,.55)'); sg.addColorStop(1,'rgba(40,22,8,0)');
@@ -7533,7 +7537,7 @@ openPlaySheet = function(btn){
   const dj=S.yk.findIndex(y=>y.dead && !y.dead.cleared);
   if(dj>=0){ const y=S.yk[dj], nm=ykLabel(y);
     if(gyNoKazari(y)) fixes.push([`しんだ ${nm}に おかざりを もどす`, ()=>{ closeSheet(); gyKazariBack(dj); }]);
-    else fixes.push([`しんだ ${nm}の おかざりを とる`, ()=>{ closeSheet(); y.hat={st:'gone'}; clearVariants(); note(`しんだ ${nm}の おかざりを とった。`); save(); }]); }
+    else fixes.push([`しんだ ${nm}の おかざりを とる`, ()=>{ closeSheet(); ykDo(dj, ()=>{ S.hat={st:'gone'}; clearVariants(); }); y.hat={st:'gone'}; note(`しんだ ${nm}の おかざりを とった。`); save(); }   /* v1.4.0c：しんだ子を えらんでいると とれなかった（ykDo で その子に いれる） */]); }
   if(!fixes.length) return;
   let fix=sheet.querySelector('[data-fix]') ? sheet.querySelector('[data-fix]').parentNode : null;
   if(!fix){ const hh=document.createElement('h3'); hh.className='sub'; hh.textContent='なおしてあげる／そのほか'; fix=document.createElement('div'); fix.className='fix'; const help=sheet.querySelector('.edit-help:last-of-type'); help.parentNode.insertBefore(hh,help); help.parentNode.insertBefore(fix,help); }
@@ -7543,7 +7547,7 @@ openPlaySheet = function(btn){
 /* ---------- おかざりを もどすと きづく ---------- */
 function gyKazariBack(j){
   const y=S.yk[j]; if(!y || !y.dead) return;
-  y.hat={st:'ok'}; clearVariants(); const nm=ykLabel(y); note(`しんだ ${nm}に おかざりを もどした。`);
+  ykDo(j, ()=>{ S.hat={st:'ok'}; clearVariants(); }); y.hat={st:'ok'}; const nm=ykLabel(y); note(`しんだ ${nm}に おかざりを もどした。`);   // v1.4.0c：えらんでいる しんだ子にも きくように
   const eaters=(y.dead.eaters||[]).slice();
   for(const id of eaters){ ykDoById(id, ()=>{ if(isDead()) return;
     setState('shock', 5, {shockN:nm}); M.h=0; express('blank',1.5); say('shock',{o:nm, cls:'shout'});
@@ -19487,6 +19491,171 @@ function psPackSp(){ return !!SPX && SPX!=='r:'; }
     return _ps_drawMari.apply(this, arguments);
   };
 }
+
+// ===== v1.4.0c（No.199）パックの 子が いると スマホで カクつく =====
+// パックの 絵は 2048×15648 の 大きな 1まい。本体の アトラス（2048×14875）と 同じ フレームで 両方 描くと、
+// スマホの Chrome では GPU の 画像キャッシュに 2まいが 入りきらず、毎フレーム デコード＆アップロードに なる（BGM まで 止まる）。
+// → パックを 読んだら 1まいずつの 小さな ImageBitmap に 切りわけておき、描くときは そちらを つかう。
+//    大きな 1まいは そのあと 描かれないので、キャッシュに 居すわらない。
+const PACK_BMP = [];   // PACKS と 同じ ならび：{ 'x,y': {bm, w, h} }
+async function packBmpBuild(k){
+  const pk=PACKS[k]; if(!pk || !pk.img || typeof createImageBitmap!=='function') return;
+  const img=pk.img;
+  if(!img.complete || !img.naturalWidth) await new Promise(r=>{ img.addEventListener('load', r, {once:true}); img.addEventListener('error', r, {once:true}); });
+  if(!img.naturalWidth) return;
+  const off=(k+1)*PACK_Y, seen=new Set(), rects=[];
+  for(const r of Object.values(SP_RAW)){
+    if(!r || r[1]<off || r[1]>=off+PACK_Y) continue;
+    const y=r[1]-off, key=r[0]+','+y; if(seen.has(key)) continue; seen.add(key); rects.push([r[0], y, r[2], r[3], key]);
+  }
+  let full=null;
+  try{ full=await createImageBitmap(img); }catch(e){ console.warn('[packbmp] full', e); return; }   // いちどだけ デコード
+  const map={};
+  try{
+    for(let i=0;i<rects.length;i+=40){
+      await Promise.all(rects.slice(i,i+40).map(async ([x,y,w,h,key])=>{
+        if(w<=0 || h<=0) return;
+        try{ map[key]={bm:await createImageBitmap(full, x, y, w, h), w, h}; }catch(e){}
+      }));
+    }
+  } finally { try{ full.close(); }catch(e){} }
+  if(PACKS[k]!==pk) return;                 // とちゅうで いれかわった
+  // 一部だけ 描く（ゼリーの 1行ずつ など）ときの ための さくいん：y を 256 ごとの 帯に わける
+  const band={};
+  for(const [key,e] of Object.entries(map)){ const [x,y]=key.split(',').map(Number); e.x=x; e.y=y;
+    for(let b=Math.floor(y/256); b<=Math.floor((y+e.h-1)/256); b++) (band[b]=band[b]||[]).push(e); }
+  map._band=band;
+  const old=PACK_BMP[k]; PACK_BMP[k]=map;
+  if(old) for(const [kk,v] of Object.entries(old)) if(kk!=='_band') try{ v.bm.close(); }catch(e){}
+}
+{ const P=CanvasRenderingContext2D.prototype, _di2=P.drawImage;
+  P.drawImage=function(img, a1, a2, a3, a4, a5, a6, a7, a8){
+    if(img===atlas && arguments.length>=9 && a2>=PACK_Y){
+      const k=Math.floor(a2/PACK_Y)-1, m=PACK_BMP[k];
+      if(m){ const ly=a2-(k+1)*PACK_Y, e=m[a1+','+ly];
+        if(e && a3<=e.w && a4<=e.h) return _di2.call(this, e.bm, 0, 0, a3, a4, a5, a6, a7, a8);
+        const L=m._band && m._band[Math.floor(ly/256)];
+        if(L) for(const f of L){
+          if(a1>=f.x && ly>=f.y-1e-6 && ly<f.y+f.h && a1+a3<=f.x+f.w+1e-6){   // 下に すこし はみでる（ゼリーの さいごの 1行）は きりつめる
+            const sy=Math.max(0,ly-f.y), sh=Math.min(a4, f.h-sy); if(sh<=0) return;
+            return _di2.call(this, f.bm, a1-f.x, sy, a3, sh, a5, a6, a7, a8*sh/a4); }
+        }
+      }
+    }
+    return _di2.apply(this, arguments);
+  };
+}
+{ const _pb_install=packInstall;
+  packInstall=function(p){
+    const r=_pb_install.apply(this, arguments);
+    const k=PACKS.findIndex(x=>x && x.id===p.id);
+    if(k>=0){ PACK_BMP[k]=null; packBmpBuild(k).catch(e=>console.warn('[packbmp]', e)); }
+    return r;
+  };
+}
+
+// ===== v1.4.0c（No.196）「すいそうを ふやす」で ステージを おしても 反応が ないように みえる =====
+// えらんだ ステージに しるしが つかず、②（さいしょに すむ 子）は がめんの そとに あった。
+// → えらんだ ボタンを こい いろに、② まで スクロール＋ひとこと。
+{ const st=document.createElement('style');
+  st.textContent='#tank-sec [data-newst].on{background:#6b4f3a;color:#fff;border-color:#6b4f3a;box-shadow:0 0 0 2px #f3c77a}'
+    +'#tank-sec #tk-first.tk-flash{animation:tkflash 1.2s ease-out}@keyframes tkflash{0%{background:#fde9b8}100%{background:transparent}}';
+  document.head.appendChild(st); }
+{ const _tp_oa=openAdoptSheet;
+  openAdoptSheet=function(){
+    const r=_tp_oa.apply(this, arguments);
+    try{
+      const box=document.getElementById('tank-sec'); if(!box) return r;
+      box.querySelectorAll('[data-newst]').forEach(b=>b.addEventListener('click',()=>{
+        if(b.disabled || b.classList.contains('lock') || !b.classList.contains('on')) return;
+        const ts=b.closest('#tk-st'), h=ts && ts.nextElementSibling, f=h && h.nextElementSibling; if(!h || !f) return;   // おなじ id が 2つ ある ことが あるので、おした ボタンから たどる
+        const sh=document.getElementById('sheet'); const dy=f.getBoundingClientRect().top-sh.getBoundingClientRect().top-(h.offsetParent?h.offsetHeight:0); sh.scrollTop=Math.max(0, sh.scrollTop+dy-8);
+        f.classList.remove('tk-flash'); void f.offsetWidth; f.classList.add('tk-flash');
+        toast('つぎは ② さいしょに すむ 子を えらんでね');
+      }));
+    }catch(e){ console.warn('[tankpick]', e); }
+    return r;
+  }; }
+
+// ===== v1.4.0c 「すいそうを なくす」（Xで さつま揚げさん：すいそうを けしたいけど どこで けせるか わからない） =====
+// おむかえ →「すいそう」の ならびに 🗑 を つける（すいそうが 2こ いじょうの ときだけ）。
+// なかに 子が いるときは「おわかれ」に なるので、もう いちど たしかめる。いま みている すいそうは けせない（ほかの すいそうへ うつってから）。
+function tankDel(j){
+  if(!S.tanks || S.tanks.length<2 || !S.tanks[j]) return false;
+  const name=tankName(j), icon=tankIcon(j);
+  if(j===S.tankI) return false;          // いま みている すいそうは けさない（ほかへ うつってから）
+  S.tanks.splice(j,1);
+  if(S.tankI>j) S.tankI--;
+  try{ renderYkTabs(); }catch(e){} try{ tankBar(); }catch(e){}
+  note(`${icon} ${name}を なくした。`);
+  tankBanner(`${icon} ${name}を なくしました`);
+  save();
+  return true;
+}
+function tankDelAsk(j){
+  try{ if(typeof closeSheet==='function' && sheetKind) closeSheet(); }catch(e){}
+  const old=document.getElementById('tk-del'); if(old) old.remove();
+  const yk=tankYks(j).filter(y=>!y.dead), name=tankName(j), icon=tankIcon(j);
+  const w=document.createElement('div'); w.id='tk-del';
+  w.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;z-index:9000;padding:16px';
+  w.innerHTML=`<div style="background:#fffaf0;border-radius:18px;padding:16px 18px;width:min(400px,100%);max-height:90vh;overflow:auto;box-shadow:0 8px 30px rgba(0,0,0,.3);color:#3b2a1c">
+   <h2 style="margin:0 0 6px;font-size:17px">${icon} ${name}を なくしますか？</h2>
+   <p style="margin:0 0 10px;font-size:13px;line-height:1.7">${yk.length
+     ? `なかに いる <b>${yk.map(ykLabel).join('・')}</b>（${yk.length}ひき）とは <b style="color:#b0413e">おわかれ</b> に なります。もどせません。<br>のこしたい 子は さきに「おひっこし」で ほかの すいそうへ うつしてね。`
+     : 'からっぽの すいそうです。もようがえも いっしょに なくなります。'}</p>
+   <div style="display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:12px">
+     <button type="button" class="btn" data-no>やめる</button>
+     <button type="button" class="btn" data-yes style="background:#b0413e;border-color:#b0413e;color:#fff">${yk.length?'おわかれして なくす':'なくす'}</button></div></div>`;
+  document.body.appendChild(w);
+  const close=()=>w.remove();
+  w.addEventListener('click',e=>{ if(e.target===w) close(); });
+  w.querySelector('[data-no]').addEventListener('click', close);
+  w.querySelector('[data-yes]').addEventListener('click',()=>{ close(); tankDel(j); });
+}
+{ const st=document.createElement('style');
+  st.textContent='#tank-sec .tk-row{display:flex;gap:6px;align-items:center;flex-wrap:nowrap}#tank-sec .tk-row>[data-gotank]{flex:1 1 auto}'
+    +'#tank-sec .tk-del{flex:none;padding:4px 9px;font-size:12px;color:#8a3b33;border-color:#d9b2a8;background:#fff6f2}';
+  document.head.appendChild(st); }
+{ const _td_oa=openAdoptSheet;
+  openAdoptSheet=function(){
+    const r=_td_oa.apply(this, arguments);
+    try{
+      const box=document.getElementById('tank-sec'); if(!box || !S.tanks || S.tanks.length<2) return r;
+      box.querySelectorAll('[data-gotank]').forEach(b=>{
+        const j=+b.dataset.gotank; if(j===S.tankI) return;
+        const row=document.createElement('div'); row.className='tk-row';
+        b.parentNode.insertBefore(row, b); row.appendChild(b);
+        const d=document.createElement('button'); d.type='button'; d.className='btn tk-del'; d.textContent='🗑 なくす';
+        d.setAttribute('aria-label', `${tankName(j)}を なくす`);
+        d.addEventListener('click',()=>tankDelAsk(j)); row.appendChild(d);
+      });
+      const fx=box.querySelector('[data-gotank]') && box.querySelector('[data-gotank]').closest('.fix');
+      if(fx){ const p=document.createElement('p'); p.className='edit-help'; p.textContent='・🗑 で すいそうを なくせます（いま みている すいそうは、ほかの すいそうへ うつってから）'; fx.after(p); }
+    }catch(e){ console.warn('[tankdel]', e); }
+    return r;
+  }; }
+
+// ===== v1.4.0c おいけ：みずうみ・追加ステージでは もようがえに ださない（BOOTH 寿司ししゃもさん 10/9：おいたら きえる） =====
+// これらの ステージは みずべが あるので おいけは つかわない しくみ。おいけの ものが のこっていると、みえないのに うごかせて しまっていた。
+// → ステージに いる あいだは おいけを しまっておき（いちは おぼえておく）、ふつうの ステージに もどったら もとの ばしょに だす。
+{ const _ph_sync=syncPond;
+  syncPond=function(){
+    if(typeof isLakeStage==='function' && isLakeStage()){
+      const o=S.objects && S.objects.find(o=>o.type==='pond');
+      if(o){ S._pondStash={u:o.u, v:o.v, flip:!!o.flip}; S.objects=S.objects.filter(x=>x.type!=='pond'); }
+      return _ph_sync.apply(this, arguments);   // もとの しょり（ステージでは POND を そとへ など）
+    }
+    if(S._pondStash && S.objects && !S.objects.some(o=>o.type==='pond') && !(typeof pondNone==='function' && pondNone())){
+      const p=S._pondStash; S.objects.unshift({id:uid(), type:'pond', u:p.u, v:p.v, flip:p.flip}); delete S._pondStash;
+    }
+    return _ph_sync.apply(this, arguments);
+  }; }
+{ const _ph_look=lookPanelHTML;
+  lookPanelHTML=function(){
+    const h=_ph_look.apply(this, arguments);
+    if(!(typeof isLakeStage==='function' && isLakeStage())) return h;
+    return h.replace(/<h3 class="sub">おいけ<\/h3><div class="fix look">[\s\S]*?<\/div>/, '<h3 class="sub">おいけ</h3><p class="edit-help">この ステージでは おいけは おけません（みずべで みずあび します）</p>');
+  }; }
 
 /* ============================================================
    v1.3.7a セーブの もどしで きえる どうぐ（X さつま揚げ@ゆ虐さん 10/7「浮島や ハスの おうちが 再起動で きえる」）
