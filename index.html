@@ -17152,6 +17152,33 @@ openSettings = function(){
 };
 setTimeout(()=>{ try{ document.body.classList.toggle('nobub', bubPct()<=0); }catch(e){} }, 0);
 
+// ===== v1.4.0g（zz_v140f_guard0.js の まえに おく）ブラウザを とじて ひらきなおすと パックが はずれる（X 鬼威茶さん 10/10 7:12・Android） =====
+// 原因1（1.3.9 から）：ひらいた ときに とっておいた パックを よむのを 4秒で あきらめていた。
+//   通常種パックは 1200万字 あるので、スマホでは よむだけで 4秒を こえることが ある → だまって パックなしで はじまる。
+//   （CPU を 1/8 に した ためしで 3.8〜4.9秒。いれなおすと ファイルから じかに いれるので なおったように 見える）
+// 原因2（1.4.0f から）：「よみこみ中に おちた」しるしを 20秒 たってから けしていたので、ひらいて すぐ とじるを 2回 すると
+//   おちた ことに なって パックを やすませていた。
+// なおし：
+//   1) よむのを あきらめない（60秒まで まつ）。4秒 こえたら「パックを よみこみちゅう…」を だし、よめたら その場で いれる
+//   2) ページが うしろに いった（とじた・アプリを きりかえた）ときは しるしを けす。
+//      ほんとうに おちた ときは この合図が こないので、おちた ことは いままでどおり わかる
+packBoot=async function(){
+  let slow=false;
+  const tm=setTimeout(()=>{ slow=true; try{ toast('とっておいた パックを よみこみちゅう…'); }catch(e){} }, 4000);
+  let all=[];
+  try{ all=await Promise.race([packDbAll(), new Promise(r=>setTimeout(()=>r(null),60000))]); }catch(e){ all=[]; }
+  clearTimeout(tm);
+  if(all===null){ try{ toast('パックを よみこめませんでした。ゲームを ひらきなおしてね'); }catch(e){} all=[]; }
+  let n=0;
+  for(const txt of all){ try{ const p=JSON.parse(txt); if(!packCheck(p, true)){ packInstall(p); n++; } }catch(e){} }
+  try{ if(YK_I>=0) SPX=(SPECIES[S.sp||'maricha']||SPECIES.maricha).spx; renderYkTabs(); drawPortrait(); }catch(e){}
+  if(slow && n) try{ toast('パックを よみこみました'); }catch(e){}
+};
+{ const clr=()=>{ try{ localStorage.removeItem('mtPacks.bootTry'); }catch(e){} };
+  document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='hidden') clr(); });
+  window.addEventListener('pagehide', clr);
+}
+
 // ===== v1.4.0f（その1：zz_v139_pack.js の まえに おく。packBoot は その ファイルの さいごで すぐ よばれるため） パックを ひらく とちゅうで おちつづけると、ゲームが ひらけなくなる のを ふせぐ =====
 // パックは いちど いれると、つぎに ひらく たびに 自動で よみこむ。iPhone などで よみこみの とちゅうで ページが おちると、
 // ひらく たびに おちて ゲームに もどれなくなる。
