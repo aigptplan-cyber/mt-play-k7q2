@@ -17152,6 +17152,30 @@ openSettings = function(){
 };
 setTimeout(()=>{ try{ document.body.classList.toggle('nobub', bubPct()<=0); }catch(e){} }, 0);
 
+// ===== v1.4.0f（その1：zz_v139_pack.js の まえに おく。packBoot は その ファイルの さいごで すぐ よばれるため） パックを ひらく とちゅうで おちつづけると、ゲームが ひらけなくなる のを ふせぐ =====
+// パックは いちど いれると、つぎに ひらく たびに 自動で よみこむ。iPhone などで よみこみの とちゅうで ページが おちると、
+// ひらく たびに おちて ゲームに もどれなくなる。
+// → よみこみを はじめる まえに しるしを つけ、ぶじに 20秒 うごいたら しるしを けす。しるしが 2かい つづけて のこっていたら
+//    パックを よまずに ひらき、「せってい」の ついかパック に「もういちど ためす」を だす。
+const PG_KEY='mtPacks.bootTry', PG_PAUSE='mtPacks.paused';
+const pgGet=k=>{ try{ return localStorage.getItem(k); }catch(e){ return null; } };
+const pgSet=(k,v)=>{ try{ if(v===null) localStorage.removeItem(k); else localStorage.setItem(k,v); }catch(e){} };
+let PG_SKIPPED=false;
+{ const _pg_boot=packBoot;
+  packBoot=async function(){
+    const n=+(pgGet(PG_KEY)||0);
+    if(pgGet(PG_PAUSE)==='1' || n>=2){
+      pgSet(PG_PAUSE,'1'); pgSet(PG_KEY,null); PG_SKIPPED=true;
+      setTimeout(()=>{ try{ toast('まえに ひらいた とき パックの よみこみで とまったので、こんかいは パックなしで ひらきました（「せってい」→「ついかパック」で もういちど ためせます）'); }catch(e){} }, 1500);
+      try{ if(YK_I>=0) SPX=(SPECIES[S.sp||'maricha']||SPECIES.maricha).spx; renderYkTabs(); drawPortrait(); }catch(e){}
+      return;
+    }
+    pgSet(PG_KEY, String(n+1));
+    try{ return await _pg_boot.apply(this, arguments); }
+    finally{ setTimeout(()=>pgSet(PG_KEY,null), 20000); }   // 20秒 ぶじなら しるしを けす
+  };
+}
+
 /* ============================================================
    v1.3.9 No.14：ついかパック（しゅぞくパック）を よみこむ
    ・せってい →「ついかパック」→「パックを よみこむ」で .mtpack を えらぶ（PC・スマホ どちらも）
@@ -19670,6 +19694,27 @@ const IS_APPLE_WEBKIT = (()=>{ try{
 }catch(e){ return false; } })();
 if(IS_APPLE_WEBKIT && typeof packBmpBuild==='function'){
   packBmpBuild = async function(){ /* WebKit では つかわない */ };
+}
+
+// ===== v1.4.0f（その2）パックの よみこみ おやすみ中の「もういちど ためす」ボタン（zz_v140f_guard0.js の つづき）
+{ const _pg_os=openSettings;
+  openSettings=function(){
+    const r=_pg_os.apply(this, arguments);
+    try{
+      const row=document.getElementById('set-pack');
+      if(row && pgGet(PG_PAUSE)==='1' && !row.querySelector('[data-pgretry]')){
+        const b=document.createElement('button'); b.type='button'; b.className='btn'; b.dataset.pgretry='1';
+        b.textContent='とっておいた パックを もういちど ためす'; b.style.cssText='font-size:12px';
+        b.addEventListener('click',()=>{ pgSet(PG_PAUSE,null); pgSet(PG_KEY,null); location.reload(); });
+        row.appendChild(b);
+      }
+    }catch(e){}
+    return r;
+  };
+}
+// あたらしく パックを よみこんだ ときは おやすみを とく（その パックが はいれば つぎから ふつうに よむ）
+{ const _pg_lf=packLoadFile;
+  packLoadFile=async function(){ pgSet(PG_PAUSE,null); return _pg_lf.apply(this, arguments); };
 }
 
 /* ============================================================
