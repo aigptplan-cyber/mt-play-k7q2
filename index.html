@@ -19348,6 +19348,91 @@ for(const [t,src] of Object.entries(SOFTOBJ_SRC)){
 }
 
 /* ============================================================
+   v1.4.1 No.190 おかざりの なおし
+   ・ゆかに こげた／やぶれた おかざりが あるときに「あたらしい おかざりを あげる」を おすと、
+     あたらしい おかざりでは なく ゆかの こげた おかざりを かぶっていた → あたらしい おかざりを あげる
+     （ゆかの きずものは かたづける）
+   ============================================================ */
+{ const _hf_fixHat = fixHat;
+  fixHat = function(){
+    if(S.hat && S.hat.st==='taken' && S.hat.dmg){
+      ensureMean && ensureMean();
+      S.hat={st:'ok'}; FLOOR_HAT=null; clearVariants();
+      afterFix('fixHat'); note(`あたらしい ${typeof kzPartName==='function'?kzPartName():'おぼうし'}を もらった。`); return;
+    }
+    return _hf_fixHat.apply(this, arguments);
+  };
+}
+/* ・あんよが いたくて うごけない 子の すぐ そば（ほぼ おなじ ばしょ）に おかざりを おくと、とりに いけず
+     ゆかの おかざりが からだに かさなって かぶったり かぶらなかったり みえた → てが とどく きょりなら その ばで かぶる */
+{ const _hf_update = update;
+  update = function(dt){ _hf_update(dt); ykEach(()=>{
+    if(isDead() || M.lifted || M.burnT>0 || !S.hat || S.hat.st!=='taken' || (S.anyo||0)<30) return;
+    if(['sleep','nap','kzRepair','kzRepair2'].includes(M.state)) return;
+    const p=toW(S.hat.u,S.hat.v);
+    if(Math.abs(p.x-M.x)<34*depthScale(M.z) && Math.abs(p.z-M.z)<14) wearHat();
+  }); };
+}
+
+/* ============================================================
+   v1.4.1 ついかパック：BOOTH の ZIP を そのまま えらんでも よみこめる
+   ・10/9 iPad の かたが MarichaTerrarium_PackSet.zip を えらんで「まりテラの パックでは ありません」に なった
+   ・ZIP の なかの .mtpack を ぜんぶ とりだして ふつうに いれる（セットは 2つ いっぺんに）
+   ・ZIP を ひらく しくみ（DecompressionStream deflate-raw）が ない 古い ブラウザでは「ZIP を ひらいてから .mtpack を えらんでね」と だす
+   ============================================================ */
+function pzToast(t){ toast(t); try{ clearTimeout(toastT); toastT=setTimeout(()=>$('#toast').classList.remove('on'), 6000); }catch(e){} }
+async function pzUnzip(buf){
+  const dv=new DataView(buf), u8=new Uint8Array(buf), out=[];
+  // おわりの きろく（End of central directory）を うしろから さがす
+  let e=-1; for(let i=u8.length-22;i>=Math.max(0,u8.length-65557);i--){ if(dv.getUint32(i,true)===0x06054b50){ e=i; break; } }
+  if(e<0) throw new Error('zip');
+  const n=dv.getUint16(e+10,true); let p=dv.getUint32(e+16,true);
+  const td=new TextDecoder('utf-8');
+  for(let k=0;k<n;k++){
+    if(dv.getUint32(p,true)!==0x02014b50) throw new Error('zip');
+    const method=dv.getUint16(p+10,true), csize=dv.getUint32(p+20,true), nlen=dv.getUint16(p+28,true), xlen=dv.getUint16(p+30,true), clen=dv.getUint16(p+32,true), lho=dv.getUint32(p+42,true);
+    const name=td.decode(u8.subarray(p+46,p+46+nlen)); p+=46+nlen+xlen+clen;
+    if(!/\.(mtpack|zip)$/i.test(name) || /(^|\/)__MACOSX\//.test(name) || /(^|\/)\._/.test(name)) continue;
+    const ds=lho+30+dv.getUint16(lho+26,true)+dv.getUint16(lho+28,true), raw=u8.subarray(ds, ds+csize);
+    let data;
+    if(method===0) data=raw.slice();
+    else if(method===8){ data=new Uint8Array(await new Response(new Blob([raw]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).arrayBuffer()); }
+    else continue;
+    if(/\.zip$/i.test(name)){ try{ out.push(...await pzUnzip(data.buffer.slice(data.byteOffset, data.byteOffset+data.byteLength))); }catch(err){} }   // ZIP の なかの ZIP も 1だん だけ
+    else out.push({name:name.split('/').pop(), data});
+  }
+  return out;
+}
+{ const _pz_load=packLoadFile;
+  packLoadFile=async function(f){
+    let head=null; try{ head=new Uint8Array(await f.slice(0,4).arrayBuffer()); }catch(e){}
+    const isZip = (head && head[0]===0x50 && head[1]===0x4b && head[2]===0x03 && head[3]===0x04) || /\.zip$/i.test(f.name||'');
+    if(!isZip) return _pz_load.apply(this, arguments);
+    if(typeof DecompressionStream==='undefined'){ pzToast('この ブラウザでは ZIP を ひらけません。ファイルアプリで ZIP を タップして ひらき、なかの .mtpack を えらんでね'); return; }
+    let list; try{ list=await pzUnzip(await f.arrayBuffer()); }catch(e){ pzToast('ZIP を ひらけませんでした。ファイルアプリで ZIP を タップして ひらき、なかの .mtpack を えらんでね'); return; }
+    if(!list.length){ toast('この ZIP には まりテラの パック（.mtpack）が はいっていません'); return; }
+    for(const it of list){ await _pz_load.call(this, new File([it.data], it.name, {type:'application/octet-stream'})); }
+  };
+}
+// いっぺんに いくつも えらべるように（PC で .mtpack を 2つ えらぶ など）
+{ const _pz_os=openSettings;
+  openSettings=function(){
+    const r=_pz_os.apply(this, arguments);
+    try{
+      const old=document.getElementById('set-packfile');
+      if(old && !old._pz){
+        const inp=old.cloneNode(false); inp._pz=1; inp.multiple=true;   // もとの「1つだけ よむ」しくみを はずして つけなおす
+        if(inp.hasAttribute('accept')) inp.setAttribute('accept','.mtpack,.zip,.json,application/json,application/zip');
+        old.replaceWith(inp);
+        inp.addEventListener('change', async ev=>{ const fs=[...(ev.target.files||[])]; ev.target.value=''; for(const f of fs) await packLoadFile(f); });
+        const sm=inp.closest('.row')?.querySelector('small'); if(sm && !/ZIP/.test(sm.textContent)) sm.textContent='BOOTH で かった パック（ZIP のままでも .mtpack でも OK）を いれます。いちど いれると つぎからも はいっています';
+      }
+    }catch(e){}
+    return r;
+  };
+}
+
+/* ============================================================
    v1.3.7a セーブの もどしで きえる どうぐ（X さつま揚げ@ゆ虐さん 10/7「浮島や ハスの おうちが 再起動で きえる」）
    ・b_core.js の load() は「OBJ に ない どうぐ」を けす。load() は h_ui.js の boot()→start() で
      うごくので、そのあとに つくられた どうぐ（ハスの おうち・ホテイアオイ＝zz_v137_r123.js など）が まいかい けされていた
