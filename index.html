@@ -23467,6 +23467,129 @@ for(const [k,src] of Object.entries(RO2_SRC)){
   }; }
 
 /* ============================================================
+   v1.4.4 メモリせつやく（X ナラあずきさん 10/12「追加パック両方入れただけなのに重いのかすぐ落ちちゃいます（iPhone13）」）
+   しらべ（Chromium の iPhone 13 まね・1.4.3 スマホ版）：絵を ひらいた メモリが 起動 266MB → 通常種パック 413MB → ステージパック 489MB
+     いちばん 大きいのは 本体の 絵（2048×15231 ＝ 125MB）と 通常種パックの 絵（134MB）。iPhone 13（4GB）は Safari の 上限が ひくく、
+     ここで おちている と みている（iPhone 14 は かるい モードで うごく：Nexus Atelier）
+   10/12 22:22 Nexus Atelier「①＋③で」
+   ① メモリせつやく（せってい）：本体と パックの 絵を 0.6 ばいに ちいさく して もつ（メモリ やく 1/3。すこし ぼやける）
+      ・iPhone・iPad は さいしょから ON（ひらいた とたんに おちると せっていまで たどりつけない ため）。ほかは OFF
+      ・かわるのは つぎに ひらいた とき から（ページの よみなおし）
+      ・パックの 絵は ひらいた あと ちいさい canvas に うつして 大きな 1まいを はなす（下の msPackScan）
+   ③ ステージの 絵は いま みている ステージの 1まい だけ ひらく（ステージパックの 7まいを ぜんぶ ひらいていた）。すべての たんまつ
+   ※ このファイルは zz_v142_perf.js の まえに おく：perf の いろフィルターの とっておき（img===atlas）が ちいさい 絵を つかえるように
+   ============================================================ */
+var MEMSAVE_IOS = (()=>{ const ua=navigator.userAgent||''; return /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && (navigator.maxTouchPoints||0)>1); })();
+function MEMSAVE_ON(){ try{ const v=localStorage.getItem('mt.memsave'); if(v==='1') return true; if(v==='0') return false; }catch(e){} return MEMSAVE_IOS; }
+var MEMSAVE_K = MEMSAVE_ON() ? .6 : 1;
+var MEMSAVE = MEMSAVE_K!==1;
+let ATLAS_S = null, MS_BUILD = false;
+const MS_GIF = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+// ---- ① 本体の 絵を ちいさく して もつ ----
+function msBuildAtlas(){
+  if(!MEMSAVE || ATLAS_S || !atlas.naturalWidth || atlas.naturalWidth<64) return;
+  const K=MEMSAVE_K, W=Math.round(atlas.naturalWidth*K), H=Math.round(atlas.naturalHeight*K);
+  try{
+    const c=document.createElement('canvas'); c.width=W; c.height=H;
+    const g=c.getContext('2d'); if(!g) return;
+    g.imageSmoothingEnabled=true; try{ g.imageSmoothingQuality='high'; }catch(e){}
+    MS_BUILD=true;
+    try{ g.drawImage(atlas, 0, 0, atlas.naturalWidth, atlas.naturalHeight, 0, 0, W, H); } finally { MS_BUILD=false; }
+    ATLAS_S=c;
+    atlas.src=MS_GIF;                                   // 大きな 1まいを はなす（atlasReady は そのまま）
+    try{ if(typeof OBJ_CACHE==='object' && OBJ_CACHE) for(const k in OBJ_CACHE) delete OBJ_CACHE[k]; }catch(e){}
+  }catch(e){ console.warn('[memsave] atlas', e); ATLAS_S=null; }
+}
+if(MEMSAVE){
+  if(atlas.complete && atlas.naturalWidth>64) msBuildAtlas();
+  else atlas.addEventListener('load', ()=>{ if(atlas.naturalWidth>64) msBuildAtlas(); });
+}
+// ---- ① パックの 絵も ちいさく して もつ（zz_v139_pack の PACKS[k].img）----
+//   ひらいた あと（あるき・じだんだの コマ＝packMotion は もとの 大きさで きりだし ずみ）に ちいさい canvas を つくって、大きな 1まいを はなす
+//   pk.img は のこす（complete・naturalWidth を みている ところが ある）。かくのは pk.img._ms から
+function msPackScan(){
+  if(!MEMSAVE || typeof PACKS==='undefined') return;
+  for(const pk of PACKS){
+    const img=pk && pk.img; if(!img || img._ms || img._msNG || !img.complete || !img.naturalWidth || img.naturalWidth<64) continue;
+    try{
+      const K=MEMSAVE_K, W=Math.round(img.naturalWidth*K), H=Math.round(img.naturalHeight*K);
+      const c=document.createElement('canvas'); c.width=W; c.height=H;
+      const g=c.getContext('2d'); if(!g){ img._msNG=1; continue; }
+      g.imageSmoothingEnabled=true; try{ g.imageSmoothingQuality='high'; }catch(e){}
+      MS_BUILD=true; try{ g.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, W, H); } finally { MS_BUILD=false; }
+      img._ms=c; img.onload=null;                        // GIF の ロードで packMotion が もういちど はしらないように
+      MS_ST.set.call(img, MS_GIF);
+      try{ if(typeof HG_CACHE==='object') for(const k in HG_CACHE) delete HG_CACHE[k]; }catch(e){}
+    }catch(e){ console.warn('[memsave] pack', e); img._msNG=1; }
+  }
+}
+if(MEMSAVE){
+  packBmpBuild = async function(){ /* メモリせつやく：きりわけない（zz_v142_perf も ここを みて うわがき しない） */ };
+  setInterval(()=>{ try{ msPackScan(); }catch(e){} }, 500);
+}
+{ const P=CanvasRenderingContext2D.prototype, _prev=P.drawImage;
+  P.drawImage=function(img, a1, a2, a3, a4, a5, a6, a7, a8){
+    if(img===atlas && !MS_BUILD){
+      if(arguments.length>=9){
+        const K=MEMSAVE_K;
+        if(a2<PACK_Y){ if(ATLAS_S) return _prev.call(this, ATLAS_S, a1*K, a2*K, a3*K, a4*K, a5, a6, a7, a8); }
+        else if(MEMSAVE){ const k=Math.floor(a2/PACK_Y)-1, pk=PACKS[k], c=pk && pk.img && pk.img._ms;
+          if(c) return _prev.call(this, c, a1*K, (a2-(k+1)*PACK_Y)*K, a3*K, a4*K, a5, a6, a7, a8); }
+      }
+      else if(ATLAS_S && (arguments.length===5 || arguments.length===3)) return;   // 本体の 絵を まるごと かく ところは ない（ねんのため かかない）
+    }
+    return _prev.apply(this, arguments);
+  }; }
+// ---- ③ ステージの 絵は いまの ステージだけ ひらく ----
+const MS_ST = { get: Object.getOwnPropertyDescriptor(HTMLImageElement.prototype,'src').get, set: Object.getOwnPropertyDescriptor(HTMLImageElement.prototype,'src').set };
+function msStageCur(){ try{ return typeof stageNow==='function' ? stageNow() : null; }catch(e){ return null; } }
+// いる 絵：いまの ステージ ＋ おでかけ ちゅうの ばしょ（zz_v143_odekake.js は ステージパックの 絵を はいけいに つかう）
+function msWant(k){
+  if(k===msStageCur()) return true;
+  try{ if(typeof ODK!=='undefined' && ODK.on && typeof ODK_PLACE!=='undefined'){ const P=ODK_PLACE[ODK.place]; if(P && IMGST[k] && IMGST[k].img===P.img) return true; } }catch(e){}
+  return false;
+}
+function msStageSync(){
+  if(typeof IMGST_IM!=='object' || !IMGST_IM) return;
+  for(const [k,im] of Object.entries(IMGST_IM)){
+    if(!im || !im._lz) continue;
+    const want = msWant(k) ? im._lzSrc : MS_GIF;
+    if(want && MS_ST.get.call(im)!==want) MS_ST.set.call(im, want);
+  }
+}
+if(typeof IMGST_IM==='object' && IMGST_IM){
+  for(const [k,im] of Object.entries(IMGST_IM)){
+    if(!im) continue;
+    im._lz=true; im._lzSrc=MS_ST.get.call(im);
+    Object.defineProperty(im, 'src', { configurable:true,
+      get(){ return this._lzSrc || MS_ST.get.call(this); },
+      set(v){ this._lzSrc=v; if(msWant(k)) MS_ST.set.call(this, v); else if(MS_ST.get.call(this)!==MS_GIF) MS_ST.set.call(this, MS_GIF); } });
+    if(!msWant(k) && typeof im._lzSrc==='string' && im._lzSrc.length>4096) MS_ST.set.call(im, MS_GIF);
+  }
+  if(typeof buildLayers==='function'){ const _b=buildLayers; buildLayers=function(){ try{ msStageSync(); }catch(e){} return _b.apply(this, arguments); }; }
+  setInterval(()=>{ try{ msStageSync(); }catch(e){} }, 1000);
+  setTimeout(()=>{ try{ if(typeof odkStart==='function'){ const _os=odkStart; odkStart=function(){ const r=_os.apply(this, arguments); try{ msStageSync(); }catch(e){} return r; }; } }catch(e){} }, 0);   // おでかけは うしろの ファイル     // おでかけの はじまり・おわり（1びょう おくれて ひらく／はなす）
+}
+// ---- せってい ----
+{ const _o = openSettings;
+  openSettings = function(){
+    const r=_o.apply(this, arguments);
+    try{
+      const eco=document.getElementById('set-eco'), anchor=(eco && eco.closest('.row')) || (document.getElementById('set-bgmvol')||{}).closest?.('.row');
+      if(anchor && !document.getElementById('set-memsave')){
+        const d=document.createElement('label'); d.className='row';
+        d.innerHTML=`<span>メモリせつやく<small>絵を すこし ちいさく して もちます（すこし ぼやけます）。スマホで おちる・おもい ときに。つぎに ひらいた ときから かわります</small></span><input class="sw" id="set-memsave" type="checkbox" ${MEMSAVE?'checked':''}>`;
+        anchor.after(d);
+        d.querySelector('#set-memsave').addEventListener('change',ev=>{
+          const on=!!ev.target.checked;
+          try{ localStorage.setItem('mt.memsave', on?'1':'0'); }catch(e){}
+          toast(on ? 'メモリせつやく：ON（つぎに ひらいた ときから）' : 'メモリせつやく：OFF（つぎに ひらいた ときから）'); });
+      }
+    }catch(e){ console.warn('[memsave] set', e); }
+    return r;
+  }; }
+
+/* ============================================================
    v1.4.2 かるく する（10/11 18:03 Nexus Atelier「重すぎてスマホだとかなり遅くなる…クオリティを落とさず軽量化」）
    ・え は かえない。おなじ え を まいフレーム つくりなおして いた ところを 1かいだけ つくって つかいまわす
    ① いろの フィルター（あき・ふゆの くさ、こげた・しんだ おかざり など）：
@@ -23563,7 +23686,7 @@ function perfFgRuns(c){
       ・いま すいそうに いる しゅぞくの 絵から さきに きりわけて、すぐ つかえる ように する
       ・のこりは 40まい ごとに ひとやすみ（がめんの うごきを とめない）
    きりわけた 絵は おなじ。まだ きりわけて いない 絵は いままで どおり 大きな 1まいから かく */
-if(!(typeof IS_APPLE_WEBKIT!=='undefined' && IS_APPLE_WEBKIT)) packBmpBuild = async function(k){   // iPhone・iPad・Safari では きりわけない（メモリの 上限）＝ いままで どおり
+if(!(typeof IS_APPLE_WEBKIT!=='undefined' && IS_APPLE_WEBKIT) && !(typeof MEMSAVE!=='undefined' && MEMSAVE)) packBmpBuild = async function(k){   // iPhone・iPad・Safari では きりわけない（メモリの 上限）＝ いままで どおり
   const pk=PACKS[k]; if(!pk || !pk.img || typeof createImageBitmap!=='function') return;
   const img=pk.img;
   if(!img.complete || !img.naturalWidth) await new Promise(r=>{ img.addEventListener('load', r, {once:true}); img.addEventListener('error', r, {once:true}); });
@@ -24250,7 +24373,7 @@ function hogoAdopt(){
    ② 警告：公式で ない ウェブサイトで ひらかれた ときだけ、上に 小さな おしらせ（とじられる）
       公式＝ファイルを じかに ひらく（file:）／公式の ブラウザ版（aigptplan-cyber.github.io）／localhost
    ============================================================ */
-const SEC_MARK = 'mt-gh-143-75a3cf77';                     // release.py が 配布ごとに おきかえる
+const SEC_MARK = 'mt-gh-143a-e79cd15f';                     // release.py が 配布ごとに おきかえる
 const SEC_OK_HOSTS = ['aigptplan-cyber.github.io', 'localhost', '127.0.0.1', ''];
 function secHost(){ return (window.__SEC_HOST!=null) ? window.__SEC_HOST : (location.protocol==='file:' ? '' : location.hostname); }
 function secOfficial(){ const h=secHost(); return SEC_OK_HOSTS.includes(h); }
@@ -25729,6 +25852,24 @@ try{ if(OBJ.kg_athl) OBJ.kg_athl.cat='__v144'; }catch(e){}
 /* ・おくるみ は v1.4.3 では だささない（10/12 17:10 Nexus Atelier：おおきすぎる ので v1.4.4 で つくりなおした ものを だす）
      okrCan を いつも false に → おせわの「おくるみ」が でない・きている 子も ぬげる（デバッグ版で きせていた 子だけ） */
 try{ if(typeof okrCan==='function'){ okrCan=function(){ return false; }; } }catch(e){}
+
+/* v1.4.4 おでかけ中の うえの バーが スマホ（たて）で くずれる（X ベーグル眠りさん 10/12「見れねぇ！」）
+   原因：バーが 1ぎょう きめうち（まるい ふち・はば は なかみ まかせ）。せまい がめんだと もじが 1もじずつ おりかえされて
+         たてに のび、まるい ふち（999px）の せいで 大きな だえんに なって すいそうを かくしていた
+   → はばは がめんの はば まで。もじは 1ぎょう（はみだしたら …）、ボタンは その した に ならべる。ふちは かくまる */
+{ const _b=odkBar; odkBar=function(){
+    const r=_b.apply(this, arguments);
+    try{
+      const b=document.getElementById('odk-bar'); if(!b) return r;
+      Object.assign(b.style, {maxWidth:'calc(100% - 16px)', flexWrap:'wrap', justifyContent:'center', borderRadius:'14px', rowGap:'4px', padding:'5px 10px', boxSizing:'border-box'});
+      const sp=b.querySelector('span');
+      if(sp) Object.assign(sp.style, {flex:'1 1 100%', textAlign:'center', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis', minWidth:'0'});
+      b.querySelectorAll('button').forEach(x=>Object.assign(x.style, {padding:'3px 10px', fontSize:'12px'}));
+      const w=(b.parentElement||document.body).clientWidth||400;
+      b.style.fontSize = w<420 ? '12px' : '13px';
+      if(sp && w<560) sp.innerHTML=sp.innerHTML.replace('に おでかけ ちゅう（','（');   // せまい ときは みじかく（のこり びょうが きれないように）
+    }catch(e){ console.warn('[odkbar]', e); }
+    return r; }; }
 
 /* ============================================================
    v1.3.7a セーブの もどしで きえる どうぐ（X さつま揚げ@ゆ虐さん 10/7「浮島や ハスの おうちが 再起動で きえる」）
