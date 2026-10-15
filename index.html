@@ -24532,7 +24532,7 @@ function hogoAdopt(){
    ② 警告：公式で ない ウェブサイトで ひらかれた ときだけ、上に 小さな おしらせ（とじられる）
       公式＝ファイルを じかに ひらく（file:）／公式の ブラウザ版（aigptplan-cyber.github.io）／localhost
    ============================================================ */
-const SEC_MARK = 'mt-gh-150-5b59d778';                     // release.py が 配布ごとに おきかえる
+const SEC_MARK = 'mt-gh-150-0397b8b8';                     // release.py が 配布ごとに おきかえる
 const SEC_OK_HOSTS = ['aigptplan-cyber.github.io', 'localhost', '127.0.0.1', ''];
 function secHost(){ return (window.__SEC_HOST!=null) ? window.__SEC_HOST : (location.protocol==='file:' ? '' : location.hostname); }
 function secOfficial(){ const h=secHost(); return SEC_OK_HOSTS.includes(h); }
@@ -36953,6 +36953,20 @@ const PONDROCK = { on:true };
 { const _rt=rockTick; rockTick=function(dt){
     if(PONDROCK.on && M.rock && M.rock.kind==='pond'){ M.hover=false; M.ground=0; M.h=0; setState('idle',1); return; }
     return _rt.apply(this, arguments); }; }
+
+/* ============================================================
+   v1.5.0 で だ さない もの（10/15 22:02 Nexus Atelier「おくるみもアスレチックも急いで外して」）
+   ・おくるみ：おせわの「おくるみ」を 出さない（okrCan=false・着ている 子は ぬげる）。ショップの「おくるみ」タブも 出さない
+   ・アスレチック：もようがえの いちらんに 出さない（しくみは のこす。もう おいてある ものは そのまま）
+   ・HOLD150.on=false で もとどおり
+   ============================================================ */
+const HOLD150 = { on:true };
+if(HOLD150.on){
+  try{ if(typeof okrCan==='function'){ okrCan=function(){ return false; }; } }catch(e){}
+  try{ if(typeof OBJ==='object' && OBJ.kg_athl) OBJ.kg_athl.cat='__v144'; }catch(e){}
+  try{ if(typeof SHU_TABS!=='undefined' && Array.isArray(SHU_TABS)){ const k=SHU_TABS.findIndex(t=>t[0]==='okr'); if(k>=0) SHU_TABS.splice(k,1); } }catch(e){}
+  try{ if(typeof SHOPFIX2==='object') SHOPFIX2.mihonTabs=SHOPFIX2.mihonTabs.filter(t=>t!=='okr'); }catch(e){}
+}
 
 /* ============================================================
    v1.3.7a セーブの もどしで きえる どうぐ（X さつま揚げ@ゆ虐さん 10/7「浮島や ハスの おうちが 再起動で きえる」）
