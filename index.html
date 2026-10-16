@@ -24532,7 +24532,7 @@ function hogoAdopt(){
    ② 警告：公式で ない ウェブサイトで ひらかれた ときだけ、上に 小さな おしらせ（とじられる）
       公式＝ファイルを じかに ひらく（file:）／公式の ブラウザ版（aigptplan-cyber.github.io）／localhost
    ============================================================ */
-const SEC_MARK = 'mt-gh-152-89e21c2d';                     // release.py が 配布ごとに おきかえる
+const SEC_MARK = 'mt-gh-152-7c0ecf9b';                     // release.py が 配布ごとに おきかえる
 const SEC_OK_HOSTS = ['aigptplan-cyber.github.io', 'localhost', '127.0.0.1', ''];
 function secHost(){ return (window.__SEC_HOST!=null) ? window.__SEC_HOST : (location.protocol==='file:' ? '' : location.hostname); }
 function secOfficial(){ const h=secHost(); return SEC_OK_HOSTS.includes(h); }
@@ -38000,6 +38000,224 @@ const SU16_WORRY_REAL = /おなか *す|ねむ|くさい|むずむず|さびし|
     try{ ykEach(()=>{ const q=M._su16; delete M._su16; if(!q || isDead() || M.lifted || M.state!=='sleep') return;
       const p=PS(); if(p.kbox || M.boxed) return;                       // はこの 子は はこの なか（keeppos）
       M.x=q.x; M.z=q.z; M.h=q.h; M.hidden=q.hidden; M.actObj=q.actObj && objById(q.actObj) ? q.actObj : null; M.hover=q.hover && !!M.actObj; if(!M.hover) M.h=0; }); }catch(e){ console.warn('[su16 sleep]', e); }
+    return r; }; }
+
+/* ============================================================
+   v1.5.2 にとり（捕食種パック）：りくに いる とき（10/16 19:46 Nexus Atelier）
+   ・「水のない とこに いると めちゃくちゃ 高速で 水に向かう」
+       げんいん：みずの そとでは もとの のうみそ（predWaterBrain の fly）が「いちばん ちかい みずへ のこりの きょりの 1.2ばい／びょう」で
+       ちかづいていた → とおいほど はやい（300px はなれると 1びょうで 360px）
+       → りくでは 1びょう NIT.landV（40px）まで の はやさで はって いく（みずに はいったら いままで どおり）
+   ・「水との間に 仕切りが あると 仕切りに ぶつかって 何もしなくなる」
+       げんいん：いきさきは さく・しきりに かんけいなく「いちばん ちかい みず」→ さくに ぶつかって すすめない まま
+       → さく・しきりを こえずに いける みずだけを いきさきに する。いける みずが なければ その ばで「かわいて よわる」（みずの ない ステージと おなじ）
+       ひきずりこむ（drag）とき も、りくでは おなじ はやさの うえかぎり と さくを こえない
+   ============================================================ */
+const NIT = { on:true, landV:40, dragV:70 };
+function nitInW(x, z){ try{ return typeof waterAt==='function' && !!waterAt(x, z); }catch(e){ return false; } }
+function nitReach(x0, z0, x1, z1){ try{ return typeof skrCanReach!=='function' || skrCanReach(x0, z0, x1, z1); }catch(e){ return true; } }
+function nitInTank(x, z){ try{ return typeof stabInTank!=='function' || stabInTank(x, z, 12); }catch(e){ return true; } }
+// さく・しきりを こえずに いける みず（3びょう おぼえる）
+function nitTarget(){
+  const c=M._nitT; if(c && T-c.t<3 && Math.hypot(M.x-c.ox, M.z-c.oz)<60 && (c.none || nitInW(c.x, c.z))) return c.none ? null : c;   // うごいたら（もちあげて べつの ばしょ など）さがしなおす
+  let best=null, bd=1e9;
+  try{ const w=nearestWater(M.x, M.z);
+    if(w && nitInW(w.x, w.z) && nitInTank(w.x, w.z) && nitReach(M.x, M.z, w.x, w.z)){ best=w; bd=0; } }catch(e){}
+  if(!best && typeof suiWaterPoint==='function'){
+    for(let k=0;k<50;k++){ const p=suiWaterPoint(null); if(!p) break;
+      if(!nitInTank(p.x, p.z)) continue;
+      const d=Math.hypot(p.x-M.x,(p.z-M.z)*1.6); if(d>=bd) continue;
+      if(!nitReach(M.x, M.z, p.x, p.z)) continue;
+      best=p; bd=d; } }
+  M._nitT = best ? {x:best.x, z:best.z, t:T, ox:M.x, oz:M.z} : {none:true, t:T, ox:M.x, oz:M.z};
+  return best;
+}
+function nitStep(x0, z0, tx, tz, v, dt){
+  const dx=tx-x0, dz=tz-z0, d=Math.hypot(dx, dz); if(d<0.5) return;
+  const s=Math.min(d, v*dt), nx=x0+dx/d*s, nz=z0+dz/d*s;
+  let cross=false; try{ cross = typeof skrCross==='function' && SHIKIRI.on && skrCross(x0, z0, nx, nz); }catch(e){}
+  if(cross){ M.x=x0; M.z=z0; M._nitT=null; return; }
+  M.x=nx; M.z=nz; M.face = dx>0 ? 1 : -1;
+}
+{ const _wb=predWaterBrain; predWaterBrain=function(dt, d, p){
+    if(!NIT.on || M.lifted || M._carried || nitInW(M.x, M.z)) return _wb.apply(this, arguments);
+    const pm=M.pm||'fly', x0=M.x, z0=M.z;
+    if(pm==='fly'){
+      const tg=nitTarget();
+      const _nw=nearestWater; nearestWater=function(){ return tg ? {x:tg.x, z:tg.z} : null; };
+      let r; try{ r=_wb.apply(this, arguments); } finally{ nearestWater=_nw; }
+      if(tg && (M.pm||'fly')==='fly'){ M.x=x0; M.z=z0; nitStep(x0, z0, tg.x, tg.z, NIT.landV*(d.speed||1), dt); }
+      return r;
+    }
+    const r=_wb.apply(this, arguments);
+    if(M.pm==='drag' || M.pm==='lurk'){ const tx=M.x, tz=M.z; M.x=x0; M.z=z0; nitStep(x0, z0, tx+(tx-x0)*1e-6, tz, (M.pm==='drag'?NIT.dragV:NIT.landV*1.6)*(d.speed||1), dt);
+      if(M.pm==='drag'){ const j=predPrey(); if(j>=0){ const Tm=MS[j]; let w=60; try{ w=spriteSize(currentSprite())[0]; }catch(e){} Tm.x=M.x+M.face*w*depthScale(M.z)*.38; Tm.z=M.z-.5; } } }
+    return r;
+  }; }
+
+/* ============================================================
+   v1.5.2 ふつうの 子は 捕食種を 見かけると「○○だぁぁぁ！！」と こわがる（10/16 19:49 Nexus Atelier「この設定どこいった」）
+   ・しらべた もと：ピクシブ百科事典「ゆっくり」捕食種＋α「通常種ゆっくりにとっては野生下における天敵であり、捕食種を見たことも
+     聞いたことが無くても、捕食種の鳴き声や姿を捉えると『○○だぁぁぁぁ！！！』と恐怖してしまう」
+   ・いままで：さけぶ（preyReact）のは 捕食種が かりを はじめた とき（predStartHunt）と、のらの 捕食種が きた とき だけ
+     → いっしょに すんでいる 捕食種（おなかが いっぱい・とんでいる・ねている）を 見ても なにも しなかった
+   ・これから：ふつうの 子が 捕食種の ちかく（PSEE.dist）に いて 目に はいると、こわがって さけぶ（にげる／ふせる は いままでの preyReact）
+     おなじ 捕食種には PSEE.cool びょう あける（ずっと さけびつづけない）。ねている 子・かくれている 子・もちあげ中 は さけばない
+     にとりが 水に もぐって いる（ねらう＝lurk）ときは 見えない ので さけばない
+   ============================================================ */
+const PSEE = { on:true, dist:240, cool:240, every:.5, p:.4, t:0 };
+function pseePredVisible(i){
+  const y=S.yk[i], o=MS[i]; if(!y || !o || y.dead || !PRED_DEF[y.sp]) return false;
+  if(o.lifted || o.hidden || o.boxed) return false;
+  if(PRED_DEF[y.sp].kind==='water' && o.pm==='lurk') return false;
+  return true;
+}
+function pseeTick(dt){
+  if(!PSEE.on || typeof PRED_DEF==='undefined' || typeof preyReact!=='function') return;
+  PSEE.t+=dt; if(PSEE.t<PSEE.every) return; PSEE.t=0;
+  const preds=[]; for(let i=0;i<S.yk.length;i++) if(pseePredVisible(i)) preds.push(i);
+  if(!preds.length) return;
+  for(let j=0;j<S.yk.length;j++){
+    if(typeof preyOk==='function' && !preyOk(j)) continue;
+    const q=MS[j]; if(!q || ['sleep','nap','jisei','pHeld'].includes(q.state) || (q.bubbleT>0)) continue;
+    for(const i of preds){
+      const o=MS[i], far=Math.hypot(o.x-q.x, (o.z-q.z)*2); if(far>PSEE.dist) continue;
+      const pid=S.yk[i].id, key='psee:'+pid; let seenT=0;
+      ykDo(j, ()=>{ seenT=M._psee && M._psee[key] || -1e9; });
+      if(T-seenT < PSEE.cool || Math.random()>PSEE.p) continue;
+      const nm=predName(S.yk[i].sp);
+      ykDo(j, ()=>{ (M._psee=M._psee||{})[key]=T; if(isDead()) return; M.face = o.x>M.x ? 1 : -1; preyReact(nm, far); });
+      break;
+    }
+  }
+}
+{ const _u=update; update=function(dt){ const r=_u.apply(this, arguments); try{ pseeTick(Math.min(dt, .1)); }catch(e){ console.warn('[psee]', e); } return r; }; }
+
+/* ============================================================
+   v1.5.2 捕食種の たべた あと／にとりの しめりけ（10/16 19:59 Nexus Atelier）
+   (1)「捕食種が 食った後の 死体が なくなってない。途中で 食うの 飽きたら 死体残る とかなら いいけど」
+       ・いままで：さいごまで すった（れみりゃ）・水の なかで とかした（にとり）あとも、したいが のこっていた
+       ・これから：さいごまで たべたら したいは のこらない（すこし まって きえる）。PEAT.leaveP の かくりつで「たべあきて」のこす
+         ふらん（すって ぽいっ）は もともと あきて すてる たべかた なので のこす
+       ・まわりの 子の ことばも「からからに なっちゃった」→ のこらない ときは「たべられちゃった」
+   (2)「ニトリが 体が ジメジメ するとか 言うの おかしい。水好きな はずやろ」
+       ・からだの しめりけ（ゆかびの もと）で「からだが じめじめ する…」と いっていた → みずの 捕食種（にとり）は しめりけで こまらない
+         （しめりけを ためない・その ことばと「からだが しめってる」の おしらせを ださない）
+   ============================================================ */
+const PEAT = { on:true, leaveP:.25, gone:{} };
+Object.assign(L, {
+  preySeeGone:["{o}が… たべられちゃった…","{o}… いなく なっちゃった[のじぇ]…","{o}ぉぉ… どこにも いない[のじぇ]…"],
+});
+function peatVanish(id, eaterSp){
+  try{ const y0=S.yk.find(v=>v.id===id); if(y0) PEAT.gone[ykLabel(y0)]=T; }catch(e){}
+  setTimeout(()=>{ try{
+    const i=S.yk.findIndex(y=>y.id===id); if(i<0 || S.yk.length<2) return;
+    const y=S.yk[i]; if(!y.dead || (MS[i] && MS[i].lifted)) return;
+    const nm=ykLabel(y);
+    ykRemoveQuiet(i);
+    if(typeof renderYkTabs==='function') renderYkTabs();
+    note(`${nm}は ${predName(eaterSp)}に のこさず たべられてしまった…。`);
+    save();
+  }catch(e){ console.warn('[peat]', e); } }, 1600);
+}
+// れみりゃ・ふらん（すう）
+if(typeof predFinish==='function'){ const _pf=predFinish; predFinish=function(j, d){
+    const id=S.yk[j] && S.yk[j].id, sp=S.sp;
+    const r=_pf.apply(this, arguments);
+    try{ if(PEAT.on && id && d && d.eat!=='suck_toss' && Math.random()>=PEAT.leaveP) peatVanish(id, sp); }catch(e){}
+    return r; }; }
+// にとり（水の なかへ ひきずりこんで とかす）
+if(typeof predWaterBrain==='function'){ const _wb=predWaterBrain; predWaterBrain=function(dt, d, p){
+    const pm0=M.pm, j0=(pm0==='drag' && typeof predPrey==='function') ? predPrey() : -1, id=j0>=0 && S.yk[j0] ? S.yk[j0].id : null, sp=S.sp;
+    const r=_wb.apply(this, arguments);
+    try{ if(PEAT.on && id && pm0==='drag' && M.pm!=='drag'){ const y=S.yk.find(v=>v.id===id); if(y && y.dead && Math.random()>=PEAT.leaveP) peatVanish(id, sp); } }catch(e){}
+    return r; }; }
+// まわりの 子：のこらない ときは「たべられちゃった」
+{ const _s=say; say=function(k, o){
+    try{ if(PEAT.on && k==='preySeeDead' && o && PEAT.gone[o.o]!==undefined && T-PEAT.gone[o.o]<15) k='preySeeGone'; }catch(e){}   // その子が きえる とき だけ
+    return _s.call(this, k, o); }; }
+
+// (2) みずの 捕食種は しめりけで こまらない
+function peatAqua(){ try{ return typeof PRED_DEF!=='undefined' && PRED_DEF[S.sp] && PRED_DEF[S.sp].kind==='water'; }catch(e){ return false; } }
+{ const _f=tickStats; tickStats=function(minutes, awake){
+    const r=_f.apply(this, arguments);
+    try{ if(peatAqua()){ const p=BY(); p.wet=0; } }catch(e){}
+    return r; }; }
+{ const _s=say; say=function(k, o){
+    if(peatAqua() && (k==='wetItch' || k==='wetHint')) return;
+    return _s.apply(this, arguments); }; }
+{ const _u=updateUI; updateUI=function(dt){ const r=_u.apply(this, arguments);
+    try{ if(peatAqua()){ const need=document.getElementById('need'); if(need && /しめってる/.test(need.textContent||'')) need.hidden=true; } }catch(e){}
+    return r; }; }
+
+/* ---------- 10/16 20:03 Nexus Atelier ----------
+   (3)「ニトリに 襲われて 死因が 水に浸かって は おかしい。捕食種に 襲われたら ○○に 襲われて ゆっくりした に」
+       ・にとりに ひきずりこまれて とけた 子は「みずに ながく つかって あんよが とけて」、れみりゃは「捕食種に なかみを すわれて」だった
+       → 捕食種に つかまれて（または かまれて）しんだ ときは「○○に おそわれて えいえんに ゆっくり…」（しにかたの しゅるい・したいの みためは そのまま）
+   (4)「おしょろしーしー だよ」を けす（ゆっくりが じぶんで そう いわない）
+   (5)「ニトリは あんこを 吸うんじゃなくて 体を 噛みちぎって 食べる」→ にとりに つかまった 子は「すわないで」ではなく「かじらないで」などを いう */
+L.preyPee = (L.preyPee||[]).filter(s=>!/おそろしーしー/.test(s));
+if(!L.preyPee.length) L.preyPee=["しーしー… でちゃった[のじぇ]…"];
+Object.assign(L, {
+  preyChew:["かじらないで！ {me}を かじらないでぇぇ！！","いだい！ いだいぃぃ！！ ちぎらないで[ほしいのじぇ]ぇぇ！！","ゆ…ゆぎぃ… {me}の からだが… ちぎれる[のじぇ]…","たすけて！ だれか たすけて[ほしいのじぇ]！！"],
+});
+const PEAT_CAUSE = new Set(['pred','predBite','predDrown']);
+function peatKiller(){
+  try{ if(M._carried && M.carrier){ const c=S.yk.find(y=>y.id===M.carrier); if(c && PRED_DEF[c.sp]) return c.sp; } }catch(e){}
+  return null;
+}
+function peatCauseText(sp){ return `${predName(sp)}に おそわれて`; }
+{ const _d=die; die=function(cause){
+    if(!PEAT.on || isDead()) return _d.apply(this, arguments);
+    const sp=peatKiller();
+    if(!sp && !PEAT_CAUSE.has(cause)) return _d.apply(this, arguments);
+    const k=cause, keep=DEATH_CAUSE[k];
+    DEATH_CAUSE[k] = sp ? peatCauseText(sp) : '捕食種に おそわれて';
+    try{ const r=_d.apply(this, arguments); if(S.dead) S.dead.by = sp || 'pred'; return r; }
+    finally{ DEATH_CAUSE[k]=keep; }
+  }; }
+// しんだ あとの シート・ずかん など：DEATH_CAUSE[S.dead.cause] を みる ところは、その あいだ だけ「○○に おそわれて」に
+function peatWith(fn){
+  const d=S.dead; if(!d || !d.by) return fn();
+  const k=d.cause, keep=DEATH_CAUSE[k]; DEATH_CAUSE[k] = d.by==='pred' ? '捕食種に おそわれて' : peatCauseText(d.by);
+  try{ return fn(); } finally{ DEATH_CAUSE[k]=keep; }
+}
+if(typeof openDeathSheet==='function'){ const _o=openDeathSheet; openDeathSheet=function(){ const a=arguments, t=this; return peatWith(()=>_o.apply(t, a)); }; }
+// にとりに つかまっている 子の ことば
+{ const _s=say; say=function(k, o){
+    try{ if(PEAT.on && (k==='preySuck' || k==='preyBeg') && M._carried && M.carrier){ const c=S.yk.find(y=>y.id===M.carrier); if(c && PRED_DEF[c.sp] && PRED_DEF[c.sp].kind==='water') k='preyChew'; } }catch(e){}
+    return _s.call(this, k, o); }; }
+
+/* ---------- 10/16 20:04「きめぇまるが まりちゃとかを おちょくる 頻度が 多すぎて うざい」 ----------
+   ・いままで：とびはじめて 6びょう たつと、1びょうに 12% で おちょくりに いく → だいたい 15びょうに 1かい
+   → いちど おちょくったら KSC.cool びょう（2ぶん30びょう）は おちょくらない（だいたい 3ぶんに 1かい）
+   ・見かけて さけぶ（zz_v152_preysee）も、きめぇまるは おなじ 子に 10ぷんに 1かい まで */
+const KSC = { on:true, cool:150 };
+if(typeof predStartScare==='function'){ const _ss=predStartScare; predStartScare=function(){
+    if(KSC.on){ const p=BY(); if(p.kscT!==undefined && T-p.kscT < KSC.cool && p.kscT<=T) return; }
+    const r=_ss.apply(this, arguments);
+    try{ if(M.pm==='scare') BY().kscT=T; }catch(e){}
+    return r; }; }
+/* 10/16 20:13 Nexus Atelier「きめぇまる見かけて叫ぶはおかしい。通常種はきめぇまるを『ゆっくりしてないゆっくり』とバカにするが、
+     おちょくられると『ゆっくりできないいい』と言う」（資料：docs/捕食種_資料メモ.md きめぇ丸「通常種はきめぇ丸を嫌い…『きめぇ丸はゆっくりしないでね』」）
+   → きめぇまるを 見かけた ときは さけばず・にげず、ばかに する（おなじ 子は 10ぷんに 1かい まで）
+   → おちょくられた とき（preyScared）は「ゆっくり できないぃぃ！！」 */
+Object.assign(L, {
+  preyMockKime:["ゆっくり してない ゆっくり[なのじぇ]！ ゆぷぷ！","きめぇまるは ゆっくり しないでね！","あんな ゆっくり してない ゆっくりとは あそばない[のじぇ]！","ゆっくり してない ゆっくりは あっち いって[ほしいのじぇ]！ ぷんぷん！"],
+  preyScared:["ゆっくり できないぃぃぃ！！","ゆ、ゆっくり できないよぉぉぉ！！ やめて[ほしいのじぇ]ぇぇ！！","は、はやい！ ゆっくり できないぃぃ！！"],
+});
+if(typeof preyReact==='function' && typeof PSEE!=='undefined'){ const _pr=preyReact; preyReact=function(nm, far){
+    try{ if(KSC.on && /きめぇ/.test(nm||'')){
+        const k='kscSee'; if(M[k] && T-M[k]<600) return; M[k]=T;
+        if(isDead() || M._carried || M.lifted) return;
+        say('preyMockKime',{cls:'shout'}); express(chance(.5)?'doya':'puku3', 2.5); return; } }catch(e){}
+    return _pr.apply(this, arguments); }; }
+// おちょくられた 子の「しーしー… でちゃった」が 1かいの おちょくりで 6かいくらい でていた
+//   げんいん：predScare の さいご（M.pt>5.9）で M.pSaid=0 に もどす → つぎの フレームで また「しーしー」（6びょうで おわるまで まいフレーム）
+//   → おちょくりの とちゅうは もどさない（おわったら もどす）
+if(typeof predScare==='function'){ const _sc=predScare; predScare=function(){
+    const r=_sc.apply(this, arguments);
+    try{ if(M.pm==='scare'){ if(M.pt>5.9) M.pSaid=1; } else M.pSaid=0; }catch(e){}
     return r; }; }
 
 /* ============================================================
