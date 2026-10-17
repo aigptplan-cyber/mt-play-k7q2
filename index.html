@@ -369,7 +369,7 @@ body.wide .act kbd{font-family:var(--ui); font-size:9.5px; color:var(--ink-soft)
 /* ============================================================
    素材
    ============================================================ */
-const ATLAS_SRC = "a2.webp?v=152";
+const ATLAS_SRC = "a2.webp?v=153";
 const SP_RAW = {"smile":[0,0,213,195],"side":[215,0,183,191],"joy":[400,0,195,176],"squish":[597,0,196,186],"back":[795,0,199,205],"oh":[996,0,206,197],"relax":[1204,0,205,173],"excited":[1411,0,191,176],"tilt":[1604,0,176,162],"angry":[1782,0,189,177],"sleep":[0,207,192,137],"love":[194,207,194,175],"worry":[390,207,193,178],"doya":[585,207,196,174],"doze":[783,207,175,166],"blank":[960,207,185,169],"laugh":[1147,207,184,164],"backwobble":[1333,207,181,166],"strain":[1516,207,180,150],"hide":[1698,207,179,129],"sing":[0,387,172,153],"crawl":[174,387,151,153],"lovelove":[327,387,188,172],"dizzy":[517,387,171,154],"amaama":[690,387,53,50],"eat3":[745,387,161,150],"cry3":[908,387,151,143],"puku3":[1061,387,156,147],"back_nohat":[1219,387,190,184],"braid":[1411,387,32,85],"cry3_burnt":[1445,387,223,192],"cry3_nohat":[1670,387,190,157],"cry3_nohat_nobraid":[0,581,192,158],"cry3_torn":[194,581,213,188],"dead":[409,581,185,167],"dead2":[596,581,185,166],"hat":[783,581,209,133],"pero":[994,581,196,191],"pero2":[1192,581,191,191],"side_nohat":[1385,581,177,164],"sleep_nohat":[1564,581,194,159],"smile_nohat":[1760,581,196,159],"smile_nohat_nobraid":[0,774,197,160],"suri":[199,774,190,191],"suri2":[391,774,197,191],"worry_nohat":[590,774,189,157],"mv_backDL_1":[781,774,180,183,0.0],"mv_backDL_2":[963,774,185,183,-1.9],"mv_backDL_3":[1150,774,186,188,-2.3],"mv_backDL_4":[1338,774,189,195,0.0],"mv_backDR_1":[1529,774,192,187,-0.4],"mv_backDR_2":[1723,774,190,188,0.0],"mv_backDR_3":[0,971,198,192,4.3],"mv_backDR_4":[200,971,189,192,7.0],"mv_backL_1":[391,971,180,183,0.0],"mv_backL_2":[573,971,185,183,-1.9],"mv_backL_3":[760,971,186,188,-2.3],"mv_backL_4":[948,971,189,195,0.0],"mv_backR_1":[1139,971,192,187,-0.4],"mv_backR_2":[1333,971,190,188,0.0],"mv_backR_3":[1525,971,198,192,4.3],"mv_backR_4":[1725,971,189,192,7.0],"mv_back_1":[0,1168,196,196,14.0],"mv_back_2":[198,1168,193,186,8.6],"mv_back_3":[393,1168,194,192,0.0],"mv_back_4":[589,1168,196,212,-3.1],"mv_front_1":[787,1168,194,196],"mv_front_2":[983,1168,225,185],"mv_front_3":[1210,1168,193,155],"mv_front_4":[1405,1168,207,172],"mv_jump":[1614,1168,164,167],"mv_side_1":[1780,1168,182,156],"mv_side_2":[0,1382,262,178],"mv_side_3":[264,1382,207,138],"mv_side_4":[473,1382,152,143],"mv_spin_1":[627,1382,185,182,-6.8],"mv_spin_10":[814,1382,172,184,-0.4],"mv_spin_2":[988,1382,175,177,-0.4],"mv_spin_3":[1165,1382,178,175,-5.1],"mv_spin_4":[1345,1382,182,182,-12.3],"mv_spin_5":[1529,1382,178,177,-15.7],"mv_spin_6":[1709,1382,206,173,-4.7],"mv_spin_7":[0,1568,187,170,1.3],"mv_spin_8":[189,1568,168,170,0.0],"mv_spin_9":[359,1568,165,170,-0.4],"mv_turn_1":[526,1568,207,184],"mv_turn_2":[735,1568,184,189],"r:angry":[921,1568,192,161],"r:back":[1115,1568,185,183],"r:back_nohat":[1302,1568,190,167],"r:backwobble":[1494,1568,173,150],"r:blank":[1669,1568,192,154],"r:braid":[1863,1568,35,85],"r:crawl":[0,1759,170,147],"r:cry3":[172,1759,151,135],"r:cry3_burnt":[325,1759,151,135],"r:cry3_nohat":[478,1759,190,153],"r:cry3_nohat_nobraid":[670,1759,192,149],"r:cry3_torn":[864,1759,151,135],"r:dead":[1017,1759,192,153],"r:dead2":[1211,1759,192,153],"r:dizzy":[1405,1759,175,144],"r:doya":[1582,1759,193,159],"r:doze":[1777,1759,180,150],"r:eat3":[0,1920,161,151],"r:excited":[163,1920,190,160],"r:hat":[355,1920,230,155],"r:hide":[587,1920,182,126],"r:joy":[771,1920,197,167],"r:laugh":[970,1920,193,156],"r:love":[1165,1920,189,157],"r:lovelove":[1356,1920,185,146],"r:mv_backDL_1":[1543,1920,189,161,-3.7],"r:mv_backDL_2":[1734,1920,189,163,2.4],"r:mv_backDL_3":[0,2089,186,169,-0.9],"r:mv_backDL_4":[188,2089,183,168,0.2],"r:mv_backDR_1":[373,2089,187,156,2.5],"r:mv_backDR_2":[562,2089,189,171,-5.1],"r:mv_backDR_3":[753,2089,194,156,3.6],"r:mv_backDR_4":[949,2089,190,156,1.1],"r:mv_backL_1":[1141,2089,193,176,-3.0],"r:mv_backL_2":[1336,2089,190,161,2.0],"r:mv_backL_3":[1528,2089,186,165,0.0],"r:mv_backL_4":[1716,2089,177,156,-2.6],"r:mv_backR_1":[0,2267,184,164,0.8],"r:mv_backR_2":[186,2267,179,167,1.4],"r:mv_backR_3":[367,2267,182,175,1.2],"r:mv_backR_4":[551,2267,187,171,4.6],"r:mv_back_1":[740,2267,201,176,2.6],"r:mv_back_2":[943,2267,193,169,3.4],"r:mv_back_3":[1138,2267,195,174,-1.5],"r:mv_back_4":[1335,2267,196,186,-1.5],"r:mv_front_1":[1533,2267,216,186],"r:mv_front_2":[1751,2267,228,176],"r:mv_front_3":[0,2455,198,146],"r:mv_front_4":[200,2455,212,158],"r:mv_jump":[414,2455,173,157],"r:mv_side_1":[589,2455,183,164],"r:mv_side_2":[774,2455,260,191],"r:mv_side_3":[1036,2455,198,128],"r:mv_side_4":[1236,2455,161,139],"r:mv_spin_1":[1399,2455,178,171,1.3],"r:mv_spin_10":[1579,2455,171,158,1.1],"r:mv_spin_2":[1752,2455,173,176,0.4],"r:mv_spin_3":[0,2648,173,167,0.5],"r:mv_spin_4":[175,2648,182,167,2.5],"r:mv_spin_5":[359,2648,186,168,-1.7],"r:mv_spin_6":[547,2648,187,169,-2.7],"r:mv_spin_7":[736,2648,173,168,-7.3],"r:mv_spin_8":[911,2648,173,173,0.2],"r:mv_spin_9":[1086,2648,176,168,-1.2],"r:mv_turn_1":[1264,2648,201,161],"r:mv_turn_2":[1467,2648,182,169],"r:nbf|angry":[1651,2648,192,161],"r:nbf|back":[1845,2648,185,183],"r:nbf|back_nohat":[0,2833,190,167],"r:nbf|backwobble":[192,2833,173,150],"r:nbf|blank":[367,2833,192,154],"r:nbf|crawl":[561,2833,170,147],"r:nbf|cry3":[733,2833,151,135],"r:nbf|cry3_burnt":[886,2833,151,135],"r:nbf|cry3_nohat":[1039,2833,190,153],"r:nbf|cry3_torn":[1231,2833,151,135],"r:nbf|dizzy":[1384,2833,175,144],"r:nbf|doya":[1561,2833,193,159],"r:nbf|doze":[1756,2833,180,150],"r:nbf|eat3":[0,3002,161,151],"r:nbf|excited":[163,3002,190,160],"r:nbf|hide":[355,3002,182,126],"r:nbf|joy":[539,3002,197,167],"r:nbf|laugh":[738,3002,193,156],"r:nbf|love":[933,3002,189,157],"r:nbf|lovelove":[1124,3002,185,146],"r:nbf|mv_backDL_1":[1311,3002,189,161],"r:nbf|mv_backDL_2":[1502,3002,189,163],"r:nbf|mv_backDL_3":[1693,3002,186,169],"r:nbf|mv_backDL_4":[0,3173,183,168],"r:nbf|mv_backDR_1":[185,3173,187,156],"r:nbf|mv_backDR_2":[374,3173,189,171],"r:nbf|mv_backDR_3":[565,3173,194,156],"r:nbf|mv_backDR_4":[761,3173,190,156],"r:nbf|mv_backL_1":[953,3173,193,176],"r:nbf|mv_backL_2":[1148,3173,190,161],"r:nbf|mv_backL_3":[1340,3173,186,165],"r:nbf|mv_backL_4":[1528,3173,177,156],"r:nbf|mv_backR_1":[1707,3173,184,164],"r:nbf|mv_backR_2":[0,3351,179,167],"r:nbf|mv_backR_3":[181,3351,182,175],"r:nbf|mv_backR_4":[365,3351,187,171],"r:nbf|mv_back_1":[554,3351,201,176],"r:nbf|mv_back_2":[757,3351,193,169],"r:nbf|mv_back_3":[952,3351,195,174],"r:nbf|mv_back_4":[1149,3351,196,186],"r:nbf|mv_front_1":[1347,3351,216,186],"r:nbf|mv_front_2":[1565,3351,228,176],"r:nbf|mv_front_3":[1795,3351,198,146],"r:nbf|mv_front_4":[0,3539,212,158],"r:nbf|mv_jump":[214,3539,173,157],"r:nbf|mv_side_1":[389,3539,183,164],"r:nbf|mv_side_2":[574,3539,260,191],"r:nbf|mv_side_3":[836,3539,198,128],"r:nbf|mv_side_4":[1036,3539,161,139],"r:nbf|mv_spin_1":[1199,3539,178,171],"r:nbf|mv_spin_10":[1379,3539,171,158],"r:nbf|mv_spin_2":[1552,3539,173,176],"r:nbf|mv_spin_3":[1727,3539,173,167],"r:nbf|mv_spin_4":[0,3732,182,167],"r:nbf|mv_spin_5":[184,3732,186,168],"r:nbf|mv_spin_6":[372,3732,187,169],"r:nbf|mv_spin_7":[561,3732,173,168],"r:nbf|mv_spin_8":[736,3732,173,173],"r:nbf|mv_spin_9":[911,3732,176,168],"r:nbf|mv_turn_1":[1089,3732,201,161],"r:nbf|mv_turn_2":[1292,3732,182,169],"r:nbf|oh":[1476,3732,203,171],"r:nbf|puku3":[1681,3732,156,140],"r:nbf|relax":[1839,3732,196,159],"r:nbf|side":[0,3907,175,171],"r:nbf|side_nohat":[177,3907,177,157],"r:nbf|sing":[356,3907,178,140],"r:nbf|sleep":[1242,14684,193,114],"r:nbf|sleep_nohat":[731,3907,194,154],"r:nbf|smile":[927,3907,200,174],"r:nbf|smile_nohat":[1129,3907,196,157],"r:nbf|squish":[1327,3907,197,172],"r:nbf|strain":[1526,3907,177,143],"r:nbf|tilt":[1705,3907,188,161],"r:nbf|worry":[0,4083,193,154],"r:nbf|worry_nohat":[195,4083,189,156],"r:oh":[386,4083,203,171],"r:pero":[591,4083,179,171],"r:pero2":[772,4083,174,171],"r:puku3":[948,4083,156,140],"r:relax":[1106,4083,196,159],"r:side":[1304,4083,175,171],"r:side_nohat":[1481,4083,177,157],"r:sing":[1660,4083,178,140],"r:sleep":[1437,14684,193,114],"r:sleep_nohat":[0,4256,194,154],"r:smile":[196,4256,200,174],"r:smile_nohat":[398,4256,196,157],"r:smile_nohat_nobraid":[596,4256,197,155],"r:squish":[795,4256,197,172],"r:strain":[994,4256,177,143],"r:suri":[1173,4256,178,171],"r:suri2":[1353,4256,179,171],"r:tilt":[1534,4256,188,161],"r:worry":[1724,4256,193,154],"r:worry_nohat":[0,4432,189,156],"nb|angry":[191,4432,189,177,0,0],"nb|back_nohat":[434,4432,42,59,0,98],"nb|blank":[527,4432,185,169,0,0],"nb|crawl":[714,4432,67,62,4,91],"nb|cry3":[783,4432,151,143,0,0],"nb|cry3_burnt":[936,4432,55,167,152,23],"nb|cry3_nohat":[993,4432,43,93,147,63],"nb|cry3_torn":[1038,4432,90,167,116,21],"nb|dizzy":[1130,4432,171,154,0,0],"nb|doya":[1303,4432,196,174,0,0],"nb|doze":[1501,4432,107,79,2,87],"nb|excited":[1610,4432,191,176,0,0],"nb|hide":[1803,4432,179,129,0,0],"nb|joy":[0,4611,195,176,0,0],"nb|laugh":[197,4611,184,164,0,0],"nb|love":[383,4611,194,175,0,0],"nb|lovelove":[579,4611,188,172,0,0],"nb|mv_backDL_1":[769,4611,150,163,13,20],"nb|mv_backDL_2":[921,4611,49,59,10,124],"nb|mv_backDL_3":[972,4611,49,84,14,104],"nb|mv_backDL_4":[1023,4611,46,59,16,131],"nb|mv_backDR_1":[1071,4611,43,139,4,48],"nb|mv_backDR_2":[1116,4611,49,77,7,111],"nb|mv_backDR_3":[1167,4611,47,58,6,134],"nb|mv_backDR_4":[1216,4611,44,132,8,60],"nb|mv_backL_1":[1262,4611,149,163,14,20],"nb|mv_backL_2":[1413,4611,49,78,19,105],"nb|mv_backL_3":[1464,4611,49,84,14,104],"nb|mv_backL_4":[1515,4611,46,59,16,131],"nb|mv_backR_1":[1563,4611,43,139,4,48],"nb|mv_backR_2":[1608,4611,40,84,0,104],"nb|mv_backR_3":[1650,4611,51,81,10,111],"nb|mv_backR_4":[1703,4611,46,132,6,60],"nb|mv_back_1":[1751,4611,183,143,7,52],"nb|mv_back_2":[1936,4611,45,53,1,133],"nb|mv_back_3":[1983,4611,50,81,8,111],"nb|mv_back_4":[0,4789,46,153,3,50],"nb|mv_front_1":[48,4789,47,80,144,111],"nb|mv_front_2":[97,4789,55,78,129,107],"nb|mv_front_3":[154,4789,50,62,140,93],"nb|mv_front_4":[206,4789,52,67,143,105],"nb|mv_jump":[260,4789,45,76,80,82],"nb|mv_side_1":[307,4789,49,65,68,91],"nb|mv_side_2":[358,4789,61,52,55,125],"nb|mv_side_3":[421,4789,52,57,39,81],"nb|mv_side_4":[475,4789,43,67,43,76],"nb|mv_turn_1":[520,4789,52,50,52,130],"nb|oh":[625,4789,206,197,0,0],"nb|puku3":[833,4789,156,147,0,0],"nb|relax":[991,4789,205,173,0,0],"nb|side":[1198,4789,92,89,14,97],"nb|sing":[1292,4789,172,153,0,0],"nb|sleep":[1466,4789,64,52,118,84],"nb|sleep_nohat":[1532,4789,104,144,81,13],"nb|smile":[1638,4789,213,195,0,0],"nb|smile_nohat":[1853,4789,92,142,100,13],"nb|squish":[0,4988,196,186,0,0],"nb|strain":[198,4988,180,150,0,0],"nb|tilt":[380,4988,176,162,0,0],"nb|worry":[558,4988,193,178,0,0],"nb|worry_nohat":[753,4988,50,84,134,71],"kzpero1":[0,5174,205,164],"kzpero2":[207,5174,201,164],"dentart1":[410,5174,202,135],"dentart2":[614,5174,250,175],"dentart3":[866,5174,331,226],"r:kzpero1":[1199,5174,193,157],"r:kzpero2":[1394,5174,201,157],"p_bfly1":[1597,5174,81,84],"p_bfly2":[1680,5174,56,84],"p_cater":[1738,5174,72,42],"p_hopper":[1812,5174,84,54],"p_acorn":[1898,5174,41,52],"p_chestnut":[1941,5174,52,51],"p_grass":[0,5402,84,81],"p_wxdev":[86,5402,150,120],"p_shell_f":[1086,5402,240,173],"p_shell_s":[1328,5402,240,233],"p_kota_f":[1570,5402,260,184],"p_kota_s":[864,5402,220,167],"p_desk":[0,5637,241,240],"p_board":[243,5637,247,245],"p_harisen":[492,5637,193,246],"p_trap_open":[687,5637,233,211],"p_trap_shut":[922,5637,212,202],"p_lie_up":[1136,5637,300,215],"p_lie_dn":[1438,5637,300,197],"p_bind_board":[0,5885,360,144],"p_lie_up2":[362,5885,420,257],"p_lie_up3":[784,5885,440,309],"p_lie_dn_hat":[1226,5885,300,197],"p_tsu_b":[1528,5885,246,245],"p_kocha_s":[0,6196,406,232],"p_kocha_b":[408,6196,377,243],"p_takadai":[787,6196,751,338],"dl_kocha_burst":[1540,6196,340,185],"dl_kocha_char":[0,6536,340,164],"dl_kocha_dry":[342,6536,340,171],"dl_kocha_flat":[684,6536,340,128],"dl_kocha_frost":[1026,6536,340,194],"dl_kocha_halves":[1368,6536,340,153],"dl_kocha_squash":[0,6732,340,124],"dl_kocha_vomit":[342,6732,340,163],"dl_maricha_burst":[684,6732,340,198],"dl_maricha_char":[1026,6732,340,192],"dl_maricha_dry":[1368,6732,340,221],"dl_maricha_flat":[0,6955,340,142],"dl_maricha_frost":[342,6955,340,211],"dl_maricha_halves":[684,6955,340,166],"dl_maricha_squash":[1026,6955,340,156],"dl_maricha_vomit":[1368,6955,340,223],"dl_reimu_char":[0,7180,340,196],"dl_reimu_dry":[342,7180,340,168],"dl_reimu_flat":[684,7180,340,136],"dl_reimu_frost":[1026,7180,340,180],"dl_reimu_halves":[1368,7180,340,214],"dl_reimu_squash":[0,7396,340,160],"dl_reimu_vomit":[342,7396,340,198],"dl_tsumuri_burst":[684,7396,340,199],"dl_tsumuri_char":[1026,7396,340,190],"dl_tsumuri_dry":[1368,7396,340,224],"dl_tsumuri_flat":[0,7622,340,158],"dl_tsumuri_frost":[342,7622,340,254],"dl_tsumuri_halves":[684,7622,340,212],"dl_tsumuri_squash":[1026,7622,340,163],"dl_tsumuri_vomit":[1368,7622,340,221],"p_lie_dn_reimu":[0,7878,340,182],"p_lie_dn_reimu_hat":[342,7878,340,182],"p_lie_dn_tsumuri":[684,8094,340,246],"p_lie_dn_tsumuri_hat":[1026,8094,340,246],"p_lie_dn_kocha":[1368,7878,340,186],"p_lie_dn_kocha_hat":[0,8094,340,186],"dl_reimu_burst":[342,8094,340,203],"angry_nohat":[1368,8094,189,177],"nb|angry_nohat":[1559,8094,189,177,0,0],"blank_nohat":[1750,8094,185,169],"nb|blank_nohat":[0,8342,185,169,0,0],"dizzy_nohat":[187,8342,171,154],"nb|dizzy_nohat":[360,8342,171,154,0,0],"doya_nohat":[533,8342,196,174],"excited_nohat":[929,8342,191,176],"nb|excited_nohat":[1122,8342,191,176,0,0],"joy_nohat":[1315,8342,195,176],"nb|joy_nohat":[1512,8342,195,176,0,0],"laugh_nohat":[1709,8342,184,164],"nb|laugh_nohat":[0,8520,184,164,0,0],"love_nohat":[186,8520,194,175],"nb|love_nohat":[382,8520,194,175,0,0],"lovelove_nohat":[578,8520,188,172],"nb|lovelove_nohat":[768,8520,188,172,0,0],"oh_nohat":[958,8520,206,197],"nb|oh_nohat":[1166,8520,206,197,0,0],"puku3_nohat":[1374,8520,156,147],"nb|puku3_nohat":[1532,8520,156,147,0,0],"relax_nohat":[1690,8520,205,173],"sing_nohat":[207,8719,172,153],"nb|sing_nohat":[381,8719,172,153,0,0],"squish_nohat":[555,8719,196,186],"nb|squish_nohat":[753,8719,196,186,0,0],"strain_nohat":[951,8719,180,150],"nb|strain_nohat":[1133,8719,180,150,0,0],"tilt_nohat":[1315,8719,176,162],"nb|tilt_nohat":[1493,8719,176,162,0,0],"eat3_nohat":[1671,8719,161,150],"doze_nohat":[1834,8719,175,166],"hide_nohat":[0,8907,179,129],"mv_jump_nohat":[362,8907,164,167],"backwobble_nohat":[528,8907,181,166],"crawl_nohat":[711,8907,151,153],"dead_nohat":[864,8907,185,167],"dead2_nohat":[1051,8907,185,166],"pero_nohat":[1238,8907,196,191],"pero2_nohat":[1436,8907,191,191],"suri_nohat":[1629,8907,190,191],"suri2_nohat":[1821,8907,197,191],"mv_front_1_nohat":[0,9100,194,196],"mv_front_2_nohat":[196,9100,225,185],"mv_front_3_nohat":[423,9100,193,155],"mv_front_4_nohat":[618,9100,207,172],"mv_side_1_nohat":[827,9100,182,156],"mv_side_2_nohat":[1011,9100,262,178],"mv_side_3_nohat":[1275,9100,207,138],"mv_side_4_nohat":[1484,9100,152,143],"mv_turn_1_nohat":[1638,9100,207,184],"mv_turn_2_nohat":[1847,9100,184,189],"nb|doze_nohat":[118,9298,107,79,2,87],"nb|mv_front_1_nohat":[227,9298,47,80,144,111],"nb|mv_front_2_nohat":[276,9298,55,78,129,107],"nb|mv_front_3_nohat":[333,9298,50,62,140,93],"nb|mv_front_4_nohat":[385,9298,52,67,143,105],"nb|mv_jump_nohat":[439,9298,45,76,80,82],"nb|mv_side_1_nohat":[486,9298,49,65,68,91],"nb|mv_side_2_nohat":[537,9298,61,52,55,125],"nb|mv_side_3_nohat":[600,9298,52,57,39,81],"nb|mv_side_4_nohat":[654,9298,43,67,43,76],"nb|mv_turn_1_nohat":[699,9298,52,50,52,130],"mv_back_1_nohat":[804,9298,196,196],"mv_back_2_nohat":[1002,9298,193,186],"mv_back_3_nohat":[1197,9298,194,192],"mv_back_4_nohat":[1393,9298,196,212],"mv_backL_1_nohat":[1591,9298,180,183],"mv_backL_2_nohat":[1773,9298,185,183],"mv_backL_3_nohat":[0,9512,186,188],"mv_backL_4_nohat":[188,9512,189,195],"mv_backR_1_nohat":[379,9512,192,187],"mv_backR_2_nohat":[573,9512,190,188],"mv_backR_3_nohat":[765,9512,198,192],"mv_backR_4_nohat":[965,9512,189,192],"mv_backDL_1_nohat":[1156,9512,180,183],"mv_backDL_2_nohat":[1338,9512,185,183],"mv_backDL_3_nohat":[1525,9512,186,188],"mv_backDL_4_nohat":[1713,9512,189,195],"mv_backDR_1_nohat":[0,9709,192,187],"mv_backDR_2_nohat":[194,9709,190,188],"mv_backDR_3_nohat":[386,9709,198,192],"mv_backDR_4_nohat":[586,9709,189,192],"mv_spin_1_nohat":[777,9709,185,182],"mv_spin_2_nohat":[964,9709,175,177],"mv_spin_3_nohat":[1141,9709,178,175],"mv_spin_4_nohat":[1321,9709,182,182],"mv_spin_5_nohat":[1505,9709,178,177],"mv_spin_6_nohat":[1685,9709,206,173],"mv_spin_7_nohat":[0,9903,187,170],"mv_spin_8_nohat":[189,9903,168,170],"mv_spin_9_nohat":[359,9903,165,170],"mv_spin_10_nohat":[526,9903,172,184],"r:angry_nohat":[700,9903,192,161],"r:nbf|angry_nohat":[894,9903,192,161],"r:blank_nohat":[1088,9903,192,154],"r:nbf|blank_nohat":[1282,9903,192,154],"r:dizzy_nohat":[1476,9903,175,144],"r:nbf|dizzy_nohat":[1653,9903,175,144],"r:doya_nohat":[1830,9903,193,159],"r:nbf|doya_nohat":[0,10089,193,159],"r:excited_nohat":[195,10089,190,160],"r:nbf|excited_nohat":[387,10089,190,160],"r:joy_nohat":[579,10089,197,167],"r:nbf|joy_nohat":[778,10089,197,167],"r:laugh_nohat":[977,10089,193,156],"r:nbf|laugh_nohat":[1172,10089,193,156],"r:love_nohat":[1367,10089,189,157],"r:nbf|love_nohat":[1558,10089,189,157],"r:lovelove_nohat":[1749,10089,185,146],"r:nbf|lovelove_nohat":[0,10258,185,146],"r:oh_nohat":[187,10258,203,171],"r:nbf|oh_nohat":[392,10258,203,171],"r:puku3_nohat":[597,10258,156,140],"r:nbf|puku3_nohat":[755,10258,156,140],"r:relax_nohat":[913,10258,196,159],"r:nbf|relax_nohat":[1111,10258,196,159],"r:sing_nohat":[1309,10258,178,140],"r:nbf|sing_nohat":[1489,10258,178,140],"r:squish_nohat":[1669,10258,197,172],"r:nbf|squish_nohat":[0,10432,197,172],"r:strain_nohat":[199,10432,177,143],"r:nbf|strain_nohat":[378,10432,177,143],"r:tilt_nohat":[557,10432,188,161],"r:nbf|tilt_nohat":[747,10432,188,161],"r:eat3_nohat":[937,10432,161,151],"r:nbf|eat3_nohat":[1100,10432,161,151],"r:doze_nohat":[1263,10432,180,150],"r:nbf|doze_nohat":[1445,10432,180,150],"r:hide_nohat":[1627,10432,182,126],"r:mv_jump_nohat":[1811,10432,173,157],"r:nbf|mv_jump_nohat":[0,10606,173,157],"r:backwobble_nohat":[175,10606,173,150],"r:nbf|backwobble_nohat":[350,10606,173,150],"r:crawl_nohat":[525,10606,170,147],"r:nbf|crawl_nohat":[697,10606,170,147],"r:dead_nohat":[869,10606,192,153],"r:dead2_nohat":[1063,10606,192,153],"r:pero_nohat":[1257,10606,179,171],"r:pero2_nohat":[1438,10606,174,171],"r:suri_nohat":[1614,10606,178,171],"r:suri2_nohat":[1794,10606,179,171],"r:mv_front_1_nohat":[0,10779,216,186],"r:nbf|mv_front_1_nohat":[218,10779,216,186],"r:mv_front_2_nohat":[436,10779,228,176],"r:nbf|mv_front_2_nohat":[666,10779,228,176],"r:mv_front_3_nohat":[896,10779,198,146],"r:nbf|mv_front_3_nohat":[1096,10779,198,146],"r:mv_front_4_nohat":[1296,10779,212,158],"r:nbf|mv_front_4_nohat":[1510,10779,212,158],"r:mv_side_1_nohat":[1724,10779,183,164],"r:nbf|mv_side_1_nohat":[0,10967,183,164],"r:mv_side_2_nohat":[185,10967,260,191],"r:nbf|mv_side_2_nohat":[447,10967,260,191],"r:mv_side_3_nohat":[709,10967,198,128],"r:nbf|mv_side_3_nohat":[909,10967,198,128],"r:mv_side_4_nohat":[1109,10967,161,139],"r:nbf|mv_side_4_nohat":[1272,10967,161,139],"r:mv_turn_1_nohat":[1435,10967,201,161],"r:nbf|mv_turn_1_nohat":[1638,10967,201,161],"r:mv_turn_2_nohat":[1841,10967,182,169],"r:nbf|mv_turn_2_nohat":[0,11160,182,169],"r:mv_back_1_nohat":[184,11160,201,176],"r:mv_back_2_nohat":[387,11160,193,169],"r:mv_back_3_nohat":[582,11160,195,174],"r:mv_back_4_nohat":[779,11160,196,186],"r:mv_backL_1_nohat":[977,11160,193,176],"r:mv_backL_2_nohat":[1172,11160,190,161],"r:mv_backL_3_nohat":[1364,11160,186,165],"r:mv_backL_4_nohat":[1552,11160,177,156],"r:mv_backR_1_nohat":[1731,11160,184,164],"r:mv_backR_2_nohat":[0,11348,179,167],"r:mv_backR_3_nohat":[181,11348,182,175],"r:mv_backR_4_nohat":[365,11348,187,171],"r:mv_backDL_1_nohat":[554,11348,189,161],"r:mv_backDL_2_nohat":[745,11348,189,163],"r:mv_backDL_3_nohat":[936,11348,186,169],"r:mv_backDL_4_nohat":[1124,11348,183,168],"r:mv_backDR_1_nohat":[1309,11348,187,156],"r:mv_backDR_2_nohat":[1498,11348,189,171],"r:mv_backDR_3_nohat":[1689,11348,194,156],"r:mv_backDR_4_nohat":[0,11525,190,156],"r:mv_spin_1_nohat":[192,11525,178,171],"r:mv_spin_2_nohat":[372,11525,173,176],"r:mv_spin_3_nohat":[547,11525,173,167],"r:mv_spin_4_nohat":[722,11525,182,167],"r:mv_spin_5_nohat":[906,11525,186,168],"r:mv_spin_6_nohat":[1094,11525,187,169],"r:mv_spin_7_nohat":[1283,11525,173,168],"r:mv_spin_8_nohat":[1458,11525,173,173],"r:mv_spin_9_nohat":[1633,11525,176,168],"r:mv_spin_10_nohat":[1811,11525,171,158],"nbf|backwobble_nohat":[0,11703,181,166],"nbf|hide_nohat":[183,11703,179,129],"nbf|mv_backDL_1_nohat":[364,11703,180,183],"nbf|mv_backDL_2_nohat":[546,11703,185,183],"nbf|mv_backDL_3_nohat":[733,11703,186,188],"nbf|mv_backDL_4_nohat":[921,11703,189,195],"nbf|mv_backDR_1_nohat":[1112,11703,192,187],"nbf|mv_backDR_2_nohat":[1306,11703,190,188],"nbf|mv_backDR_3_nohat":[1498,11703,198,192],"nbf|mv_backDR_4_nohat":[1698,11703,189,192],"nbf|mv_backL_1_nohat":[0,11900,180,183],"nbf|mv_backL_2_nohat":[182,11900,185,183],"nbf|mv_backL_3_nohat":[369,11900,186,188],"nbf|mv_backL_4_nohat":[557,11900,189,195],"nbf|mv_backR_1_nohat":[748,11900,192,187],"nbf|mv_backR_2_nohat":[942,11900,190,188],"nbf|mv_backR_3_nohat":[1134,11900,198,192],"nbf|mv_backR_4_nohat":[1334,11900,189,192],"nbf|mv_back_1_nohat":[1525,11900,196,196],"nbf|mv_back_2_nohat":[1723,11900,193,186],"nbf|mv_back_3_nohat":[0,12098,194,192],"nbf|mv_back_4_nohat":[196,12098,196,212],"r:nbf|hide_nohat":[394,12098,182,126],"r:nbf|mv_backDL_1_nohat":[578,12098,189,161],"r:nbf|mv_backDL_2_nohat":[769,12098,189,163],"r:nbf|mv_backDL_3_nohat":[960,12098,186,169],"r:nbf|mv_backDL_4_nohat":[1148,12098,183,168],"r:nbf|mv_backDR_1_nohat":[1333,12098,187,156],"r:nbf|mv_backDR_2_nohat":[1522,12098,189,171],"r:nbf|mv_backDR_3_nohat":[1713,12098,194,156],"r:nbf|mv_backDR_4_nohat":[0,12312,190,156],"r:nbf|mv_backL_1_nohat":[192,12312,193,176],"r:nbf|mv_backL_2_nohat":[387,12312,190,161],"r:nbf|mv_backL_3_nohat":[579,12312,186,165],"r:nbf|mv_backL_4_nohat":[767,12312,177,156],"r:nbf|mv_backR_1_nohat":[946,12312,184,164],"r:nbf|mv_backR_2_nohat":[1132,12312,179,167],"r:nbf|mv_backR_3_nohat":[1313,12312,182,175],"r:nbf|mv_backR_4_nohat":[1497,12312,187,171],"r:nbf|mv_back_1_nohat":[1686,12312,201,176],"r:nbf|mv_back_2_nohat":[0,12490,193,169],"r:nbf|mv_back_3_nohat":[195,12490,195,174],"r:nbf|mv_back_4_nohat":[392,12490,196,186],"r:nbf|mv_spin_1_nohat":[590,12490,178,171],"r:nbf|mv_spin_10_nohat":[770,12490,171,158],"r:nbf|mv_spin_2_nohat":[943,12490,173,176],"r:nbf|mv_spin_3_nohat":[1118,12490,173,167],"r:nbf|mv_spin_4_nohat":[1293,12490,182,167],"r:nbf|mv_spin_5_nohat":[1477,12490,186,168],"r:nbf|mv_spin_6_nohat":[1665,12490,187,169],"r:nbf|mv_spin_7_nohat":[1854,12490,173,168],"r:nbf|mv_spin_8_nohat":[0,12678,173,173],"r:nbf|mv_spin_9_nohat":[175,12678,176,168],"dl_maricha_burst_nohat":[353,12678,340,198],"dl_maricha_char_nohat":[695,12678,340,192],"dl_maricha_dry_nohat":[1037,12678,340,221],"dl_maricha_flat_nohat":[1379,12678,340,142],"dl_maricha_frost_nohat":[0,12901,340,211],"dl_maricha_halves_nohat":[342,12901,340,166],"dl_maricha_squash_nohat":[684,12901,340,156],"dl_maricha_vomit_nohat":[1026,12901,340,223],"dl_reimu_burst_nohat":[1368,12901,340,203],"dl_reimu_char_nohat":[0,13126,340,196],"dl_reimu_dry_nohat":[342,13126,340,168],"dl_reimu_flat_nohat":[684,13126,340,136],"dl_reimu_frost_nohat":[1026,13126,340,180],"dl_reimu_halves_nohat":[1368,13126,340,214],"dl_reimu_squash_nohat":[0,13342,340,160],"dl_reimu_vomit_nohat":[342,13342,340,198],"p_lie_dn_nohat":[684,13342,300,197],"p_lie_up_nohat":[986,13342,300,215],"p_lie_up2_nohat":[1288,13342,420,257],"p_lie_up3_nohat":[0,13601,440,309],"p_lie_dn_reimu_nohat":[442,13601,340,182],"nbf|eat3":[784,13601,161,150],"nbf|dead":[947,13601,185,167],"nbf|dead2":[1134,13601,185,166],"nbf|pero":[1321,13601,196,191],"nbf|pero2":[1519,13601,191,191],"nbf|suri":[1712,13601,190,191],"nbf|suri2":[0,13912,197,191],"nbf|dead2_nohat":[549,13912,185,166],"nbf|pero_nohat":[736,13912,196,191],"nbf|pero2_nohat":[934,13912,191,191],"nbf|suri_nohat":[1127,13912,190,191],"r:nbf|dead":[1518,13912,192,153],"r:nbf|dead2":[1712,13912,192,153],"r:nbf|pero":[0,14105,179,171],"r:nbf|pero2":[181,14105,174,171],"r:nbf|suri":[357,14105,178,171],"r:nbf|suri2":[537,14105,179,171],"r:nbf|dead_nohat":[718,14105,192,153],"r:nbf|dead2_nohat":[912,14105,192,153],"r:nbf|pero_nohat":[1106,14105,179,171],"r:nbf|pero2_nohat":[1287,14105,174,171],"r:nbf|suri_nohat":[1463,14105,178,171],"r:nbf|suri2_nohat":[1643,14105,179,171],"nbf|relax_nohat":[1824,14105,205,173],"nbf|doya_nohat":[0,14280,196,174],"nbf|eat3_nohat":[198,14280,161,150],"nbf|dead_nohat":[361,14280,185,167],"nbf|crawl_nohat":[548,14280,151,153],"nbf|suri2_nohat":[701,14280,197,191],"nbf|mv_turn_2_nohat":[900,14280,184,189],"nbf|mv_spin_1_nohat":[1086,14280,185,182],"nbf|mv_spin_2_nohat":[1273,14280,175,177],"nbf|mv_spin_3_nohat":[1450,14280,178,175],"nbf|mv_spin_4_nohat":[1630,14280,182,182],"nbf|mv_spin_5_nohat":[1814,14280,178,177],"nbf|mv_spin_6_nohat":[0,14473,206,173],"nbf|mv_spin_10_nohat":[208,14473,172,184],"bkx":[382,14473,210,209],"r:bkx":[594,14473,210,185],"nbf|back":[806,14473,199,205],"nbf|backwobble":[1007,14473,181,166],"nbf|mv_spin_1":[1190,14473,185,182,-6.8],"nbf|mv_spin_2":[1377,14473,175,177,-0.4],"nbf|mv_spin_4":[1554,14473,182,182,-12.3],"nbf|mv_spin_5":[1738,14473,178,177,-15.7],"nbf|mv_spin_6":[0,14684,206,173,-4.7],"nbf|mv_spin_8":[208,14684,168,170,0.0],"nbf|mv_spin_9":[378,14684,165,170,-0.4],"nbf|mv_spin_10":[545,14684,172,184,-0.4],"nbf|mv_turn_2":[719,14684,184,189],"nbf|mv_spin_8_nohat":[905,14684,168,170],"nbf|mv_spin_9_nohat":[1075,14684,165,170]};
 // しゅぞくごとの 絵：いまの しゅぞくの 接頭辞（れいみゅ＝"r:"）つきの 絵が あれば そちらを つかう
 let SPX = '';
@@ -6135,6 +6135,7 @@ ykAdd = function(sp){
 /* ============================================================
    うごき：もるもる・びたんびたん
    ============================================================ */
+var MORU_LINES=false;
 function moruFast(){ return (M.speed||0)>45; }
 // はやく はうときは うしろで ひっぷを はげしく ふる（みじかい せん）
 const _mv_drawMari = drawMari;
@@ -6145,7 +6146,8 @@ drawMari = function(){
   M._nobi = (M.state==='stretch' && !M.lifted && !isDead()) ? nobiK(M.stT, M.stDur) : 0;
   _mv_drawMari();
   M._nobi=0; M._nobiDown=false; M._hipX=0;
-  if(M._moru===2 && M.state==='move' && !M.lifted){
+  // v1.5.3 X ユシューさん「下方向へのもるもるに変な影がちらつく」（見本45）：はやく はう ときの せんは かかない（MORU_LINES=true で もどる）
+  if(typeof MORU_LINES!=='undefined' && MORU_LINES && M._moru===2 && M.state==='move' && !M.lifted){
     const b=mariBox(), g=ctx; g.save(); g.strokeStyle='rgba(90,70,50,.55)'; g.lineWidth=1.1; g.lineCap='round';
     for(let k=0;k<3;k++){ const on=((T*18+k)|0)%2; if(!on) continue; const y=b.bot-b.h*(.15+k*.14);
       for(const sd of [-1,1]){ const x=b.x+sd*(b.w*.52+2+k); g.beginPath(); g.moveTo(x,y); g.lineTo(x+sd*5,y+1); g.stroke(); } }
@@ -14953,7 +14955,7 @@ try{ _camUIk=''; camUI(); }catch(e){}
      からっぽの すいそうを みに いくと「だれを すまわせる？」を きく（みている すいそうには かならず 1ぴき いる）
    セーブ：S.tanks = [{id, seen, snap}]、S.tankI = みている ばんごう。みている すいそうの なかみは いままでどおり S に ある
    ============================================================ */
-const TANK_MAX = 6;
+const TANK_MAX = 6;   // 1.5.3 リリースでは 6 の まま（8 は OK まち）
 // すいそうに かんけい ない（へやで ひとつ）もの。それいがいは ぜんぶ すいそうごと
 const TANK_GLOBAL = new Set(['set','diary','gameMin','gameDay','realDayMark','env','tanks','tankI','rel']);   // rel：なかよしは ゆっくりの id どうし なので へやで ひとつ
 const STAGE_ICON = {normal:'🏠', mizuumi:'🌲', koen:'⛲', kasen:'🌉', keiryu:'⛰️', shicchi:'🍃', sougen:'🌾'};
@@ -24532,7 +24534,7 @@ function hogoAdopt(){
    ② 警告：公式で ない ウェブサイトで ひらかれた ときだけ、上に 小さな おしらせ（とじられる）
       公式＝ファイルを じかに ひらく（file:）／公式の ブラウザ版（aigptplan-cyber.github.io）／localhost
    ============================================================ */
-const SEC_MARK = 'mt-gh-152-7c0ecf9b';                     // release.py が 配布ごとに おきかえる
+const SEC_MARK = 'mt-gh-153-7f6b726b';                     // release.py が 配布ごとに おきかえる
 const SEC_OK_HOSTS = ['aigptplan-cyber.github.io', 'localhost', '127.0.0.1', ''];
 function secHost(){ return (window.__SEC_HOST!=null) ? window.__SEC_HOST : (location.protocol==='file:' ? '' : location.hostname); }
 function secOfficial(){ const h=secHost(); return SEC_OK_HOSTS.includes(h); }
@@ -31848,7 +31850,7 @@ if(GUIDE.on){
    ・そとから なにも よまない（exe・bat の なかでも うごく）。絵は アトラスの まりちゃ だけ
    ============================================================ */
 const TITLE = { on:true,   // 10/14 23:41 見本17 OK
-  ver:'1.5.2', z:9400 };
+  ver:'1.5.3', z:9400 };
 function titWant(){
   try{ if(/[?&]title=1(&|$)/.test(location.search||'')) return true; }catch(e){}
   try{ const v=localStorage.getItem('mtTitle'); if(v==='1') return true; if(v==='0') return false; }catch(e){}
@@ -33099,7 +33101,7 @@ const FISH_IMG={"fish_catch":{"src":"data:image/webp;base64,UklGRlATAABXRUJQVlA4
 /* ---- スイッチ（見た目が かわる 新機能＝OK まち・10/15）----
    FISHON.on=false：ボタン・メニュー・せっていの 行・セーブの キー・まいフレームの しょり も ふくめて なにも しない（いままで どおり）
    見本：URL に ?fish=1（4つ ぜんぶ＝ショップ・さかな・成体・繁殖 は ?ysf=1）か localStorage.mtFish='1'（ぜんぶは mtYsf='1'）。'0' で けす */
-const FISHON = { on:false };
+const FISHON = { on:true };   // v1.5.3 Nexus Atelier 10/17 0:13「1.5.3でONにする」
 try{ if(/[?&](fish|ysf)=1(&|$)/.test(location.search||'')) FISHON.on=true; }catch(e){}
 try{ if(!/[?&]fish=0(&|$)/.test(location.search||'')){ const v=localStorage.getItem('mtFish'); if(v==='1' || (v!=='0' && localStorage.getItem('mtYsf')==='1')) FISHON.on=true; } else FISHON.on=false; }catch(e){}
 if(FISHON.on) Object.assign(L, {
@@ -37753,7 +37755,7 @@ if(HG5.on && typeof HG5_IMG==='object'){
           const im=HG_IM[k];
           if(im && im.complete && im.naturalWidth){
             const dead=S.dead?1:0, soot=S.soot>.05?1:0, ck=k+'|'+name+'|'+dead+soot;
-            if(HG_CACHE[ck]) return HG_CACHE[ck];
+            if(HG_CACHE[ck]){ HG_LAST=true; return HG_CACHE[ck]; }   // 10/16 ユシューさん「変な玉」：キャッシュから かえす ときも HG_LAST（ないと まばらハゲの まるが かさなる）
             const c=document.createElement('canvas'); c.width=im.naturalWidth; c.height=im.naturalHeight; const g=c.getContext('2d'); g.drawImage(im,0,0);
             if(soot){ g.globalCompositeOperation='source-atop'; g.fillStyle=`rgba(40,30,25,${Math.min(.55,S.soot*.6)})`; g.fillRect(0,0,c.width,c.height); g.globalCompositeOperation='source-over'; }
             c._own=true; c._spf=(SPF[n]||SPF[name]||1); if(dead) grayOut(c);
@@ -38219,6 +38221,1119 @@ if(typeof predScare==='function'){ const _sc=predScare; predScare=function(){
     const r=_sc.apply(this, arguments);
     try{ if(M.pm==='scare'){ if(M.pt>5.9) M.pSaid=1; } else M.pSaid=0; }catch(e){}
     return r; }; }
+
+/* ============================================================
+   v1.5.2 10/16 夜の しゅうせい（X 22:10〜22:20 の ほうこく）
+   (1) ふらん（とぶ 捕食種）・にとり（みずの 捕食種）に「おべんきょう」を いうと、へんじは するのに やらなかった
+       （X ユシューさん 22:20・board x_yushu_flanstudy1016）
+       原因：おべんきょうは goTo で つくえへ あるかせるが、とぶ／およぐ 捕食種は 捕食種の のうみそが うごかすので goTo が きえていた
+       → 捕食種は とんで（およいで）つくえへ いき、おりて べんきょうする。おわったら また とぶ
+   (2) 捕食種が ねた かおの まま とびまわる（X ユシューさん 22:11「寝ながら左右に飛んでる」・board x_yushu_sleepfly1016）
+       原因：とまりぎで ねている あいだ まいフレーム express('sleep',2) → おきて とびはじめても 2びょう ねがおが のこる
+             ほかの しくみ（ラムネスプレー など）が「ねる」に しても、捕食種の のうみそは そのまま とびつづけていた
+       → とまりぎから はなれたら ねがおを けす／「ねる」に なったら とまりぎへ いって ねる（ねる じかんが おわるまで おきない）
+   (3) 殺ゆ（なかまどうしの けんか・いいがかりの せいっさい）の みなおし（X ガクさん 22:19・board x_gaku_satsuyu1016・Nexus Atelier 22:52「調整して」）
+       ・なかまどうしの かみつき・きのぼう・いいがかりの せいっさいでは しなない（けがを する だけ。たいりょく 8 で とまる）
+         → しぬ のは、けがの あと せわを しなかった とき（おなか・びょうき など）。「しなない」ON に しなくても めんどうを みる いみが のこる
+         （ほんとうに ゲスな 子＝ゲス度 85いじょう への せいっさい だけは いままで どおり）
+       ・すーりすーり・ぺーろぺーろ・いっしょに あそんだ あと 3ぷんは、その ふたりは けんか・いいがかりを しない
+       ・いいがかりの せいっさいは「なかが わるい（なかよし度 −10 みまん）」あいて だけ（まえは なかよし度 10 みまん＝ふつうの なかでも おきた）
+       ・はじまった ときの おしらせに「わけ」を だす（なかよし度・きげん・ゲス度）
+   ・SYF.on=false で もとどおり
+   ============================================================ */
+const SYF = { on:true, floor:8, affSec:180, frameRel:-10 };
+
+/* ---------- (1) 捕食種の おべんきょう ---------- */
+function syPredBlocks(){ try{ if(typeof isPred!=='function' || !isPred()) return false; const d=predDef(); return predCanFly() || d.kind==='water'; }catch(e){ return false; } }
+if(SYF.on && typeof kyStudy==='function'){
+  try{ PRED_PASS.add('study'); }catch(e){}
+  const _ks=kyStudy; kyStudy=function(){
+    if(!syPredBlocks()) return _ks.apply(this, arguments);
+    closeSheet && closeSheet();
+    if(isDead()){ toast('もう…'); return; }
+    if(M.boxed){ toast('はこの なかでは できません'); return; }
+    if(['hunt','carry','suck','scare','lurk'].includes(M.pm) || M._carried){ toast('いまは それどころじゃ ない みたい…'); return; }
+    touch();
+    const sp=kyStudySpot();
+    if(!sp){ toast('「もようがえ」で べんきょうづくえ か こくばんを おいてね'); return; }
+    if(Math.random() < kyRefuseChance()){
+      const p=PS(); p.studyNo=(p.studyNo||0)+1; psAdd('gesu',.5);
+      express('puku3',2.4); say('studyNo',{cls:'shout'});
+      note(`${S.me}は おべんきょうを いやがった。`); save(); return;
+    }
+    say('studyGo');
+    M.pKy={x:sp.x, z:sp.z, h0:M.h}; M.pm='kyGo'; M.pt=0; M.pTgt=null;
+  };
+  // とんで（およいで）つくえへ → おりて べんきょう
+  const _pb=predBrain; predBrain=function(dt, d, p){
+    if(M.pm==='kyGo' && M.pKy && isPred()){
+      const q=M.pKy; M.pt=(M.pt||0)+dt; M.hover=true;
+      const b=BY(); b.pFull=Math.max(0, predFull()-dt*.18);
+      const k=Math.min(1, dt*1.6), dx=q.x-M.x, dz=q.z-M.z;
+      M.x+=dx*k; M.z+=dz*k; M.h=Math.max(0, M.h-(M.h*k+dt*30)); M.face=dx>0?1:dx<0?-1:M.face; M.rot=0;
+      if((Math.hypot(dx,dz)<6 && M.h<3) || M.pt>10){
+        M.x=q.x; M.z=q.z; M.h=0; M.vh=0; M.hover=false; M.pm='kyStudy'; M.pKy=null;
+        kyStudyStart(false);
+      }
+      return 'kyGo';
+    }
+    return _pb.apply(this, arguments);
+  };
+  // べんきょうちゅうは ふつうの のうみそ（zz_kyoiku）で すすめる・おわったら また とぶ
+  { const _ub=updateBrain; updateBrain=function(dt){
+      try{
+        if(typeof isPred==='function' && isPred()){
+          if(M.state==='study'){ M.hover=false; M.h=Math.max(0,(M.h||0)-dt*240); M.pm='kyStudy'; }
+          else if(M.pm==='kyStudy'){ M.pm='fly'; M.pt=0; if(predCanFly()){ M.hover=true; if(M.h<30) M.h=30; } }
+        } else if(M.pm==='kyGo' || M.pm==='kyStudy'){ M.pm=null; M.pKy=null; }
+      }catch(e){}
+      return _ub.apply(this, arguments);
+    }; }
+  if(typeof predFlap==='function'){ const _pf=predFlap; predFlap=function(){ if(M.pm==='kyStudy') return .05; return _pf.apply(this, arguments); }; }
+  if(typeof statusText==='function'){ const _st=statusText; statusText=function(){ try{ if(typeof isPred==='function' && isPred() && M.pm==='kyGo') return 'おべんきょうに いってる'; }catch(e){} return _st.apply(this, arguments); }; }
+}
+
+/* ---------- (2) ねがおの まま とばない ---------- */
+if(SYF.on && typeof predBrain==='function'){
+  const SLEEPY=['sleep','nap'];
+  const _pb=predBrain; predBrain=function(dt, d, p){
+    const fly = isPred() && predCanFly();
+    // ほかの しくみが「ねる」に した：とまりぎへ いって ねる（ねる じかんが おわるまで おきない）
+    if(fly && SLEEPY.includes(M.state)){
+      if(!M.pSlp) M.pSlp = Math.max(4, (M.stDur||8) - (M.stT||0));
+      if(M.pm!=='perch' && M.pm!=='toPerch' && !['hunt','carry','suck'].includes(M.pm)){ M.pm='toPerch'; M.pt=0; }
+      M.state='idle'; M.stT=0; M.stDur=3;
+    }
+    const before=M.pm;
+    const r=_pb.apply(this, arguments);
+    if(fly){
+      if(M.pSlp>0){ M.pSlp-=dt; if(before==='perch' && M.pm==='fly'){ M.pm='perch'; } if(M.pSlp<=0) M.pSlp=0; }
+      // とまりぎ いがいでは ねがおを けす
+      if(M.pm!=='perch' && M.expr==='sleep'){ M.expr=null; M.exprT=0; }
+    }
+    return r;
+  };
+}
+
+/* ---------- (3) 殺ゆの みなおし ---------- */
+const SY_AFF={}; let SY_NOKILL=0;
+function syAffRecent(i, j){ try{ const k=relKey(S.yk[i].id, S.yk[j].id); return (SY_AFF[k]||-1e9) > T-SYF.affSec; }catch(e){ return false; } }
+if(SYF.on){
+  // なかよく した きろく（すーりすーり・ぺーろぺーろ・いっしょに あそぶ）
+  if(typeof ykSocialBegin==='function'){ const _sb=ykSocialBegin; ykSocialBegin=function(j, kind){ const me=YK_I; const r=_sb.apply(this, arguments);
+      try{ if(M.state==='social' && S.yk[me] && S.yk[j]) SY_AFF[relKey(S.yk[me].id, S.yk[j].id)]=T; }catch(e){} return r; }; }
+  if(typeof relAdd==='function'){ const _ra=relAdd; relAdd=function(i, j, d, quiet){
+      try{ if(d>=1.5 && S.yk[i] && S.yk[j] && i!==j) SY_AFF[relKey(S.yk[i].id, S.yk[j].id)]=T; }catch(e){}
+      return _ra.apply(this, arguments); }; }
+  // しなない あいだは deathOn が false（loseHealth が たいりょく 8 で とめる）
+  { const _do=deathOn; deathOn=function(){ if(SY_NOKILL>0) return false; return _do.apply(this, arguments); }; }
+  const guard=(fn)=>{ SY_NOKILL++; try{ return fn(); } finally{ SY_NOKILL--; } };
+  const ssLethalKind=()=>{ try{ return typeof SEISAI!=='undefined' && SEISAI && SEISAI.kind==='just' && SEISAI.why==='gesu'; }catch(e){ return false; } };
+  const ssNoraKind=()=>{ try{ return typeof SEISAI!=='undefined' && SEISAI && SEISAI.nora; }catch(e){ return false; } };
+  // けんか（かみつき・きのぼう・ぷくー）：しなない
+  if(typeof fightTick==='function'){ const _ft=fightTick; fightTick=function(){ const a=arguments, me=this; return guard(()=>_ft.apply(me, a)); }; }
+  if(typeof fightHit==='function'){ const _fh=fightHit; fightHit=function(j, dmg, cause){
+      const a=arguments, me=this;
+      if(cause==='seisai' && (ssLethalKind() || ssNoraKind())) return _fh.apply(me, a);
+      let h0=100; try{ ykDo(j, ()=>{ h0=S.health||0; }); }catch(e){}
+      const r=guard(()=>_fh.apply(me, a));
+      try{ let h1=100, nm=''; ykDo(j, ()=>{ h1=S.health||0; }); nm=ykLabel(S.yk[j]);
+        if(h0>25 && h1<=25 && S.yk[j] && !S.yk[j].dead) note(`${nm}は ひどい けがを した（けんこう ${Math.round(h1)}）。ごはん・おくすりで せわを してあげて`); }catch(e){}
+      return r; }; }
+  // いいがかりの せいっさい：しなない
+  if(typeof ssTick==='function'){ const _ss=ssTick; ssTick=function(){ const a=arguments, me=this;
+      if(ssLethalKind() || ssNoraKind()) return _ss.apply(me, a);
+      return guard(()=>_ss.apply(me, a)); }; }
+  // なかよく した あとは けんかしない
+  if(typeof fightStart==='function'){ const _fs=fightStart; fightStart=function(i, j, kind){
+      if(syAffRecent(i, j)){ try{ const k=relKey(S.yk[i].id, S.yk[j].id); RL_COOL[k]=Math.max(RL_COOL[k]||0, T+60); }catch(e){} return; }
+      return _fs.apply(this, arguments); }; }
+  // はじまった ときに「わけ」を だす
+  if(typeof fightBegin==='function'){ const _fb=fightBegin; fightBegin=function(i, j, kind){
+      const r=_fb.apply(this, arguments);
+      try{ if(MS[i] && MS[i].state==='fight'){ const v=Math.round(relGet(i,j)); const A=S.yk[i]; let g=0; ykDo(i,()=>{ g=Math.round(PS().gesu||0); });
+          const why=[`${ykLabel(S.yk[i])}と ${ykLabel(S.yk[j])}は ${relName(v)}（なかよし度 ${v}）`];
+          if((A.mood||100)<28) why.push(`${ykLabel(A)}の きげんが わるい`);
+          if(g>=45) why.push(`${ykLabel(A)}は ゲス（${g}）`);
+          note(`わけ：${why.join('・')}。けんかでは しなないけど けがを するよ`); } }catch(e){}
+      return r; }; }
+  // いいがかり：なかが わるい あいて だけ・なかよく した あとは しない
+  if(typeof ssPickFrame==='function'){ ssPickFrame=function(){
+      const n=S.yk.length; if(n<2) return null;
+      for(let a=0;a<n;a++){ if(!ssCan(a) || ssGesu(a)<TV('ssFrameGesu') || (SS_COOL['f'+S.yk[a].id]||0)>T) continue;
+        const vic=[]; for(let t=0;t<n;t++){ if(t===a||!S.yk[t]||S.yk[t].dead||!ykFree(t)) continue; if(ssGesu(t)<35 && relGet(a,t)<SYF.frameRel && !syAffRecent(a,t)) vic.push(t); }
+        if(!vic.length) continue;
+        const t=pick(vic), atk=[a];
+        for(let b=0;b<n;b++){ if(b===a||b===t||!ssCan(b)) continue; if(ssGesu(b)>=60 && relGet(a,b)>20 && relGet(b,t)<SYF.frameRel) atk.push(b); }
+        return {tgt:t, atk:atk.slice(0,3), kind:'frame'};
+      }
+      return null; }; }
+  if(typeof ssBegin==='function'){ const _sbg=ssBegin; ssBegin=function(P){
+      const r=_sbg.apply(this, arguments);
+      try{ if(P && P.kind==='frame' && SEISAI){ const a=P.atk[0], t=P.tgt; const v=Math.round(relGet(a,t)); let g=0; ykDo(a,()=>{ g=Math.round(PS().gesu||0); });
+          note(`わけ：ゲスな ${ykLabel(S.yk[a])}（ゲス度 ${g}）が、なかの わるい ${ykLabel(S.yk[t])}（なかよし度 ${v}）に いいがかり。しなないけど けがを するよ`); } }catch(e){}
+      return r; }; }
+}
+
+/* ---------- (4) せりふ（X ガクさん 22:10・board x_gaku_serifu1016）----------
+   ・こっちを みて よぶ とき（lookYou）は いつもの よびかた（{you}：なつくと おにーさん）。まえは いつも「にんげんさん」で、きゅうに たにんに なった
+   ・おかざりを なくした とき「もう ゆっくり じゃ ない」→「もう かいゆっくり じゃ ない」 */
+if(SYF.on){
+  let SY_LOOK=false;
+  { const _sy=say; say=function(key){ SY_LOOK = (key==='lookYou'); try{ return _sy.apply(this, arguments); } finally{ SY_LOOK=false; } }; }
+  { const _tk=talk; talk=function(src, o){ if(SY_LOOK && typeof src==='string') src=src.replace(/^(\S*！\s*)にんげんさん(?=\[)/, '$1{you}'); return _tk.call(this, src, o); }; }
+  try{ L.lookYou=L.lookYou.map(s=>s.replace(/^(\S*！\s*)にんげんさん(?=\[)/, '$1{you}')); }catch(e){}
+  try{ L.kzGoneSad=L.kzGoneSad.map(s=>s.replace('もう ゆっくり じゃ ない','もう かいゆっくり じゃ ない')); }catch(e){}
+}
+
+/* ---------- (5) みんなで あそぶ（かりごっこ など）に、とぶ・およぐ 捕食種は はいらない ----------
+   X ベーグル眠りさん 22:36「このフィールドで狩りごっこをすると にとりが陸に上がれない。高速で出たり入ったりを繰り返してる」（board x_bagel_nitori1016）
+   原因：あそびの のうみそが にとりを りくの えもの へ あるかせ、捕食種の のうみそが みずへ もどす → 1フレームごとに ひっぱりあい
+   → とぶ（はねの ある）捕食種・みずの 捕食種は さんか しない（はねの ない 子は いままで どおり さんか できる） */
+if(SYF.on && typeof nakaOk==='function'){ const _n=nakaOk; nakaOk=function(){ if(syPredBlocks()) return false; return _n.apply(this, arguments); }; }
+
+/* ============================================================
+   v1.5.3 セリフの みなおし（Nexus Atelier 10/17 8:52「勝手にセリフを推測とかで足してたり改変してるの多すぎ」・board fb_mihon1017_serifu）
+   ・1.5.3 で たした セリフのうち、pixiv の 作品にも これまでの ゲームにも もとが ない ものは つかわない
+     → これまでの ゲームの にた セリフ（キー）に おきかえる。にた ものが ない ときは しゃべらない（表情・こうかは そのまま）
+   ・この ファイルは 1.5.3 の ほかの ファイルより まえに よむ（あとの ファイルの say の いれかえは みんな ここを とおる）
+   ・SFIX.on=false で もとどおり
+   ============================================================ */
+const SFIX = {
+  on:true,
+  // ふるい キー → これまでの キー（null＝しゃべらない）
+  map:{
+    doffAlive:null, flLand:null, flUp:null,
+    hipGo:null, hipDo:null, hipEnd:null, hipSee:null,
+    hospGo:null, hospBack:null, hospAmp:null,
+    mrRoll:'rxRoll', mrRollEnd:'dizzy', mrNo:'sulk', mrDumb:null,
+    pgHunt:'predSpot', pgNightWake:null,
+    sgsHonne:null, sgsKage:null,
+    carboEat:'yummy', cookieEat:'yummySweet', nigaAfter:null,
+    kdMake:null, kdDone:null,
+    ytHit:'hammerLow', ytHit2:'hammerMid', ytGesu:'hammerLow',
+    snRefuse:'yuckRefuse', snEat:'yuckEnd', snEatG:'yuckEnd',
+    jobGo:null, jobBack:null, jobSabo:null,
+    st2VegEatPet:'yummy',
+    wsUta:'scDuetSing', wsThanks:null,
+    doya2After:null,
+    hipSeeG:null, sgsKageHear:null, kdEat:'soso', chTailFix:null, mrDirty:'dirty',
+  },
+  // 作品の ことば そのまま（pixiv 小説 29279486・28118690「これどくはいってる」）
+  lit:{ nigaEat:['これどくはいってる！'], tgHit:['これどくはいってる！'] },   // とうがらし＝からい＝どく（小説 27565649）
+  pick:{},
+  log:[],
+};
+if(SFIX.on && typeof say==='function'){
+  const _say=say;
+  say=function(k, o){
+    try{
+      if(typeof k==='string'){
+        if(Object.prototype.hasOwnProperty.call(SFIX.lit, k)){ SFIX.log.push(k+'>lit'); return _say.call(this, SFIX.lit[k], o); }
+        if(Object.prototype.hasOwnProperty.call(SFIX.pick, k)){
+          const [kk, n]=SFIX.pick[k]; const LS=(SPECIES[S.sp]||{}).L||{}; const arr=LS[kk]||L[kk];
+          SFIX.log.push(k+'>'+kk+'#'+n);
+          if(arr && arr[n]) return _say.call(this, [arr[n]], o);
+          return _say.call(this, kk, o);
+        }
+        if(Object.prototype.hasOwnProperty.call(SFIX.map, k)){
+          const to=SFIX.map[k]; SFIX.log.push(k+'>'+to);
+          if(to===null) return;
+          const LS=(SPECIES[S.sp]||{}).L||{};
+          if(!(LS[to]||L[to])) return;      // その キーが ない しゅぞく（捕食種の predSpot など）は だまる
+          return _say.call(this, to, o);
+        }
+      }
+    }catch(e){ console.warn('[serifufix]', e); }
+    return _say.apply(this, arguments);
+  };
+}
+
+/* ============================================================
+   v1.5.3 スマホ：ボタンの アイコンの 下の せつめいを けして、図鑑に まとめる
+   （board na_phonebtn1016：Nexus Atelier 10/16 22:09「スマホ縦画面、1個1個アイコンがでかい」→
+     10/17 0:00「各アイコンの下に書いてある説明は削除し、図鑑に各項目を記載してそこに説明を書く／他のアイコンも同様」
+     10/17 0:13 範囲＝おせわ・あそぶ・いじわる・ごはん 全部）
+   ・スマホ（はば 820px いか か タッチ画面）：シートの ボタンの <small>（せつめい）を かくし、ボタンを ちいさく
+   ・せつめいは 図鑑の あたらしい タブ「🧰 ボタンの せつめい」に しゅるい ごとに ならぶ
+     （シートを ひらく たびに あつめて おぼえる。さいしょの 1かいは きどう した ときに うらで あつめる）
+   ・BTD.on=false で もとどおり
+   ============================================================ */
+const BTD = { on:true, key:'mtBtnDesc' };
+const BTD_CAT = {food:'🍚 ごはん', care:'🧹 おせわ', play:'🎾 あそぶ', mean:'😈 いじわる'};
+let BTD_MAP = {};
+try{ BTD_MAP = JSON.parse(localStorage.getItem(BTD.key)||'{}') || {}; }catch(e){ BTD_MAP={}; }
+function btdSave(){ try{ localStorage.setItem(BTD.key, JSON.stringify(BTD_MAP)); }catch(e){} }
+function btdKind(){ try{ if(sheetKind==='food') return 'food'; if(sheetKind==='play') return sheet.dataset.menu || 'play'; }catch(e){} return null; }
+// いま ひらいている シートの ボタンの「なまえ → せつめい」を あつめる
+function btdHarvest(){
+  const k=btdKind(); if(!k || !sheet || sheet.hidden) return 0;
+  let n=0; const m=BTD_MAP[k]||(BTD_MAP[k]={});
+  sheet.querySelectorAll('button').forEach(b=>{
+    const sm=b.querySelector('small'); if(!sm) return;
+    const desc=(sm.textContent||'').trim(); if(!desc) return;
+    const c=b.cloneNode(true); c.querySelectorAll('small,canvas,svg,img').forEach(x=>x.remove());
+    let name=(c.querySelector('b')?.textContent || c.textContent || '').replace(/\s+/g,' ').trim();
+    const ic=(b.querySelector('.ic')?.textContent||'').trim(); if(ic && name.startsWith(ic)) name=name.slice(ic.length).trim();
+    if(!name) return;
+    // かず・％ など その ときの ようすは せつめいに しない（そうじの「うんうん 3こ」など）
+    if(/[0-9０-９]/.test(desc) && !/[ぁ-んァ-ン]{6,}/.test(desc.replace(/[0-9０-９]+\s*(こ|%|％|かい|ひき|にち)/g,''))) { if(!m[name]) m[name]={ic, d:''}; return; }
+    if(!m[name] || m[name].d!==desc){ m[name]={ic, d:desc}; n++; }
+  });
+  // いじわるの どうぐ：ボタンに せつめいは ないので、どうぐの せつめい（TOOL_DEF の help）を つかう
+  sheet.querySelectorAll('button[data-tool]').forEach(b=>{ try{ const d=TOOL_DEF[b.dataset.tool]; if(!d || !d.help) return;
+    const name=(b.querySelector('b')?.textContent||d.name||'').trim(); if(!name) return;
+    const mm=BTD_MAP.mean||(BTD_MAP.mean={}); const desc=typeof spText==='function'?spText(d.help):d.help; if(!mm[name] || mm[name].d!==desc){ mm[name]={ic:'', d:desc}; n++; } }catch(e){} });
+  if(n) btdSave();
+  return n;
+}
+if(BTD.on){
+  // CSS：スマホでは せつめいを かくして ボタンを ちいさく
+  const st=document.createElement('style');
+  st.textContent=`@media (max-width:820px), (pointer:coarse){
+    #sheet .care-top button small, #sheet .cat button small, #sheet .foods .food small{display:none !important}
+    #sheet .care-top{gap:5px}
+    #sheet .care-top button{padding:6px 3px;font-size:13px;gap:1px}
+    #sheet .care-top button .ic{font-size:20px;line-height:24px}
+    #sheet .cat button{padding-bottom:4px}
+    /* 10/17 Nexus Atelier「説明をなくして空間が空いたのに文字が中央に配置されていない」：アイコンと なまえを ボタンの たて・よこ まんなかに */
+    #sheet .care-top button, #sheet .cat button{display:flex !important;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+    #sheet .foods .food{justify-content:center;text-align:center;min-width:0}
+    /* 10/17 ごはんの 4れつめが がめんの そとに はみでていた（1fr の さいしょうはばが なまえの ながさ）→ はばを 4とうぶん に して なまえは おりかえす */
+    #sheet .foods{grid-template-columns:repeat(4,minmax(0,1fr)) !important}
+    #sheet .foods .food b{font-size:12px;line-height:1.25;white-space:normal !important;overflow-wrap:anywhere;word-break:normal}
+  }`;
+  document.head.appendChild(st);
+  // シートが かわったら あつめる
+  try{ let t=0; new MutationObserver(()=>{ clearTimeout(t); t=setTimeout(()=>{ try{ btdHarvest(); }catch(e){} }, 60); }).observe(sheet, {childList:true, subtree:true}); }catch(e){}
+  // きどう した とき：まだ あつめて いない シートを うらで ひらいて あつめる（おなじ フレームで とじるので 画面には でない）
+  function btdPrefill(){
+    try{
+      if(!sheet.hidden) return;
+      const want=[['food',()=>openFoodSheet()],['care',()=>openCareSheet()],['play',()=>openPlaySheet()],['mean',()=>openMeanSheet()]];
+      for(const [k,fn] of want){ if(BTD_MAP[k] && Object.keys(BTD_MAP[k]).length) continue; try{ fn(); btdHarvest(); }catch(e){} try{ closeSheet(); }catch(e){} }
+    }catch(e){ console.warn('[btd] prefill', e); }
+  }
+  setTimeout(btdPrefill, 2500);
+  // 図鑑の タブ「🧰 ボタンの せつめい」
+  if(typeof openZukan==='function'){
+    const _oz=openZukan;
+    openZukan=function(tab){
+      const want=tab==='btn';
+      const r=_oz.call(this, want ? 'status' : tab);
+      try{
+        const tabs=sheet.querySelector('.zk-tabs'); if(!tabs) return r;
+        if(!tabs.querySelector('[data-zky]')){
+          const b=document.createElement('button'); b.type='button'; b.className='btn'; b.dataset.zky='btn'; b.style.cssText='padding:4px 12px'; b.textContent='🧰 ボタン';
+          b.addEventListener('click', ev=>{ ev.stopPropagation(); openZukan('btn'); });
+          tabs.appendChild(b);
+        }
+        if(want){
+          tabs.querySelectorAll('[data-zk],[data-zkx]').forEach(x=>{ x.style.background=''; x.style.borderColor=''; x.style.fontWeight=''; });
+          const me=tabs.querySelector('[data-zky]'); me.style.background='#ffd98a'; me.style.borderColor='#c98a1c'; me.style.fontWeight='bold';
+          const list=sheet.querySelector('.zk-list') || sheet.querySelector('.help-list');
+          if(list){
+            const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+            const sec=Object.entries(BTD_CAT).map(([k,t])=>{ const m=BTD_MAP[k]||{}; const rows=Object.entries(m).filter(([n,v])=>v.d);
+              if(!rows.length) return `<details style="border:1px solid #e3d3b8;border-radius:12px;margin:0 0 8px;background:#fffaf0"><summary style="cursor:pointer;padding:10px 12px;font-weight:700;font-size:15px">${t}</summary><div style="padding:0 12px 10px;font-size:13px">「${t.slice(2)}」を いちど ひらくと ここに でます</div></details>`;
+              return `<details style="border:1px solid #e3d3b8;border-radius:12px;margin:0 0 8px;background:#fffaf0"><summary style="cursor:pointer;padding:10px 12px;font-weight:700;font-size:15px">${t}（${rows.length}）</summary><div style="padding:0 12px 10px">${rows.map(([n,v])=>`<div style="display:flex;gap:8px;padding:5px 0;border-top:1px dashed #eadbc2;font-size:13.5px;line-height:1.45"><b style="min-width:7.5em">${esc(v.ic?v.ic+' ':'')}${esc(n)}</b><span>${esc(v.d)}</span></div>`).join('')}</div></details>`; }).join('');
+            list.innerHTML=`<p class="memo" style="margin:0 0 8px">スマホでは ボタンの 下の せつめいを はぶいています。ここで まとめて よめます。</p>`+(typeof spText==='function'?spText(sec):sec);
+            const ds=[...list.querySelectorAll('details')]; ds.forEach(d=>d.addEventListener('toggle',()=>{ if(d.open) ds.forEach(o=>{ if(o!==d) o.open=false; }); }));
+          }
+        }
+      }catch(e){ console.warn('[btd] zukan', e); }
+      return r;
+    };
+  }
+}
+
+/* v1.5.3 スマホの ショップ：売値の りゆう（.ng）が 1行で きれて よめなかった（X ユシューさん 10/16・board x_yushu_shopphone1016・見本42）
+   → スマホでは 2行まで おりかえして ぜんぶ よめる ように（字を すこし ちいさく）。SHW.on=false で もとどおり */
+const SHW={on:true};
+if(SHW.on){ const st=document.createElement('style'); st.textContent=`
+#shu.sp .shu-card .ng{white-space:normal;overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;text-overflow:clip;word-break:keep-all;overflow-wrap:anywhere;font-size:10.5px;line-height:1.2;min-height:2.4em}
+#shu.sp .shu-card canvas.ic{height:38px}
+#shu.sp .shu-card b{font-size:13.5px}`; document.head.appendChild(st); }
+
+/* ============================================================
+   v1.5.3 こまかい ちょうせい（10/17 0:00 Nexus Atelier ボード）
+   (1) ダンボールハウス：ろじうらステージの ダンボールハウス（はいけい）と くらべて おおきすぎた → 1.85 → 1.35
+       （X ユシューさん 10/16 22:10「ダンボールハウスこんなに大きかったか……？」・board x_yushu_boxsize1016「路地裏と比較して調整」）
+       ゆっくりの せの たかさ に くらべて：ろじうら 約2.9ばい／おきもの 約4ばい だった
+   (2) つむりは トランポリン（なかまの うえで はねる）を しない：まりさつむりは からが おもくて はねられない（ピクシブ百科事典「まりさつむり」）
+       （X ユシューさん「つむり養殖場を作ったが同族トランポリンで死にかける」・board x_tsumuri_1016）
+   (3) 捕食種と ふつうの 子が、まれに なかよしに なる（board x_nirarebar_predfriend1016：Nexus Atelier「低確率で・頻発させない」）
+       ・1日に 1かい、おなかが いっぱいの 捕食種と、ゲスで ない ふつうの 子（なかよし・かしこさ が たかい）の くみで 3% だけ
+       ・なかよしに なった 子は その 捕食種に ねらわれない・見ても さけばない。ちかくに いると たまに ハート
+       ・捕食種 1ぴきに つき なかよしは 1ぴき まで
+   ・M153.on=false で もとどおり
+   ============================================================ */
+const M153 = { on:true, danbo:1.35, pfP:0 };   // 1.5.3 リリース：捕食種と なかよし（まれ）は 見本OK まで はずす
+if(M153.on){
+  // (1)
+  try{ if(OBJ.danbo) OBJ.danbo.s=M153.danbo; }catch(e){}
+  // (2)
+  if(typeof asTrampStart==='function'){ const _ts=asTrampStart; asTrampStart=function(j){
+      try{ if(S.sp==='tsumuri'){ /* 10/17 セリフの みなおし：もとの ない セリフは つかわない */ express('worry',1.5); setState('idle',2); return; } }catch(e){}
+      return _ts.apply(this, arguments); }; }
+  // (3)
+  const pfFriendOf=(pi, j)=>{ try{ const f=S.yk[pi].pFriend; return !!(f && S.yk[j] && f===S.yk[j].id); }catch(e){ return false; } };
+  if(typeof preyOk==='function'){ const _po=preyOk; preyOk=function(j){ try{ if(YK_I>=0 && PRED_DEF[(S.yk[YK_I]||{}).sp] && pfFriendOf(YK_I, j)) return false; }catch(e){} return _po.apply(this, arguments); }; }
+  let PF_DAY=null, PF_ACC=0;
+  function pfTick(dt){
+    if(typeof PRED_DEF==='undefined' || !S.yk || S.yk.length<2) return;
+    const day=S.gameDay||0;
+    if(PF_DAY===null) PF_DAY=day;
+    if(day!==PF_DAY){ PF_DAY=day;
+      for(let i=0;i<S.yk.length;i++){ const P=S.yk[i]; if(!P || P.dead || !PRED_DEF[P.sp] || P.pFriend) continue;
+        let full=false; ykDo(i,()=>{ full=!predHungry(); }); if(!full) continue;
+        const cand=[]; for(let j=0;j<S.yk.length;j++){ const Y=S.yk[j]; if(j===i || !Y || Y.dead || PRED_DEF[Y.sp]) continue;
+          let ok=false; ykDo(j,()=>{ const p=PS(); ok=(p.gesu||0)<30 && ((p.kashi||0)>=50 || (p.natsu||0)>=60); }); if(ok) cand.push(j); }
+        if(cand.length && Math.random()<M153.pfP){ const j=pick(cand); P.pFriend=S.yk[j].id;
+          ykDo(j,()=>{ express('smile',3); });   // 10/17 セリフの みなおし：もとの ない セリフは つかわない
+          try{ const a=MS[i], b=MS[j]; fx('heart',(a.x+b.x)/2,Math.min(a.z,b.z)-70,{vy:-30,max:1.6,size:1}); }catch(e){}
+          note(`めずらしい！ ${ykLabel(P)}と ${ykLabel(S.yk[j])}が なかよしに なった。${ykLabel(P)}は もう ${ykLabel(S.yk[j])}を ねらわない。`); save(); } }
+    }
+    PF_ACC+=dt; if(PF_ACC<1) return; PF_ACC=0;
+    for(let i=0;i<S.yk.length;i++){ const P=S.yk[i]; if(!P || P.dead || !P.pFriend) continue;
+      const j=S.yk.findIndex(y=>y && y.id===P.pFriend); if(j<0 || S.yk[j].dead){ if(j<0) P.pFriend=null; continue; }
+      // みても さけばない（zz_v152_preysee の クールダウンを いつも あたらしく しておく）
+      ykDo(j,()=>{ (M._psee=M._psee||{})['psee:'+P.id]=T; });
+      const a=MS[i], b=MS[j]; if(!a || !b) continue;
+      if(Math.hypot(a.x-b.x,(a.z-b.z)*2)<140 && Math.random()<.03){ try{ fx('heart',(a.x+b.x)/2,Math.min(a.z-(a.h||0),b.z)-60,{vy:-30,max:1.2,size:.8}); }catch(e){} }
+    }
+  }
+  { const _u=update; update=function(dt){ const r=_u.apply(this, arguments); try{ pfTick(Math.min(dt,.1)); }catch(e){ console.warn('[predfriend]', e); } return r; }; }
+}
+
+/* ============================================================
+   v1.5.3 まばらハゲ（かみを むしる 1〜3かい）を すべての コマで「ほんとうの 絵」に
+   （X ユシューさん 10/16 22:45「髪の毛むしった子のおさげ引き抜いたら髪の毛復活して腫瘍が付く」・board x_yushu_braidtumor1016・
+     Nexus Atelier「不足絵は生成」）
+   いままで：まばらハゲの 絵は 3コマ（にこ・よろこぶ・おこる）だけ。ほかの コマは「かみが ある 絵」の うえに
+     プログラムで はだいろの まるを かいていた → まるが できものに 見えた／おさげを ちぎると かみが もどって 見えた
+   これから：その コマの「かみが ある 絵」と「つるつるの 絵（バリカンの 絵・おさげ残しハゲの 絵）」を かさねて、
+     かみの ところ だけ を まるく くりぬいて つるつるの はだを のぞかせる（ほんとうの 絵どうしを くみあわせる）
+     ・むしった かず：1かい＝2か所／2かい＝3か所／3かい＝5か所（おおきさも すこしずつ おおきく）
+     ・おさげを ちぎった 子は「おさげなしの 絵」×「つるつる（おさげなし）」で つくる＝かみが もどって 見えない
+     ・おぼうしの ある 子は、ぼうしの したから 見えている かみ だけ くりぬく
+   ・まりちゃ・れいみゅ・わさ（ほんたいの しゅぞく）だけ。パックの しゅぞくは パックの 絵
+   ・SPH.on=false で もとどおり（まるを かく）
+   ============================================================ */
+const SPH = { on:true, cache:{}, n:[0,2,3,5], r:[0,.15,.17,.18] };
+function sphHairRGB(){ const sp=S.sp||'maricha'; return sp==='maricha'||sp==='kocha'||sp==='tsumuri'||sp==='suijo' ? [240,210,122] : [42,34,36]; }
+function sphRand(seed){ let s=seed>>>0||1; return ()=>{ s^=s<<13; s^=s>>>17; s^=s<<5; return ((s>>>0)%10000)/10000; }; }
+function sphHash(str){ let h=2166136261; for(let i=0;i<str.length;i++){ h^=str.charCodeAt(i); h=Math.imul(h,16777619); } return h>>>0; }
+// その コマの つるつるの 絵（おさげ残し n5／おさげなし n4）
+function sphBald(name, torn){
+  const pre = SPX==='w:' ? 'r:' : (SPX||'');
+  const cands = torn ? ['|n4'] : ['|n5','|n4'];
+  for(const c of cands){ const im=HG_IM[pre+name+c]; if(im && im.complete && im.naturalWidth) return im; }
+  try{ const m=(typeof HG5!=='undefined' && pre==='' && HG5.mapM[name]) || (typeof HG5!=='undefined' && HG5.map[name]); if(m) for(const c of cands){ const im=HG_IM[pre+m+c]; if(im && im.complete && im.naturalWidth) return im; } }catch(e){}
+  return null;
+}
+function sphMake(base, bald, level, key){
+  const W=base.width, H=base.height; if(!W || !H) return null;
+  const c=document.createElement('canvas'); c.width=W; c.height=H; const g=c.getContext('2d',{willReadFrequently:true}); g.drawImage(base,0,0);
+  const B=g.getImageData(0,0,W,H);
+  // そろえる：した はんぶんの かたち（不透明な ところ）が いちばん かさなる ずらしかたを さがす
+  const bw=bald.naturalWidth||bald.width, bh=bald.naturalHeight||bald.height;
+  const tb=document.createElement('canvas'); tb.width=bw; tb.height=bh; const tbg=tb.getContext('2d',{willReadFrequently:true}); tbg.drawImage(bald,0,0); const BD=tbg.getImageData(0,0,bw,bh).data;
+  const PA=B.data; const y0=Math.floor(H*.45);
+  const score=(ox,oy)=>{ let hit=0, tot=0; for(let y=y0;y<H;y+=2) for(let x=0;x<W;x+=2){ const a=PA[(y*W+x)*4+3]>128; const bx=x-ox, by=y-oy; const bb= bx>=0&&by>=0&&bx<bw&&by<bh && BD[(by*bw+bx)*4+3]>128; if(a||bb){ tot++; if(a&&bb) hit++; } } return tot? hit/tot : 0; };
+  let best={ox:Math.round((W-bw)/2), oy:H-bh, s:-1};
+  for(let oy=H-bh-30; oy<=H-bh+30; oy+=3) for(let ox=Math.round((W-bw)/2)-30; ox<=Math.round((W-bw)/2)+30; ox+=3){ const sc=score(ox,oy); if(sc>best.s) best={ox,oy,s:sc}; }
+  for(let oy=best.oy-2; oy<=best.oy+2; oy++) for(let ox=best.ox-2; ox<=best.ox+2; ox++){ const sc=score(ox,oy); if(sc>best.s) best={ox,oy,s:sc}; }
+  if(best.s<.85) return null;   // かたちが あわない コマは つくらない（まるも かかない）
+  const t=document.createElement('canvas'); t.width=W; t.height=H; const tg=t.getContext('2d',{willReadFrequently:true});
+  tg.drawImage(bald, best.ox, best.oy);
+  const T2=tg.getImageData(0,0,W,H).data, P=B.data;
+  // かみの ところ（かみの いろ に ちかく、つるつるの 絵では かみが ない ところ）
+  const hc=sphHairRGB(), hair=new Uint8Array(W*H); let minY=H, maxY=0, cnt=0;
+  for(let y=0;y<H;y++) for(let x=0;x<W;x++){ const i=(y*W+x)*4; if(P[i+3]<200) continue;
+    const dh = hc[0]>200 ? ((P[i]-P[i+2])>50 && P[i+1]>120 ? 0 : 999) : ((P[i]+P[i+1]+P[i+2])<300 ? 0 : 999); const dd= T2[i+3]<128 ? 999 : Math.abs(P[i]-T2[i])+Math.abs(P[i+1]-T2[i+1])+Math.abs(P[i+2]-T2[i+2]);
+    if(dh<150 && dd>60){ hair[y*W+x]=1; cnt++; if(y<minY) minY=y; if(y>maxY) maxY=y; } }
+  if(cnt<60) return null;
+  // くりぬく ところ（かみの うえの ほう から えらぶ）
+  const torn2=/\|t\|/.test(key), rnd=sphRand(sphHash(key)), N=SPH.n[Math.min(3,level)]+(torn2?2:0), R=Math.max(6, W*SPH.r[Math.min(3,level)]*(torn2?1.3:1));
+  const pts=[]; const lim=minY+(maxY-minY)*(torn2?.6:.5);
+  for(let tries=0; tries<400 && pts.length<N; tries++){ const x=Math.floor(rnd()*W), y=Math.floor(minY+rnd()*(lim-minY)); if(!hair[y*W+x]) continue; if(pts.some(p=>Math.hypot(p[0]-x,p[1]-y)<R*1.3)) continue; pts.push([x,y,R*(.8+rnd()*.45)]); }
+  for(const [cx,cy,r] of pts){
+    const x0=Math.max(0,Math.floor(cx-r-2)), x1=Math.min(W-1,Math.ceil(cx+r+2)), y0=Math.max(0,Math.floor(cy-r*.8-2)), y1=Math.min(H-1,Math.ceil(cy+r*.8+2));
+    for(let y=y0;y<=y1;y++) for(let x=x0;x<=x1;x++){ if(!hair[y*W+x] && !(T2[(y*W+x)*4+3]<128 && P[(y*W+x)*4+3]>0 && y<lim)) continue; const d=Math.hypot((x-cx)/r,(y-cy)/(r*.8)); if(d>1) continue;
+      const a = d<.75 ? 1 : (1-d)/.25; const i=(y*W+x)*4; const ta=T2[i+3]/255; for(let k=0;k<3;k++) P[i+k]=Math.round(P[i+k]*(1-a)+(ta>0?T2[i+k]:P[i+k])*a); P[i+3]=Math.round(P[i+3]*(1-a)+T2[i+3]*a); }
+  }
+  g.putImageData(B,0,0);
+  c._own=true; c._spf=base._spf||1; return c;
+}
+if(SPH.on){
+  const _v=variantSprite;
+  variantSprite=function(name){
+    const r=_v.apply(this, arguments);
+    try{
+      const p=BY(), lv=p && (p.hage||0);
+      if(!lv || lv>=4 || HG_LAST || isDead()) return r;
+      if(SPX && !['r:','w:'].includes(SPX)) return r;
+      const hs=hatState(); if(hs!=='ok' && hs!=='nohat') return r;
+      const torn=S.braid==='torn';
+      // おぼうしを かぶっている：あたまの うえは ぼうしで 見えないので、まるい ハゲは かかない（できものに 見えていた）
+      if(hs==='ok'){ HG_LAST=true; return r; }
+      const key=(SPX||'')+name+'|'+lv+'|'+(torn?'t':'b')+'|'+hs+'|'+(S.soot>.05?1:0);
+      if(key in SPH.cache){ const c=SPH.cache[key]; if(c){ HG_LAST=true; return c; } return r; }
+      const bald=sphBald(String(name).replace(/_nohat$/,''), torn);
+      let c=null;
+      if(bald){ let base=r; if(!(base instanceof HTMLCanvasElement)){ const sn=SP[(SPX||'')+name]?(SPX||'')+name:name; if(!SP[sn]) { SPH.cache[key]=null; return r; } const [bc]=spriteCanvas(sn); base=bc; base._spf=SPF[name]||1; }
+        c=sphMake(base, bald, lv, key); }
+      SPH.cache[key]=c;
+      if(c){ HG_LAST=true; return c; }
+    }catch(e){ console.warn('[sph]', e); }
+    return r;
+  };
+  // むしった・けはえぐすり・おさげを ちぎった とき は つくりなおす
+  { const _cv=clearVariants; clearVariants=function(){ for(const k in SPH.cache) delete SPH.cache[k]; return _cv.apply(this, arguments); }; }
+}
+
+/* ============================================================
+   v1.5.3 くだしあまあまを まんぷくでも たべに いく（X ユシューさん 10/17 0:46「くだしあまあま、喜びはするが全然食いにいきませんね」
+     board x_yushu_kudashi1017）
+   げんいん：あまあまは まんぷくでも とびつくが、くだしあまあまは「ふつうの ごはん」あつかいで
+     まんぷくど 88いじょうだと さがさない／92いじょうだと「おなかいっぱい」で たべなかった
+   → ゆっくりには あまあまと みわけが つかない ので、あまあまと おなじく まんぷくでも たべに いく
+   ・KUDAFIX.on=false で もとどおり
+   ============================================================ */
+const KUDAFIX = { on:true };
+if(KUDAFIX.on){
+  { const _w=wantsFood; wantsFood=function(){
+      const r=_w.apply(this, arguments); if(r) return r;
+      try{ if(M.boxed || isDead() || (typeof hiyuOn==='function' && hiyuOn())) return r;
+        const f=bestFood(); if(f && f.type==='kudashi') return f; }catch(e){}
+      return r; }; }
+  { const _se=startEat; startEat=function(){
+      let f=null; try{ f=bestFood(); }catch(e){}
+      if(!f || f.type!=='kudashi') return _se.apply(this, arguments);
+      f.type='amaama'; try{ return _se.apply(this, arguments); } finally{ f.type='kudashi'; } }; }
+}
+
+/* v1.5.3 おさげちゅぱ の 絵（ChatGPT で もとの ねがおに おさげを くわえさせた：chupa/）*/
+const CHUPA_IMG={"sleep": "data:image/webp;base64,UklGRsYpAABXRUJQVlA4WAoAAAAQAAAAvwAAjAAAQUxQSFUIAAABsIZtmyFJ1vtFRHNsr23btm0Oj22fsXHMtW3b9u7YtqorIr73R1U1qjPjd0RMALJZHIDaHW567KNFiz+97ayeAOAEyWwsgGNnfL6eFVc+M24/AM6kkbFA1xHvkWQMUTUGJanvfr8nYGz6iAV2nLSQVB+VFTV4kotH7gAYmzbigN3+uokMkS3V6MnND54EwCaMBWrHFUivbFX1JJ+90ECcpIkRdLj6bdIrW12Dkq+ebQAr6SEOuPYLMijbNkTy9cEdACeJYYHdnyJDZNvHSH4zojNgraSDMegzdTNDZHXGQM75WR8AVhLBAlcvIgOrNwZy1X9OsoA1CSCCQ54nvbKqYyD56fd6AtbknYP8osCgrHr1kVw+enfAmTwTi76PkoHtMway+J8dAGNyywIXLaRXtlsN5IZp+wA2n8Si2wwysF1rIMOjR8BIDhngtFmMke1dPamjIZI7Fo3TSM9MDMp/ipWccTjoY8bIjNQi/wCXK+Jw7gZ6Zqd6HgubI0bwfTIwSwNfF5MfFjX/oEZma9SDYfLCov+z9MqM9RwpLidqcNhSemZu4MOw+eBw/Bp6Zm/kkl6QHBCLK7YwMIsDz4bNPjH4ORmZyV5HwmWeEUxmUGZz4OuQrDOw99IzqyMXdIRkm0WPp+iZ2cqm/hnnMOATemZ41BNhs8xi1zn0zHLPH4nLMIedFtIz48Yjwxx2XcDAbI+c2dFIRkkNDlzCwKwPHAOXTRa4eC0DM19DOAQ2c4xzDh3/TEbmYOQn9VayRSwAnD+LUZmLgdNRK1kiwLbDr/ou6ZmXnudDrGSGQecJa0kyMjc1br6hDrCSDYKeb5E+BGWOKvnVT7oCzmSAmPpX2aTMW43kgt/1BKyT9uYwnE3M4xjIZVN3B2CsbVcGr8WQS6QGcsv/r+wPQJyV9mKwl1fNKVI9yQ0vTj0NAJy0DycT6JnjGjxJvjb6KAFsu7B4NN9IavCR5Adj+sFI9Qm6L6XmXGnwSi75DiBV53AWA9MwevKeGpGqk2HqE4FUz3uMk2rDLUwHsol/hq0ugwHLVBNCPc+ArSonP6BnSgbO7mSkmiwe0rRg4I1wVSTouZKaFl4fhakih8H0TEvlhu7GVI/B6wyJwcgfo6ZqHPYJyuSMeiOsVIdD43uM6aGRE2GkCsRg0IuMTFANnAbXdgYYsoqBSapFjoBtK4v628nARNVQOAimbRx6vk6vTNbIL+qMtIFY7PYhPVPWcyRs6xnB1esZmLQa1/cyNa1lIJPIwMQN/BtgpFUMej3LoEzeyLtPBGwrGHR8l0WmsJJ3bQuRlhg0PMEi0zhELrsGkOZZdHmFnskcyKd7iDTHoPFNeia0NnEyXDMMuj5Lz6QuckpzDLp9SM+kVi7qLVJBpPYlFpnUUb8+GAblxbpH6JnWnneiFhUdJrDI1I68Dq6cxYn0mlwaNx0itozpNU8j0zvyY2PKYBo9U9zzCtiS7TdETbKosxpFAIxjYJoH3iQOwGrVVNPnYAEw3WPhQADQdPOcWkJNtsC3BMAo+lSjNh0EoGEBmzTRAq8AgGMXkMHHNLsZgEHv0WtJxuC9Jpbn/QBggG2H/W8mk/y5EogFUH/siH//fRU1pQrruaoMYJwDgG7LNaGUi+8kKwAQ53p+xciU3vzrGJpl655jYEorL1/51+ZYjGeRSR149k71zbA4Sr2m1lmwlcQ0fMnI1Drf1FRyuJaByXUtXAWRDrM0ptf5zXByMQPT6+xmGLyi6RV5WiWDPbeqppZyQy+Ycg7T6TUkVuRHVlBe8BYDUzvovbDlDA6KMW66O7V4E1w5izNZ4I0DGVNKdc0gSKXDlc/guLTyvBUWlfYL83riEoaUinqcVDLYgx8A5ydV0LdgUFGk5r4/GxypMaE8B8NVKmtxOBMq8PN6I80yRqTHxxpTSUPxcBi01OHH9KlU5FhYtNjIQZujppHng+KkZbC4Q30Seb7TUQSt6OQChhTynN8XBq0p0vEbRmrixMAPtoVB61ocuSEoNWU0kC9tD4vWdpjOrRsZk0U9+fVFgEGrG7vTCp50G0OSaAjk2l/UQwRtaHDYL2rqPmVIDg2e5LpbtwUs2lYAg0O2hliimgSBDJFk4bmh/QAraGvjYHEBNbJUU4CM5OZHB+8FwBpUp8MQT69cFxnzTpXvbeK/Th8IwFhB1TqcvoRF//0TNzNorkXyLCz5CIA4g6q26DmDvBHHfEP6mEOqZQKLgyEXDJQaQdVb4MTfdjRo/EGB9DFvAst6bjoHTtBOxQCAAXb85Xwy+pgf0UdyPame8w6AA6xpH4B1AogBuv76S5IafNTM0xBJ8vbD72KBfLo/HDLQOKDmtBmzWRq9DzFqBmmM0ftIkm/87mwMmKdcPszAIhvFAmg48NJJHy5j+VAay2aEsuIfjz8QgBnLwoz+EEFmirUo7X7Ej/793NdfL2dzNfhmB20fysJXX311yy9O2w8AnEPfI3YFLLJVjHWCstJj8AN3P/zmNzNnzpw5ly2O7UFDPAWCUmMNyluDLBbrrKD5tQdd+stfjpw0edL0O6ZPmvzvZwJ9rLoY+CNYwDprUF6sQaaLNdZImZafOJMMPqiqRh9bQ0NsSSySw+EEeS3WuvLWOWcNuo6czbaOPqhqicbgyTlnwyIdLdDx4n88tWTx4iXz73lTtSXKtY9+yrIxqpLkrF92h0VKigOAhrq6ugZcxSYtiVohxJfhTpr+xNJlBZJsmv3Q0G6ARWKKdQalboeNpIagZIxKUgt8wFgADY27nHTc4cfsUgPACVJURASCPWYsJ8m5i1jx0x2Nsc6gsnGClBWg23lXXH52hy7Dn19O1U/G9YMAgIix1lojyEAAVlA4IEohAAAwbACdASrAAI0APjEUiEKiISEWio5sIAMEoA0bpAWf6R5t/Wvll9R+POLUsryx/df4zzmf8D/n+zD9PewB+tnTQ8x/7P/sB71npC/xXqF/1v/Ueml7EH+A/5/sAftV6cXsk/1r/n/uT8Cv7D//DrAOF6/hn4q/pL8h/EP7X+Pf7h+uP4x9C/b/7R+xP94/Z74gv8LyBdYf7L0R/kv2k+8f3X9v/7Z+63yp/wPD34+f2nqEfjP8j/wH9v/bb+1fuP9Lnyf+S76nYf8p/y/UI9X/oX+N/vf+N/33+C/ar2tf6D0q+xf+w9wH+Z/z//K/279sP8H/+feb/3nj2+k/3j3Af5B/TP8r/ef8r/x/8//////+K/89/vv8p/mf/T/xvb7+Yf3f/g/5P/Tf9z+5///8Bv47/O/8f/bP8x/0P8J//v+Z9yv//94n7R+yj+sLjr4vvjN0A2Lri9rl/iGe9eEiOwF150lmUCFnnoxi9Cn30XaTzlNUfLK8CIhCxtmV4neB498Mmr1/wH2CDGwUaPky2V7neFDP7/Ee54COyqprSjJYFi/htbh1lSvcm5JCriYz6eHirTADRNzbDbrZQtuDBKH40vm0UEld1Sa2SDpdXXsIfUMj5mKAf2Oyl322oWk7m3uXo4vcZspsK/ZXG7BKn2MoXIzwHdGF2ML5Y4PiFPSiD5o+ix5Gmx3wn4JXPHePWGF5zaQ5lmemb+9DPYj/x4oVTuAwMLI92lgoSI15i/tOVa4CcbwIqZX+n5htwnmo/LlfeZZdrA5kMRVkcrx2vYNj6gPu9qGvvufNth6VR3luDqJB5OjOKnaQlfC1YKy8C6FAmYP3oe7FKSSyrEsuNjqhKh8/H/7u8mM0jU3s2Esy/S6wuFuKc6g2+1ZyHHZ0yV+l7jCZS9Mq17UDJ6+qtt4gLi9N8A/K/ZSHM1oDTkweZUctSrVdeymhv9YQbVoMKks3uiElNE22btihFXLxnrY7pZ/v8BTePpINBp1CrFFOAe+GLhKgIswFa1849C9Wc5aSGa3C3sfLvxGxXTBi8/tsToqfkSuxoCiuQG39sO7wyfPq7aHnub2zhNrxTEToez3c8H6j/74TtsMH4+W/iguM3J13/9AjxsRA3K+CqKDWGRExtvACjhlVpfRRlR/1VSVZ4+oVh9fAAP7/j7wHX+B/KCeLwOuE6ES79FckdbFLX7iDYFnMu7mSYBlzBnyrsNbVNU8WQa4JvLgmVGuhsU6J0OPb0mrfBnm//ba+Y+h4RvOh7Qoyx+INoB1w5Umo5rkQjxk7crH79TfC0dCUc0UHjO76g+qSot4GohqSBK65Qj/mjjoBNiwTl7jXIIRw75XDU0rDLHazWD0usA3j8xVYih/svWML9JymWPAYiLU1FMXPab6KJH45JlN7o2EjTuJQoAbNCPZtN38vuU5FXvqks4TbAisu7Es88qWItZgXtBbxSBXVmVAjR/Z9To5eUTbFgDkQTF9HpO1i3UEQI+zNMj+zFsQqOu8dyWZ/7fPwQANOsh3527+6kkQF+EsI8GSQ0vmI5ufnI0vxGdsOaSJtObhCLiDOKyAWyZRMprk1DkEUIjHjOhXXTYXzoHiz3CHPwVgKeMdCdaymW0f2Ad7pIdI/crbt5mDIAscofw90TWZjwIdp81xNAJhzYYnbwppA/c8Ucl8xB6BWvTMl7kKhlam8n4CoZdREHIVHT/asQdP7/sMP8sBM7W46eUYcrPTh/2tML/+wpt3jXZqmyZTusoSAPPz3dnz/oxudSSt28uJ2oy+6zRyym1I6RiE61zHsoxoBHU12YWNrP9lEAAD391aFzY4CKJCzYq9Kf62rYYtDR57CX8dgt9/5VnPji0fA54B0MgXMI0fVhtDoLcvBr6I/lJSadZ+mm/0SlM1vxpJm4P+JripjNa64V9+izsS2ivTJ7DXENbn3/xcKCr/idgJcwx27EEF7A9pkfpUnoP929DCTH1aRoUl7THSp6Kx8wnFgYWa8vkFENFPCXq9bC39vs4JzJO2t7NgOzlbh+rNYx6OiaOzn7w8UGldwWKgCYEkZhgyr5it05EyOCEWTs2OOScojHwM6NhmdYO8l4d21lXJePtYM7Ej4hxHykbrGygYbfzsciTaXl22NbuoTE3GCxNMYL6GdWpTG1CIZO7AaPN8SGwbPUI3Txk0H5w0kcqneCfWziLPlJP95ApV8yMc4hpWHUtEJ3zbtAV0LqEf7GWxMAoUaJJvwhdW7V5ubbcNh93RORLG5AwT/aAI3Qjl/Y/fEcHPeuKuia7v4BMWhrZ6r9t/umjZvLWQxOUzkAMXJPr0ClCcksetiNyhgguB/l8UFNg5RQcr8ROI85k6Mkj+U/mbnufdB3dGuc/W/Sq38o4IAZMoBtRcb3Xs1F9gQ/J6Mr+sBUwmA2l2FgNKCgg5+hvsWmWH1knPEai2lLTGtaiftF5o55u4eKVLUq0MIYz6k1F+ZcYlR88BNv5th9ZtPHYZfVWyT9AA13dgfP2RagvgfSaRLUi8olYkIi9v7sSUJn/F/qV9eMdu9VwhNCKbX4Tc6noCIrVFxfp6YYCwSyitM3IyziC4pDhSTyUnaV8YHyoS0aVC0IQKSYriIpcoOpcBFSs/Pu7Wu1Xth5xUObe5F2ks6ZZ1y9XYn8lso0fsFevDISnDSbKpCxjss63FWntCgeUpURNBpOZHx7pA07y8+iHPbt1dZZm+elQD8lB0YUYqnkWEsXlB0Ivyg/Me1TYkAsmmghzqGBk7JOoR9YNvxbQmnQnR+yz9bB2nyeAPH5YbRajszjw/sSuDpua8M6yqfmRVwZvRss4of8VISdDDt+3SFPq0rCMKH/dQJzGfIu01LLt7MTjeF/My3FDPMgoirGreVMnb7DXcbfsGON2rh8uF2rnHUXaUg8O+CpVZSqQjgRZzD5VvXqG33Tir+lA3cRN8+UWTiRbObgvw8bvdTtT7bLd4R2vtAF4id+i7KsVLpmm+7n5U9z831Bn8LavY+D7nG0vfYJxhuO75gyONtUAWoJFMSfQe1MvH17jZH6+o8zOVdO6dxFJrluikLvW6P2yBRvAWyYW+oqhDMvJ98v05c2FVhlN9gW/Ob//0Sf+ufPO/EwGLjEpUJ4o31YrhUTkRQh7jT1XFybDmzcG3+NzLhaQSE2jz+METojs9zN1H1gMTC07ci0UpeLWEfZzy64/WXueRtSDrQw1J9bfSJTPp67aHW5jHwuHlVW/EDYiOd+61+zOX1y74QMa6EloVW5zKIbwSJ5gFwLnnARnHKRRWR9vRG+IlJfitVk/ddYJhUecYZcC95joP6Bjw2jDSV/3D27QffAk7vMC2BpOkH8kznkhnydeThlBiD6v8omk+cA4UX7MjD9aea2zHGN7ARFygBItm0rt58vqLGUoaqZCAL5Iv+HiUpRBx6YB22vfOjpLMoP7zIqsA8SJdmm0/k9wGQtJhwMDZCYDHRPbAUB1SG8Li3acLf0Svd1/HeWPMfHyTKNFEe2p7bM3YWf+C5fLJ4YoZwwgtTKQUKCiqn+YC8jWfUvO/kFfobNhRoJOcCL5VtYo61aHTKixEWClz/4aPHlCsx9VaWlzKQ6/5nIkHCjGOjJy654L9fVfBxCHVukUwCqtM048nJl1Pkdr03D+4cdtw3fBLiwgxtoAdBWpwRYy7nwqLECE5Wch6X+SnRsa/ouNvXEnMtv+y/Yj/njG75LXeFO4ICbl+pzKmVLRxEQsuaLlUrQTd1eFJaQfVWyqVLQtA+JpM9rJ4MsfdD08Nh7Z0kSpAlHlo1q4WMiYT3kHcFW9BtP/Y2fG46hIhLKNTq4QU00qdGlJiHg9x61Np/B828OAfxt7IgaC3rlrPJkwhun4PGy0vADf+ITpDDLbKnr/koy7dBuuNUKgEJnnUN6rTVo5EMo1calR8j30Lcif7XbsJ4Ny0pXxjBwg0WOrptS9WMSgSGB/jA5v5f8EgzYFx0eOneTjUz4K3ytqTAmqu+n3smWrEiCGf8asPZM0tGjooJxYrs1WyY5w0XycdjPO+MOKV9BMUpzBuXTWlkl6R2kwARkdx/wY7ENZspA4FJrVlcfckyKr4nTfugTvILXiRo8u9IK3laiUAlBTCDIa9NMqkmlIBkCkzXq8iPjNoLMkWYHd4LYwW/XhfKAQzuzPZOfP2sSy9TA1DPbDsIpG7OF9+wxSLwuTnjCAViKrntu9ejRLuIB3uUtuOUiEk5RPbudVIsoRmBBKK2IUKCXBaq8enyMt8gp/MadKXS+YWeQqE0o34XA7QbZ9Bf9+00/xlBAIJQAwLHItN0NwT5BCHtuhEc7jMEnIT31+6XJwHTb5yrgFP3btyrAdJVm7bgv5kU9S5pECmAwiDVEMnLLJtN/ZXVZUbgs0k20eHx90sSxrpgkOkD+wgOvnFr4CJ4zLep6kb4R94CMt44g0aRw3ubTox0zdapxPauyFOZS/srUZ+auf55cIRxsWkVvm01LojQuqv26llygjHATvNShdtG6V9NDOsXgB3812YomI7ebxFnESjw27TXTQbZBA2olvUPOAuv3IsZqr/GMoJzvvQhxYmTZMPITdvuJWIottVO58nzA39MK7jTrK/5JaEtomPaNqF5/TYBTUYzZetFPzWPtem+KPjBq/24vLCGSN4QEBSbHZ9rpRSw4gOur3+9D7j/1zkGw7TjPg9ACZh26XXoIOlU1xN0uk6ZcNm1+YVPRLvZ1bXBbGNtoJl++UWm/+TeilQU0JhGOvkMP3M5JwEOJvj4W5U09qjY5HqqKNAyrNQfh6yb77wnqYTJDGKscU//ivfbSk7VC/rNMRaDdQHFn6A9xYxWNNxg+kCkccOR1EuK64YGapZqLHWHVYLlrsoYuJD8DCsvp0B28+IdaKfj4+aJzqR+BfJ1v876dDZ35K/Rm6/eCwRx0asHTcgNtDhEqg2YUikRZ64tKm9DyMdnzx9rHU5mpxcaqpj2kJ4GV/2JC1hz3G6LVIXZ4JClbvU9+oY80vU/ICugiw2SwEq84712AwsU71P0nutzqnSUbQ8NgNSMpkFnepQeqO5OPy+O5FdU+P2szrJ/8dIBn2ffsHAbbUuu7lnsoYFGaqib9c3hH9g1y6pUS8b4xieX4qOb330VFUgMWN++VAm3Qkt5vXrT6weNnzBPR5Wz+7FqBkCZTR6RDD3LT9XXUJELn6gkeQu5ilffAO/YJd3pklmzSfXdsraKcz7JCwJWMJ4LmkNX0nm6YjWetMHponfs6HSge3AeAcjMmGd/FoG5r2/tw7RbOe7Q/SYy+h7I1qASDSj4FzjgJm2sGtHDl3GnxyKhwYAf1G8MKA9pzqdpSBLNt5Rn13tc1sToiyuqiNTuA3WTZFphBadOUj5i8xntEHneL+nzhj9ryWkYpZ2daaqmXut1/UpcllZ7C/SycbztxffCSSTCjdDHdbXJsRzUM6K4HtYR4tEg9xXvS3c3SMc1BZrhoGAkdewq3FRndyNP53QqgG1ac35we2xD73NYAnJuMdAOxDY4/vBiRGjajsrvY4Uea5cA2J1yOffLjyej/mN3HRlbzP2keSbudcB1x+9EptA6NqCo4zlviMAJ1DMkjBCje7qrktT+dvGXrnZGUgDcS26xamtPn9O/smDo2MjhWTflxhc9YOX1TDRgPHp8LbkqvkxiIa50A9ZbsqEDNxfB/JXpMdVddl+aL+L2rIWkW4CX3VF11ZGRUX+5rXIIxvOOgxSBBmypjxaY7BaDBCfS+3vLAYLW47ZMpOkg85zAjsPYRAEdQiT1jjpdTdwginSGJ++QDdo2NDUqLdhCDaZrAz/oRfbDby6Y8OkwJARgo+NMq/YRJOM7p9xJTYFBJkgVcE25fVHwTmt0S68lVhHDDcB8w5BKLZLeApo6DFBZT9BEvFBs4hjBEVjynwgrLhAzOYDTm429TnMs6TFHhmcF1Y/J/AeYtQFbiMNqtAT8pD8YuXk8ZilWoPR99eEm2/12uZilHCrItZrWzRRWeCJqoYR+Nxizbut0xVln45kInAKGT8WIBlMHB5wtAMfLw48+lXjit9X4rj6tYia0eSeooE9ZedtAoSzJlGlBPZzlnLFPDveH/Cpo+7UmormwWXfYXQCVaEcRD5cL9OMS6dvVEphxqDxYT/DC7PF45aejvp1Jl0OUBI5A1C/2r2yolZldBvqw6ofKqC5Ya2a3x+A5wf1tYtyW0SBK2Q8ZbDcf9OPvn4TpueRE+p9K6+hN3lV52sjTZcJ+sh2encppw1FLPzYQ5Rs+FnBuesGF5DzHjHogmuxa8sbzUFftsadqq8Zrgj+ioXJ1+FVgFItnSR5nWYOkwGY0tDZ4gUAu7xbaGpUL2XivpfiVNYCZb/cdRUwit6GVgDvElh2ywtVEqdAWVED6nmTlKuGRGF5bRWxknGsH10GYtEy4VcnTr3qn7PYQFmouN/CsuJgSu3zfp/j16CvJ4SpzRCpUA1c79N95mhjI6UFBtvzn/wOfMbOnbQTyESpY2cFmcZYPR3AEs7lNvwruiboMnUIYTMjFtPbHBg0favoFyPVP4mW95pQPVEE2ZFtFXJzVir1fiea8RbPaLBdA14je7ZytmkataVTj2zG8vDSnxJPpMe+lyCGmjuza48vC8fo4f8xMmRFS8rPK8L1atSB02p6Vqs203dvLWX4oS2SK6PmDFqGbQj5Os5Glz3YYIlwxMMVA37a/zGF4jMSaZF5SNgftc/Cs4KyGHfNns3LzIA+D9LTW9FvlWp5PZn99bcGn9BC8EWz34uA7nA7FMAo14FqsauQi2E61fiANusg6JKPxmO0GW7i3gY738AWNgtMan2ALojYX5VlHZ6sQuoEmFPY7pfGPZmYOkBKoueWG+510SuSA6/fpbqJVVAifiQwC9kUDifUiHTJGp84TElS5pd9TWKaD3zu+bszeZfO3nToNDCbdMt23/RSY2TXc5oZdWdfjiSYdnN+hCPnorSYctbTn4OarKgordUusNuWCwxQ4I6mxbRZAHYCngRpAW4SubXelUvtnD7pBZ89hcgn8S06eNkJs3uo7ENQx9CI/znpFg/pv3vnhhHNFdDj5tK5tzMQUfMtfvJ6orDZXbGB3gs4SnuhU4h86O5ljkLOheMw8CUtPwLrNaXPoKVjThKYHrzge3+vqPF9/nk+GC3rVoSiyD97JZP6/1MozzgUGgQv7pQzcTlgoF16GS8HjYYdTas1z/xcEuK2CEN2Q8vmkfm8dSjcBLyF10pkmPROHku80NjbIeX5CxW0vIdUMymkH5/94RlvaGvRbayOE7mlAtVrDoN3zbzSxh6d+ZjCH+q4cTAAHCaXShE5/HokuWkDa+wT75x73UuO7tH8qseDf5l+4gjJqyEYrcjBkp8xZzpuxklp+ahNejGfKW4ItDhTEPCNP6mbs3kHS5LfF11IPe/WSoIahNvjUaYDY8Zo6kK6CvaJeAwqjGKj+AS2B9BKPLYD/cbJ5+FlYoMP+83+CuPiBTsKikMGBgeW0p4BBAXoYNlwDj26WtCTct3BvwZE6f1/fV1nGZBULUkdayMhoGLvl7r+p0BJlwunbkSJYEs0gAU4F0Bp9jl7TlUyuiGVO12PoZ+5N4gORDBDcIBSVq0cUGEQS7t2pCHtplk+N2Mvcq4WTiypZnmz/7MpNvEkn+7o+vTMBdn9iQD0SZwYM6XzTHMa7L3kAwDRNPRlAIr5cZjz/aV88UXFdGaZpOspr3atvH/8hfDd9FUlJ76hoscDJznTLKgn9zW/eXwdb/T926K12cfbQtVyhpk0dgYFqFeGhBzje97hHvX/2baSaXoEIENu3KGu6LiudXmXs5QFK0FqfMrEaElAL64F9WS+iV8GCf0BFe/ZGqzLKP6Su5SoH6AKYlbU6Qvm227LoLC0+Hv6VJR97r0yjzKsuO3robvfflgNixPoVkEusCIivZhOpoOo6EijHJ5fICmsbLBV6sOPnm5XCbEzZcNGAYMQz1rkquxGQgVaMN7Nm7YIXWnURj+Rw1QecnAOTDKpjKS47BVxrnNpd+aVjH/sabrZMBp6jfYG4k2njh++c8NrHMuPmpY6+3lvQi1FarIsgTjqjmKzE6LdD6pwPfeobpimWPnuOMfb4D4s8zni3CdgXBt/KruO3waLe+Zn12GrhPTLj3zAvIzVlY0T9DMdWxzsA+j4S/936519uHAhLHkTt31XXDeO6jo+/IPgsU31SuNBxG6OK5VEoxgqPHqmu2cSMQmuI4pUKAxDWWuwQZqsShsFyuO1LU12yJPusFnfL/mEyyAFzAR8XUZ+70JIlvTKaJlX/tIfhXbTG1kFp0Zx8nwBbHOOJeWQmRvU0os8e8WJTIXYafnArMqXLmoom2xyI+ipSrURRLg5DJgXHZ2lxiDqVGhwxFLIaqstmOVopVVzCYCIK8HsRDPpPT9mPeh2eIvCwjI1YfXpyWUoyXRH1ElBysDG0/lb+MN8Ra/CtB/NBWniuIjsTe3a1VhzyDiU3pNsO6SND0xRGBef+vTUgAuF6i9KDHdvf11xt3yIMzXsGPd08Hd2AN/Bcvq1AHC73OMjXzjFSifncXCaNgT4zXV17FJZXTK5L5VD9tUcqq8jncoBjQWxI+fADv3xdBmxXfFKrTa0ANTXVH1AeQdSM6LwsaWZ8g3qy1JVj21tzllXaXWzSFJ+tXNlt0daOrPKKaGg7Z+vcz8KnSm6fKlnybH9Sx8WnDxkNM22u2XP6FUJLbfFoWSCK/AOZF3OutYWTDM4nWG5pGokOf0nfi8GnR16/FSKSDhsJKAu5XcvEhf/D5f6PPauCF2g6j5674tR7KpShWaAa6HWLPrqjfogkzsPYi9RqjgQbGOAXzN/ZMTzudj4sNpDnvaujqKT7tzZoggSfnwd4Pk3ES5UgL3+3llTgbDbsG300Lnln0iVsHsuikYaZhoYMX4uYKqAX16AkkgzJ5nBHjcPd0tQSXPEW+5t21PT3zpzQZfdpWgdGY6bjWQ39pXNa2Y+B99Xdi40V4RHtzWF8GQoy8pSXETwSZ6UW3irloL2Jpfv/GOZeHumu9zsjUgfnAiTtiENh51UIGk3eCPu4wAFrvZrKd3Y8+FgWwe/cxrVvgQdls6+LlhxKouDMU+W+AzFcG9Z98cjiwZMEt0JzD4crZKFLW1ABW36xfQO99L/5op9u6B5QxNYyXWhrhGNDKzg5BuyAQz8o+OrRjI8FGS0EQbWCmSJxi9DlsgemODbC0uPNiCu7dOnURVuj+XtVFxLWdTdkotusgIJstE+cVee9XF4SNKU+HPzqstSMVALt4/QBrD/QzFcDIFenET5BGCU9sfvT6zQYtoULHtNdFiNvfbPXgD6FJVj0UxirxY4Mfmh3aoITN17zHhSYnQsyu7s0aD/vq+adn4BANRsmFPvP0u3guqE0yuqMA5F4FCU97mq7Cav/Ta74SJ08kXbGgg/bQaZ6fM9czzYSs3A1sjdAFUzuaodPrcf9zsCYM2hCCfsW6JP/inyRIq5kFZQWBAp4cdmGfWpzAcQsapexOfUH68v+I4L6hG59h2LiKEXJxE1gh6exjFil6QfLEFf7u7gOlfFfGamSqdcbShIhBnUU0F+ljBwaqg8WrW3G4PzV6Uz8+/GZqcBIP0YtWNOzi6VN9n/X3Y6I2e6o1UKO8A0bcgjePbfnyJmifUVmVtgyk/30kOok3XMp6NvZnQfZZ/aq0kA4DoxJVbLhp5Pk8/wqRpKjLUiE+eJ+WodxMoRpgOTGUC7TmvFNK8WLEC9ibZABpJ/IIn1QATp9Idw2nDHaKqZFA9FZ/t0yNcPUfY5Aga3r2U8pqURUU9bQ0Sru/Dgz8aiPrB+g2whrM8W6AFggkt7Hg1416yfmD6590Fwj/NUaa5vWossqVeJ5pLfODkZTx+3mEGNmWVNeFFM+Ojp38Epd5gTAGNK08mKu+iE7PgRwp+PplZpde7qVMvcXzFU81jLKxy/puSFSVwNrxn03yx/3OXrH9JN1N0fzqgGNJ5iHT5qsPXedyeqkF6MoT6C3hl/Wzqvy3S3F+W7tcLKzaCWKMdReYOjlXTBCyYE/SGyRDf6a/ru15mR+akdtbinDtr9YxuJGe96Zi51vJz8ftejTcJVDCm8hQ4akJ7w9LW5INNLmvjQvT9z6XdqZbwHH9GgXr0uLYVVyt1+OSFDltqr1XMLIewvYRHcUu1ZpaIFAAQzU2Jcka0gkkwaAYUPvQU9rfHAD+0ti2MnihLI6KjCRP4jfUOHWg38wJaaR/c0UurMzS9/GPb90RK6wk0PH5V6gqVZcxDsGYKsqWJoTdsl3MfswWhqmN4aKZnCrRF4JeMjkc/do4hesg6f5Ceo07iaqcn26LwSTCBRQBK4y0wLO2LZ2/4qrzF4jPrbMuku5uqsnEaSE9UdaE38AR6ZmvssnZ9w+68WtZzkQPvQ0MbiFowAUNKJIn3yUNY5WPw2lnkNFGETuozpZ8YvWWgoLTfjgsrP6afJwIK29XzVvAJLOKXj7YyHpKRkHfy+Tnac1GHf0CwWnPIo+Gcq5bVqOMkAmDF6zxW37qbWxr27HE68XD7Mrxz2pSeruTn4iig/0SHhWsMZeSZWgml3dUSWoWePF8Lzl00nf9bYAJ9ha3tkK5hHaFvkWRWBxf4G7yMKLnQW0nOiT6w2ijTo0unQ93tO8QFuSedDEP/x65/ZCNFgMgv+a+ELtHHoEUdtP802iHE1nVaKWi4qywOTU7JPS3rV05TSb8s7XKVx171yTYksT+9UCKXjn/PewYXCfkIX3VqN1rf+u/SgNmyzeSohxO0waURd797qfT0IDbGLZnMxgyN/e8KQlt/X5aAo+Rt1La7NeSsUgYJYn22Vg1LcMp+IRUb3IvooLXXttZxvcn5nhyqNi/6s3/UGgpwvm+ehjUi2QJmMSGFSUB4ZBL03tdlD1lvqXZQMHAfY3HFwfE5z8Zg3/+xcDPwZqXOew732ux0xGDW8dXxUVisoknE+oOjozFwDsfHRZ/4XtGEdrDi6Q/MmgLyO8bF7a7H8IXrh+4Gq4XZQMR0pS9fCh1JGfVYl5BlXbtunYb1a8WzKKcNbFTWOLcgl+xnyKYPCH/dscThq7k65AGqpksGh2DwFwEqaiCL+wZve7FGdtsTOZabLTv3zg+JXh5WALnwMhUFc00ty6bZc3oA4gN2GVRKSkK+EVx0fqPf6Dg5kChuSOZJXv5r/RoaOBd5X7eneXBtfgCjgq+FfFsPTd2yhOJkaWhiaxX5PrlGial6HSTaHCwrKNOvcxm6nxRheX5puFJty5vMMAEU3UCn7hTm2HMvutB/UsAEqoGCxWWtG6E8YnBFVL5tlu27lrrlvisisVWHPnkxnJ19Ktrz3JFf8+2Kpnkhqs4AAAAA==", "sleep_nohat": "data:image/webp;base64,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"};
+
+/* ============================================================
+   v1.5.3 おさげちゅぱ（board x_sticky_list1014：鬼威惨さん「おさげちゅぱ（まりちゃのみ）」／Nexus Atelier「参照資料確認必須」）
+   しらべた もと：pixiv マンガ「ちゅぱちゅぱ」（1229さん 118932295）＝ねている まりちゃが じぶんの おさげの さきを くちに くわえて
+     「ちゅぱ ちゅぱ」しゃぶっている（おしゃぶり）。キャプション「おさげ ちゅぱちゅぱしてるの 好き」
+   ・まりちゃ（ほんたい）が ねむる とき、ときどき（35%）おさげを くわえて ちゅぱちゅぱ しながら ねる
+     絵：もとの ねがお（ぼうし あり／なし）に おさげを くわえさせた 絵を ChatGPT で つくった（chupa/out）
+     ねている あいだ ときどき「ちゅぱ…」。おきると やめる
+   ・おさげが ない（ちぎれた）・ぼうしが やぶれ／こげ・すす・しんでいる とき は しない
+   ・CHUPA.on=false で もとどおり
+   ============================================================ */
+const CHUPA = { on:true, p:.35, im:{}, cv:{} };
+if(CHUPA.on && typeof CHUPA_IMG==='object'){
+  for(const k in CHUPA_IMG){ const i=new Image(); i.src=CHUPA_IMG[k]; CHUPA.im[k]=i; }
+  function chupaOk(){ return (S.sp||'maricha')==='maricha' && !SPX && S.braid==='ok' && !(S.soot>.05) && !isDead() && (M.state==='sleep' || M.state==='nap') && !M.lifted && M.chupa; }
+  { const _ss=setState; setState=function(st){ const was=M.state; const r=_ss.apply(this, arguments);
+      try{ if((st==='sleep'||st==='nap') && was!=='sleep' && was!=='nap') M.chupa = Math.random()<CHUPA.p; else if(st!=='sleep' && st!=='nap') M.chupa=false; }catch(e){}
+      return r; }; }
+  { const _v=variantSprite; variantSprite=function(name){
+      try{ if(name==='sleep' && chupaOk()){ const hs=hatState(); const k = hs==='ok' ? 'sleep' : hs==='nohat' ? 'sleep_nohat' : null;
+          const im=k && CHUPA.im[k];
+          if(im && im.complete && im.naturalWidth){ let c=CHUPA.cv[k]; if(!c){ c=document.createElement('canvas'); c.width=im.naturalWidth; c.height=im.naturalHeight; c.getContext('2d').drawImage(im,0,0); c._own = true; c._spf=SPF['sleep']||1; CHUPA.cv[k]=c; } HG_LAST=true; return c; } } }catch(e){}
+      return _v.apply(this, arguments); }; }
+  { const _ub=updateBrain; updateBrain=function(dt){ const r=_ub.apply(this, arguments);
+      try{ if(chupaOk()){ M.chupaT=(M.chupaT||0)-dt; if(M.chupaT<=0){ M.chupaT=rnd(2.4,4.2); const b=mariBox(); fxText(pick(['ちゅぱ…','ちゅぱ ちゅぱ','ちゅぱ…ちゅぱ…']), b.x+rnd(-10,10), b.top+b.h*.5, {size:11, color:'#b08a3a'}); } } }catch(e){}
+      return r; }; }
+}
+
+/* ============================================================
+   v1.5.3 めいれい「ころがって」「おしり みせて」（board x_gaku_seiyu1016：Nexus Atelier「八景に できて まりテラに できない ことを
+     洗い出して 実装するか 検討」）
+   しらべた もと：ゆっくり八景 Wiki「アクション」（声かけ：転がって／おしり見せて／全ゆん転がって／全ゆんおしり見せて）・「教育」
+     ・なつき度と きょうふ度が たかく、ゲス度が ひくい ほど いうことを きく。かしこさが ひくいと「わかった」と いうが したがわない
+     ・転がって：ころころ ころがる。うんうんの うえを とおると よごれる
+     ・おしり見せて：もるんもるん（まりテラでは ひっぷしゃん だんす）。みている ほかの 子からの なかよし度が あがる
+   ・「あそぶ」に「めいれい」：🔄 ころがって（この子）／🔄 みんな ころがって／🍑 みんな おしり みせて
+   ・きかない 子は「いやなのじぇ！」（ゲスほど）。かしこさが ひくい 子は「わかったのじぇ！」と いって なにも しない ことが ある
+   ・MEIREI.on=false で もとどおり
+   ============================================================ */
+const MEIREI = { on:true, rollT:2.6 };
+if(MEIREI.on){
+Object.assign(L, {
+  mrRoll:["ころころ〜！ {me}は ころがる てんさい[なのじぇ]！","ゆわわわ〜！ ころころ ころころ〜！"],
+  mrRollEnd:["ゆ…ゆぅ… めが まわった[のじぇ]…","ゆっへん！ じょうずに ころがれた[のじぇ]！"],
+  mrNo:["いや[なのじぇ]！ {me}は めいれい なんか きかない[のじぇ]！","ゆぷぷ、そんなの ゆっくり できない[のじぇ]！"],
+  mrDumb:["わかった[のじぇ]！ …………ゆ？ なに すれば いい[のじぇ]？","ゆっくり りかい した[のじぇ]！ …ゆ〜♪"],
+  mrDirty:["ゆげぇ！？ うんうんの うえ ころがっちゃった[のじぇ]ぇ！"],
+});
+try{ STATE_LABEL.roll='ころころ ころがってる'; }catch(e){}
+function mrObey(){ const p=PS(); const v=clamp(.3 + (p.natsu||0)*.006 + (p.kyofu||0)*.003 - (p.gesu||0)*.006, .05, .95); return Math.random()<v; }
+function mrCan(){ return !isDead() && !M.lifted && !M.boxed && !M.hidden && !M.burnT && !['sleep','nap','fight','seisai','naka','trapped','study','away','job','eat','poop'].includes(M.state); }
+function mrTry(fn){
+  if(!mrCan()) return 'busy';
+  if(!mrObey()){ express('angry',2); say('mrNo',{cls:'shout'}); psAdd('gesu',.3); return 'no'; }
+  if((PS().kashi||0)<20 && Math.random()<.5){ express('smile',2); say('mrDumb'); return 'dumb'; }
+  fn(); return 'ok';
+}
+function rollStart(){ M.next=null; M.target=null; setState('roll', MEIREI.rollT, {rollDir:(M.face||1), rollDirty:false}); say('mrRoll',{cls:'shout'}); }
+{ const _ub=updateBrain; updateBrain=function(dt){
+    if(M.state!=='roll') return _ub.apply(this, arguments);
+    M.stT+=dt; M.h=0;
+    const sp=70*dt*M.rollDir; let nx=M.x+sp; if(nx<XMIN+12 || nx>XMAX-12){ M.rollDir*=-1; nx=M.x-sp; } M.x=nx; M.face=M.rollDir;
+    M.rot=(M.rot||0) + dt*9*M.rollDir;
+    try{ if(!M.rollDirty) for(const q of S.poops){ const w=toW(q.u,q.v); if(Math.hypot(w.x-M.x,(w.z-M.z)*2)<22){ M.rollDirty=true; S.clean=Math.max(0,(S.clean||0)-15); psAdd('stress',3); setTimeout(()=>{ try{ if(!isDead()) say('mrDirty',{cls:'shout'}); }catch(e){} }, 200); break; } } }catch(e){}
+    if(M.stT>=M.stDur){ M.rot=0; setState('idle',2.5); M.dizzy=Math.max(M.dizzy||0, 1.6); psAdd('stress',-2); S.mood=Math.min(100,(S.mood||0)+3); psAdd('natsu',.3); setTimeout(()=>{ try{ if(!isDead() && bubbleT<=0) say('mrRollEnd'); }catch(e){} }, 1700); }
+  }; }
+{ const _rs=rawSprite; rawSprite=function(){ if(M.state==='roll' && !M.lifted && !isDead()) return SP['squish'] ? 'squish' : 'smile'; return _rs.apply(this, arguments); }; }
+function mrAll(fn){ const res=[]; for(let j=0;j<S.yk.length;j++){ ykDo(j,()=>{ if(!isDead() && !(S.yk[YK_I]||{}).away) res.push([j, mrTry(fn)]); }); } return res; }
+function mrHipAll(){
+  const res=mrAll(()=>{ if(typeof hipStart==='function') hipStart(true); });
+  const did=res.filter(r=>r[1]==='ok').map(r=>r[0]);
+  // おしりを みせた 子は、みていた ほかの 子からの なかよし度が すこし あがる（八景）
+  for(const a of did) for(let b=0;b<S.yk.length;b++) if(b!==a && S.yk[b] && !S.yk[b].dead) relAdd(b, a, 1.5, true);
+  return res;
+}
+if(typeof openPlaySheet==='function'){ const _op=openPlaySheet; openPlaySheet=function(btn){
+    const r=_op.apply(this, arguments);
+    try{ if(sheetKind==='play' && (sheet.dataset.menu||'play')==='play' && !sheet.querySelector('[data-mr]')){
+        const h3=document.createElement('h3'); h3.className='sub'; h3.textContent='めいれい（いうことを きくかは なつき・こわさ・ゲス しだい）';
+        const box=document.createElement('div'); box.className='care-top';
+        const mk=(k,ic,t,s)=>{ const b=document.createElement('button'); b.type='button'; b.dataset.mr=k; b.innerHTML=`<span class="ic">${ic}</span>${t}<small>${s}</small>`; box.appendChild(b); return b; };
+        mk('roll','🔄','ころがって','この子が ころころ ころがる');
+        mk('rollAll','🔄','みんな<br>ころがって','みんなで ころころ');
+        mk('hipAll','🍑','みんな<br>おしり みせて','みんなで もるんもるん');
+        box.addEventListener('click',e=>{ const b=e.target.closest('[data-mr]'); if(!b) return; closeSheet();
+          const k=b.dataset.mr;
+          if(k==='roll'){ const r=mrTry(rollStart); if(r==='busy') toast('いまは できない みたい'); }
+          if(k==='rollAll') mrAll(rollStart);
+          if(k==='hipAll') mrHipAll();
+          note(k==='roll'?`${S.me||'まりちゃ'}に「ころがって」と いった。`: k==='rollAll'?'みんなに「ころがって」と いった。':'みんなに「おしり みせて」と いった。'); });
+        const top=sheet.querySelector('.care-top'); const anchor = top || sheet.querySelector('.sheet-h');
+        if(anchor){ anchor.insertAdjacentElement('afterend', box); box.insertAdjacentElement('beforebegin', h3); }
+      } }catch(e){ console.warn('[meirei]', e); }
+    return r; }; }
+try{ Object.assign(window, {mrTry, rollStart, mrAll, mrHipAll}); }catch(e){}
+}
+
+/* ============================================================
+   v1.5.3 家具の すりぬけ（BOOTH 寿司ししゃもさん 10/16「高台など一部の家具をゆっくりが貫通する／中に入る」・board bt_sushi1016_req）
+   げんいん：おさんぽ（state 'move'）は もくてきち まで まっすぐ すすむ だけ。blocked() は「いきさき を えらぶ とき」にしか
+             みていないので、とちゅうに たかだい・き・いわ などが あると そのまま からだが めりこんで とおりぬけていた
+   → 1ぽ ごとに「つぎの いち が 家具の なか か」を みる。はいる なら、よこに よけて（±45°〜±135°）まわりこむ。
+     ・いきさき そのものが その家具の なか（おうち・クッション・どうくつ で ねる など）なら その家具は よけない
+     ・いま もう なかに いる 家具（もちあげて おとした 等）からは でられる（ふかく なる むきには うごかない）
+     ・みず（おいけ）は いままで どおり（すいじょう まりちゃ などが いるので）
+     ・2びょう うごけなかったら あきらめて ほかの ことを する
+   ・まわりみち（zz_v136b_fix.js の pfPlan／すすめない ときの とちゅうの ばしょ）も 家具を しらなかった
+     （たかだいの まえで とまる → 「うえに まわる」とちゅうの ばしょが たかだいの なか → そこへ むかって めりこむ）
+     → pfBad に 家具を いれる（いきさき・いま いる ところ の 家具は のぞく）。いつもの すいそうの およげる子 にも まわりみちを つかう
+   ・KABE.on=false で もとどおり
+   ============================================================ */
+const KABE = { on:true, pad:.9, giveUp:2.0 };
+if(KABE.on){
+  const KB_SKIP=new Set(['ball','pond','glowmoss','mushroom']);
+  function kbIn(o, x, z, pad){ try{ const ot=OBJ[o.type]; if(!ot) return false; if(ot.blockFn) return !!ot.blockFn(o, x, z, pad);
+      const p=objPos(o), ds=depthScale(p.z)*osc(o), [rx,rz]=ot.fp; return Math.hypot((x-p.x)/(rx*ds*pad+2),(z-p.z)/(rz*osc(o)*pad+2))<1; }catch(e){ return false; } }
+  // blocked() は おいけ を さきに かえすので、家具だけを じぶんで しらべる
+  function kbHit(x, z, tgt){
+    for(const o of (S.objects||[])){
+      if(!o || KB_SKIP.has(o.type)) continue;
+      if(!kbIn(o, x, z, KABE.pad)) continue;
+      if(tgt && kbIn(o, tgt.x, tgt.z, KABE.pad)) continue;   // いきさきが その家具の なか（おうち で ねる など）
+      return o; }
+    return null;
+  }
+  // どれだけ ふかく はいっているか（0＝ふち … 5＝まんなか）
+  const KB_PADS=[.9,.75,.6,.45,.3];
+  function kbDepth(o, x, z){ let n=0; for(const pd of KB_PADS){ if(kbIn(o, x, z, pd)) n++; else break; } return n; }
+  // うごいて いい か：家具に はいらない／もう はいっている ときは ふかく ならない
+  function kbFree(x0, z0, x, z, tgt){
+    const o=kbHit(x, z, tgt); if(!o) return true;
+    const d0=kbDepth(o, x0, z0); if(d0===0) return false;
+    return kbDepth(o, x, z) < d0 || (d0>=4 && kbDepth(o, x, z)<=d0);
+  }
+  { const _ub=updateBrain; updateBrain=function(dt){
+      if(M.state!=='move' || M.lifted || M.hover || (typeof onTD==='function' && onTD())) return _ub.apply(this, arguments);
+      const x0=M.x, z0=M.z, t=M.target;
+      const r=_ub.apply(this, arguments);
+      try{
+        if(M.state!=='move' || !t || M.target!==t) { M._kbStuck=0; return r; }
+        const dx=M.x-x0, dz=M.z-z0, st=Math.hypot(dx, dz);
+        if(st<1e-3) return r;
+                if(kbFree(x0, z0, M.x, M.z, t)){ M._kbStuck=0; if(M._kbClear>0.4) M._kbSide=0; M._kbClear=(M._kbClear||0)+dt; return r; }
+        // よこに よける
+        const a0=Math.atan2(t.z-z0, t.x-x0);
+        let side=M._kbSide;
+        if(!side){   // どっちに よければ はやく ぬけられるか（よこに すこしずつ ずらして、まえに すすめる ところを さがす）
+          const fx=Math.cos(a0), fz=Math.sin(a0); let best=0, bd=1e9;
+          for(const sg of [1,-1]){ const px=-fz*sg, pz=fx*sg;
+            for(let d=4; d<=240; d+=4){ const qx=x0+px*d, qz=z0+pz*d;
+              if(qx<XMIN || qx>XMAX || qz<FLOOR_TOP+1 || qz>FLOOR_BOT-1) break;
+              if(!kbFree(x0, z0, qx, qz, t)) continue;
+              if(kbFree(x0, z0, qx+fx*24, qz+fz*24, t)){ if(d<bd){ bd=d; best=sg; } break; } } }
+          side = best || 1; M._kbSide=side; }
+        let ok=false;
+        for(const k of [1,2,3]){
+          for(const sg of (M._kbStuck>.8 ? [side,-side] : [side])){
+            const a=a0 + sg*k*Math.PI/4, nx=clamp(x0+Math.cos(a)*st, XMIN, XMAX), nz=clamp(z0+Math.sin(a)*st, FLOOR_TOP+1, FLOOR_BOT-1);
+            if(kbFree(x0, z0, nx, nz, t)){ M._kbClear=0; M.x=nx; M.z=nz; ok=true; if(sg!==side) M._kbSide=sg; break; }
+          }
+          if(ok) break;
+        }
+        if(!ok){ M.x=x0; M.z=z0; M._kbStuck=(M._kbStuck||0)+dt;
+          if(M._kbStuck>KABE.giveUp){ M._kbStuck=0; M._kbSide=0; setState('idle', 1.2); } }
+        else M._kbStuck=0;
+      }catch(e){ console.warn('[kabe]', e); }
+      return r; }; }
+  // まわりみち（pfPlan）にも 家具を おしえる
+  let KB_CTX=null;
+  function kbPfFurn(x, z){
+    if(!KB_CTX) return false;
+    for(const o of (S.objects||[])){
+      if(!o || KB_SKIP.has(o.type)) continue;
+      if(!kbIn(o, x, z, KABE.pad)) continue;
+      if(kbIn(o, KB_CTX.gx, KB_CTX.gz, KABE.pad) || kbIn(o, KB_CTX.sx, KB_CTX.sz, KABE.pad)) continue;
+      return true; }
+    return false;
+  }
+  if(typeof pfBad==='function'){ const _pb=pfBad; pfBad=function(mode, x, z){ if(_pb.apply(this, arguments)) return true; try{ return kbPfFurn(x, z); }catch(e){ return false; } }; }
+  if(typeof pfMode==='function'){ const _pm=pfMode; pfMode=function(){
+      const m=_pm.apply(this, arguments); if(m) return m;
+      try{ if(isDead() || M.lifted || M.hover || isSuijo() || (typeof uwOn==='function' && uwOn()) || (typeof isLakeStage==='function' && isLakeStage())) return null;
+        if(typeof waterAt==='function' && waterAt(M.x, M.z)) return null;
+        return 'none'; }catch(e){ return null; } }; }
+  { const _gt=goTo; goTo=function(x, z){
+      const keep=KB_CTX; KB_CTX={gx:x, gz:z, sx:M.x, sz:M.z};
+      try{ return _gt.apply(this, arguments); }catch(e){ KB_CTX=keep; throw e; } }; }
+  try{ Object.assign(window, {kbHit, kbDepth, kbPfFurn}); }catch(e){}
+}
+
+/* ============================================================
+   v1.5.3 みんな あらう（X ナコスさん 10/17 2:28・board x_naco_washall1017）
+   ・1.5.2 で うえの ゆっくりの なまえが「いまの子 ▼」1つに なったので、あらう たびに 一覧を ひらく ことに なっていた
+   → おせわに「🫧 みんな あらう」（2ひき いじょう いる とき）。いきている・おでかけ／おしごと ちゅう で ない 子を じゅんばんに あらう
+   ・WASHALL.on=false で もとどおり
+   ============================================================ */
+const WASHALL = { on:true, gap:.45 };
+if(WASHALL.on && typeof doWash==='function'){
+  function waTargets(){ const out=[]; for(let j=0;j<(S.yk||[]).length;j++){ ykDo(j,()=>{ const y=S.yk[YK_I]||{}; if(!isDead() && !y.away && !y.job && !M.hidden) out.push(y.id); }); } return out; }
+  function washAll(){
+    closeSheet();
+    const ids=waTargets(); if(!ids.length){ toast('あらえる 子が いません'); return 0; }
+    ids.forEach((id,k)=>setTimeout(()=>{ try{ ykDoById(id, ()=>{ if(!isDead()) doWash(); }); }catch(e){ console.warn('[washall]', e); } }, k*WASHALL.gap*1000));
+    return ids.length;
+  }
+  { const _f=openSubSheet; openSubSheet=function(kind, btn){
+      const r=_f.apply(this, arguments);
+      try{ if(kind==='care' && sheetKind==='play' && (S.yk||[]).length>=2){
+        const top=sheet.querySelector('.care-top'), w=top && top.querySelector('[data-wash]');
+        if(top && w && !top.querySelector('[data-washall]')){
+          const x=document.createElement('button'); x.type='button'; x.dataset.washall='1';
+          x.innerHTML=`<span class="ic">🫧</span>みんな<br>あらう<small>${waTargets().length}ひきを じゅんばんに</small>`;
+          x.addEventListener('click', ()=>washAll());
+          w.insertAdjacentElement('afterend', x);
+          if(typeof kanjiApply==='function'){ try{ kanjiApply(top); }catch(e){} }
+        } } }catch(e){ console.warn('[washall] sheet', e); }
+      return r; }; }
+  if(typeof QB_ACTS!=='undefined') QB_ACTS.washAll={cat:'おせわ', name:'みんな あらう', run:()=>washAll(), emo:'🫧'};
+  try{ Object.assign(window, {washAll}); }catch(e){}
+}
+
+/* ============================================================
+   v1.5.3 おはかの いちらん（X ベーグル眠りさん 10/17 1:34・board x_bagel_ohaka1017）
+   要望：えいえんに ゆっくりした 子の おはか（いちらん）。のこす／のこさない を えらびたい
+         （ざつに しちゃった 子の おはかは いらない。ふつうに かわいがっていた 子の きろくを のこしたい）
+   ・しんだ ときに きろくを つくる（なまえ・しゅるい・いきた 日・しんだ わけ・なつき・ひづけ）
+   ・「うめてあげる」「おわかれ」の あとに「おはかの いちらんに のこす？」を きく（🪦 のこす／のこさない）
+     こたえない まま とじたら のこす（あとから けせる）
+   ・にっし に「🪦 おはか（Nにん）」。いちらんで 1にんずつ けせる（2かい おす）
+   ・OHAKA.on=false で もとどおり
+   ============================================================ */
+const OHAKA = { on:true, max:200 };
+if(OHAKA.on){
+  function ohList(){ if(!Array.isArray(S.ohaka)) S.ohaka=[]; return S.ohaka; }
+  function ohFind(id){ return ohList().find(e=>e.yk===id && !e.gone); }
+  // しんだ ときに きろく
+  { const _d=die; die=function(cause){
+      const was=isDead(); const r=_d.apply(this, arguments);
+      try{ if(!was && isDead()){
+        const y=(S.yk||[])[YK_I]||{}, p=(typeof PS==='function'?PS():{})||{};
+        const L=ohList(); if(!(y.id && ohFind(y.id))){
+          L.push({yk:y.id||uid(), name:S.me||SPECIES[S.sp||'maricha'].name, sp:S.sp||'maricha', days:(S.dead&&S.dead.days)||1, cause:cause||'', t:Date.now(), natsu:Math.round(p.natsu||0), lv:S.lv||1, keep:null});
+          while(L.length>OHAKA.max) L.shift(); }
+      } }catch(e){ console.warn('[ohaka] die', e); }
+      return r; }; }
+  // のこす？ を きく
+  function ohAsk(id){
+    const e=ohFind(id); if(!e || e.keep!==null || e._asking) return; e._asking=true;
+    setTimeout(()=>{
+      try{
+        openSheet('ohaka-ask', `<div class="sheet-h"><h2>🪦 おはか</h2><button class="x" type="button" aria-label="とじる">✕</button></div>
+          <p class="memo" style="font-size:14px;line-height:1.7"><b>${escapeHtml(e.name)}</b>（${escapeHtml(SPECIES[e.sp]?SPECIES[e.sp].name:'')}・${e.days}にち）の おはかを、にっしの「おはか」いちらんに のこしますか？</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn" data-oh="keep">🪦 のこす</button><button type="button" class="btn" data-oh="drop">のこさない</button></div>
+          <p class="edit-help">あとから にっしの「おはか」で けすことも できます</p>`);
+        sheet.querySelectorAll('[data-oh]').forEach(b=>b.addEventListener('click',()=>{
+          if(b.dataset.oh==='keep'){ e.keep=true; toast('おはかに のこしたよ'); }
+          else { e.keep=false; e.gone=true; toast('のこさなかった'); }
+          save(); closeSheet(); }));
+      }catch(err){ console.warn('[ohaka] ask', err); }
+    }, 900);
+  }
+  if(typeof byBury==='function'){ const _bb=byBury; byBury=function(){
+      const i=S.yk.findIndex(y=>y.dead && y.dead.grave && !y.dead.cleared); const id=i>=0 ? S.yk[i].id : null;
+      const r=_bb.apply(this, arguments); if(id) ohAsk(id); return r; }; }
+  if(typeof ykRemove==='function'){ const _yr=ykRemove; ykRemove=function(i){
+      const y=S.yk[i], id=(y && y.dead) ? y.id : null;
+      const r=_yr.apply(this, arguments); if(id && !S.yk.some(v=>v.id===id)) ohAsk(id); return r; }; }
+  // ひとりの ときの「あたらしい子を むかえる」も きく
+  if(typeof openDeathSheet==='function'){ const _ds=openDeathSheet; openDeathSheet=function(){
+      const r=_ds.apply(this, arguments);
+      try{ const id=((S.yk||[])[YK_I]||{}).id; const b=sheet.querySelector('#dead-new'); const e=id && ohFind(id);
+        if(b && e && e.keep===null){
+          const box=document.createElement('div'); box.style.cssText='margin:8px 0;display:flex;gap:8px;flex-wrap:wrap;align-items:center';
+          box.innerHTML='<span style="font-size:13px">おはかの いちらんに：</span><button type="button" class="btn" data-oh="keep">🪦 のこす</button><button type="button" class="btn" data-oh="drop">のこさない</button>';
+          b.insertAdjacentElement('beforebegin', box);
+          box.querySelectorAll('[data-oh]').forEach(x=>x.addEventListener('click',()=>{ if(x.dataset.oh==='keep'){ e.keep=true; } else { e.keep=false; e.gone=true; }
+            box.innerHTML=`<span style="font-size:13px">${e.keep?'🪦 おはかに のこしました':'のこしませんでした'}</span>`; save(); }));
+        } }catch(err){ console.warn('[ohaka] death', err); }
+      return r; }; }
+  // にっし → おはか
+  function ohShown(){ return ohList().filter(e=>!e.gone); }
+  function openOhaka(){
+    const L=ohShown().slice().reverse();
+    const row=e=>{ const d=new Date(e.t); const ds=`${d.getMonth()+1}/${d.getDate()}`;
+      return `<li style="display:flex;gap:8px;align-items:center;padding:6px 0;border-bottom:1px dashed #d8cbb8">
+        <span style="font-size:20px">🪦</span>
+        <span style="flex:1;font-size:13px;line-height:1.5"><b>${escapeHtml(e.name)}</b>（${escapeHtml(SPECIES[e.sp]?SPECIES[e.sp].name:'')}）　${e.days}にち いきた<br>
+        <small>${escapeHtml(DEATH_CAUSE[e.cause]||'')}　・　なつき ${e.natsu}　・　${ds}</small></span>
+        <button type="button" class="btn" data-ohdel="${e.yk}" style="font-size:12px">けす</button></li>`; };
+    openSheet('ohaka', `<div class="sheet-h"><h2>🪦 おはか</h2><button class="x" type="button" aria-label="とじる">✕</button></div>
+      <p class="memo">えいえんに ゆっくりした 子の きろく（${L.length}にん）。のこしたくない 子は「けす」を 2かい おすと きえます</p>
+      <ul style="list-style:none;margin:0;padding:0">${L.map(row).join('') || '<li style="padding:8px 0;font-size:13px">まだ おはかは ありません</li>'}</ul>
+      <div style="margin-top:8px"><button type="button" class="btn" data-ohback="1">← にっしに もどる</button></div>`);
+    sheet.querySelectorAll('[data-ohdel]').forEach(b=>{ let armed=false; b.addEventListener('click',()=>{
+      if(!armed){ armed=true; b.textContent='ほんとうに？'; return; }
+      const e=ohList().find(v=>String(v.yk)===b.dataset.ohdel && !v.gone); if(e){ e.gone=true; e.keep=false; save(); }
+      const li=b.closest('li'); if(li) li.remove(); }); });
+    sheet.querySelector('[data-ohback]')?.addEventListener('click',()=>{ closeSheet(); openDiary(); });
+  }
+  { const _od=openDiary; openDiary=function(btn){
+      const r=_od.apply(this, arguments);
+      try{ if(sheetKind==='diary' && !sheet.querySelector('[data-ohopen]')){
+        const memo=sheet.querySelector('p.memo'); const n=ohShown().length;
+        if(memo && n>0){ const b=document.createElement('button'); b.type='button'; b.className='btn'; b.dataset.ohopen='1'; b.style.cssText='margin:4px 0 6px';
+          b.textContent=`🪦 おはか（${n}にん）`; b.addEventListener('click',()=>{ closeSheet(); openOhaka(); }); memo.insertAdjacentElement('afterend', b); } } }catch(e){ console.warn('[ohaka] diary', e); }
+      return r; }; }
+  try{ Object.assign(window, {openOhaka, ohList, ohAsk}); }catch(e){}
+}
+
+/* ============================================================
+   v1.5.3「しんでしまう」OFF なのに じゅみょうで しぬ（BOOTH 寿司ししゃもさん 10/17 6:58「ON の水槽から OFF の水槽に移動した際に発生」
+     ・board bt_sushi1017_deathoff）
+   げんいん：じゅみょうの さいご（byJumyo）は はじまる ときだけ deathOn() を みて いた。はじまったら 12びょう ごの die() は
+             その ときの せってい を みない。ON の すいそうで はじまって（るすの あいだの ぶん も ふくむ）から
+             OFF の すいそうへ うつった／きりかえた ときも、そのまま しんで いた
+   → die() の まえに「いま この 子が いる すいそう」の せってい を みる。OFF なら じゅみょう・おたべなさい の さいご を とりやめて、
+     「まだ ゆっくり できる」に もどす（ほかの しにかたは もともと けんこう 8 で とまる ので さわらない）
+   ・DOFF.on=false で もとどおり
+   ============================================================ */
+const DOFF = { on:true, causes:new Set(['jumyo','otabe']) };
+if(DOFF.on){
+  Object.assign(L, { doffAlive:["ゆ…？ {me}… まだ ゆっくり できる[のじぇ]…？","ゆぅ… もうすこし… いっしょに いる[のじぇ]…"] });
+  { const _d=die; die=function(cause){
+      try{
+        if(!deathOn() && DOFF.causes.has(cause) && !isDead()){
+          const p=BY(); p.jiseiT=0;
+          if(M.state==='jisei') setState('idle', 3);
+          M.tears=0; express('worry', 2.4);
+          setTimeout(()=>{ try{ if(!isDead() && bubbleT<=0) say('doffAlive',{cls:'soft'}); }catch(e){} }, 300);
+          note(`${S.me||'まりちゃ'}は じゅみょうを むかえたけど、この すいそうは「しなない」なので まだ いっしょに くらせる。`);
+          return; }
+      }catch(e){ console.warn('[doff]', e); }
+      return _d.apply(this, arguments); }; }
+  if(typeof jmOtabeGo==='function'){ const _og=jmOtabeGo; jmOtabeGo=function(eaterId, deadId){ const y=(S.yk||[]).find(v=>v.id===deadId); if(!y || !y.dead) return; return _og.apply(this, arguments); }; }
+  // じせいの とちゅうで OFF に なったら（すいそうを うつった・きりかえた）その ばで とりやめる
+  setInterval(()=>{ try{ if(!S.yk) return; for(let j=0;j<S.yk.length;j++) ykDo(j,()=>{ if(!isDead() && M.state==='jisei' && !deathOn()){ BY().jiseiT=0; setState('idle',3); } }); }catch(e){} }, 1000);
+}
+
+/* ============================================================
+   v1.5.3 ぜんりょうな わさの おうた（BOOTH 寿司ししゃもさん 10/17 6:58・board bt_sushi1017_wasasong）
+   「わさのコンサートが善良なのにゲスと同じ騒音になる」「善良な子はコンサートのあとに威張るのではなくお礼を」
+   ・しらべ：あいぢょりゅ らいぶ（wasaIdol）は 1.4.4 から ずっと、ゲス度に かかわらず おんち（のこぎり波の はずれた おと）だった
+   → ゲス度 30 みまん の わさは：ただしい おとの やさしい おうた（ふつうの まるい おと・♪）＋せりふも ふつうの おうた
+     ほめられたら どやがお ではなく「ありがちょ」（ゲス度も ふえない）
+   ・ゲス度 30 いじょう は いままで どおり（おんち・どや）
+   ・WSONG.on=false で もとどおり
+   ============================================================ */
+const WSONG = { on:true, good:30, log:[] };
+if(WSONG.on && typeof wasaOnchiSfx==='function'){
+  Object.assign(SPECIES.wasa.L, {
+    wsUta:["ゆ〜ゆ〜ゆ〜♪ ゆっくち〜 していっちぇ〜♪","ら〜ら〜ら〜♪ みんにゃで〜 ゆっくち〜♪","ゆっゆっゆ〜♪ きょうも〜 ゆっくち〜♪"],
+    wsThanks:["みんにゃ ありがちょ[ね]！ {me}… うれちい[よ]！","きいちぇくれちぇ ありがちょ[ね]！ またうたう[よ]！"],
+  });
+  function wsGood(){ try{ return (S.sp==='wasa') && (PS().gesu||0) < WSONG.good; }catch(e){ return false; } }
+  let WS_NOGESU=0;
+  { const _s=say; say=function(k, o){
+      try{ if(k==='wsOnchi' && wsGood()) k='wsUta';
+        else if(k==='wsDoya' && wsGood()){ k='wsThanks'; WS_NOGESU=2; setTimeout(()=>{ try{ express('joy', 2.5); }catch(e){} }, 0); } }catch(e){}
+      if(/^ws/.test(k)) { WSONG.log.push(k); if(WSONG.log.length>40) WSONG.log.shift(); }
+      return _s.call(this, k, o); }; }
+  { const _p=psAdd; psAdd=function(k, d){ if(WS_NOGESU>0 && k==='gesu' && d>0){ WS_NOGESU=0; return; } if(WS_NOGESU>0) WS_NOGESU--; return _p.apply(this, arguments); }; }
+  { const _sf=wasaOnchiSfx; wasaOnchiSfx=function(){
+      if(!wsGood()) return _sf.apply(this, arguments);
+      if(typeof tone!=='function') return;
+      try{ const base=[523,587,659,698,784,880], seq=[0,2,4,5,4,2,1,0];   // ドミソラソミレド
+        seq.forEach((n,i)=>{ const f=base[n]; tone(f, f, .26, 'sine', .05, i*.24); }); }catch(e){} }; }
+  { const _wn=wasaNotes; wasaNotes=function(n){
+      if(!wsGood()) return _wn.apply(this, arguments);
+      try{ const b=mariBox(); for(let i=0;i<n;i++) setTimeout(()=>{ try{ fxText(pick(['♪','♫','♪','♬']), b.x+rnd(-26,26), b.top-8-rnd(0,16), {size:rnd(14,18), color:pick(['#e07aa8','#7a5bb0','#5aa0c8']), vx:rnd(-12,12)}); }catch(e){} }, i*260); }catch(e){} }; }
+  try{ Object.assign(window, {wsGood}); }catch(e){}
+}
+
+/* ============================================================
+   v1.5.3 トイレの うんうんが トイレに めりこむ（BOOTH 寿司ししゃもさん 10/17 6:58「うんうんがトイレの上に乗らずに、
+     テクスチャ的に下へといってしまう」・board bt_sushi1017_toilet）
+   げんいん：うんうんは ゆかの おくゆき（z）の じゅんに かく。トイレの うんうんは トイレの まんなか ±すこし に おくので、
+             トイレより おく（z が ちいさい）の うんうんは トイレの え の したに かくれ、てまえの ものも ふちに かくれて いた
+   → トイレの うんうんは、トイレを かいた すぐ あとに トイレの すなの うえに かく（すこし うえに あげる）
+     トイレが ない（かたづけた）ときは いままで どおり
+   ・TPOOP.on=false で もとどおり
+   ============================================================ */
+const TPOOP = { on:true, lift:3 };
+if(TPOOP.on){
+  let TP_IN=false;
+  function tpToilet(){ try{ return objsOf('toilet')[0] || null; }catch(e){ return null; } }
+  { const _dp=drawPoop; drawPoop=function(p, q){ if(q && q.toilet && !TP_IN && tpToilet()) return; return _dp.apply(this, arguments); }; }
+  { const _do=drawObj; drawObj=function(o, layer){
+      const r=_do.apply(this, arguments);
+      try{ if(o && o.type==='toilet' && S.poops && S.poops.length){
+        const L=S.poops.filter(q=>q.toilet).map(q=>({q, p:toW(q.u,q.v)})).sort((a,b)=>a.p.z-b.p.z);
+        if(L.length){ TP_IN=true; try{ for(const {q,p} of L){ const ds=depthScale(p.z); drawPoop({x:p.x, z:p.z - TPOOP.lift*ds}, q); } } finally{ TP_IN=false; } }
+      } }catch(e){ TP_IN=false; console.warn('[tpoop]', e); }
+      return r; }; }
+}
+
+/* ============================================================
+   v1.5.3 にとり：じぶんで りくに あがって あそぶ／みずを こわがらない
+   （BOOTH 寿司ししゃもさん 10/17 6:58・board bt_sushi1017_predact／bt_sushi1017_nitoriwater）
+   「にとりは水中のあるステージだとブラックホールのように吸い込まれてアクション不可能」「水上まりさと同じように自分から地上に上がれると解決するかも」
+   「にとりが水を怖がる（かっぱの川）。つむり種と同じ不具合」
+   しらべ（かっぱの かわ・にとり 1ぴき・40びょう）：ずっと みずの なか（pm fly）で、べんきょう・あそび・家具 は いちども しない。
+     canSwimSp('nitori') が false（およげない 子 あつかい）→ りくで みずに ちかづくと「ここから さきは あぶない」
+   → ・おなかが すいて いない にとりは、みずに 25〜50びょう いたら りくへ あがって 40〜80びょう ふつうの ゆっくり と おなじ ように すごす
+       （べんきょう・あそび・家具・なかま。みずの そとでも かわいて よわらない）。おなかが すいたら・じかんが きたら みずへ もどる
+     ・みずの 捕食種は およげる 子 あつかい（canSwimSp）。「あぶない」は いわない
+   ・NITL.on=false で もとどおり
+   ============================================================ */
+const NITL = { on:true, water:[25,50], land:[40,80] };
+if(NITL.on && typeof predWaterBrain==='function'){
+  function nlWaterPred(){ try{ return typeof isPred==='function' && isPred() && predDef().kind==='water'; }catch(e){ return false; } }
+  { const _cs=canSwimSp; canSwimSp=function(sp){ try{ if(typeof PRED_DEF!=='undefined' && PRED_DEF[sp||S.sp] && PRED_DEF[sp||S.sp].kind==='water') return true; }catch(e){} return _cs.apply(this, arguments); }; }
+  { const _s=say; say=function(k){ if(k==='lakeScared' && nlWaterPred()) return; return _s.apply(this, arguments); }; }
+  function nlShore(){
+    // みずの そとで、いちばん ちかい ゆか（さく・しきりを こえない）
+    let best=null, bd=1e9;
+    for(let k=0;k<60;k++){ const a=k/60*Math.PI*2, r=40+(k%6)*28, x=clamp(M.x+Math.cos(a)*r, XMIN+20, XMAX-20), z=clamp(M.z+Math.sin(a)*r*.5, FLOOR_TOP+10, FLOOR_BOT-8);
+      if(typeof waterAt==='function' && waterAt(x, z)) continue;
+      try{ if(typeof nitReach==='function' && !nitReach(M.x, M.z, x, z)) continue; }catch(e){}
+      const d=Math.hypot(x-M.x, (z-M.z)*1.6); if(d<bd){ bd=d; best={x, z}; } }
+    return best;
+  }
+  { const _wb=predWaterBrain; predWaterBrain=function(dt, d, p){
+      try{
+        if(M.lifted || M._carried) return _wb.apply(this, arguments);
+        const L=M._nl || (M._nl={mode:'water', t:0, dur:rnd(NITL.water[0], NITL.water[1])});
+        L.t+=dt;
+        const inW = typeof nitInW==='function' ? nitInW(M.x, M.z) : !!waterAt(M.x, M.z);
+        if(L.mode==='water'){
+          if(inW && (M.pm||'fly')==='fly' && !predHungry() && L.t>L.dur){ const s=nlShore(); if(s){ L.mode='go'; L.t=0; L.to=s; } else L.t=0; }
+          return _wb.apply(this, arguments);
+        }
+        if(L.mode==='go'){
+          M.hover=true; M.h=0; M.pm='fly';
+          if(typeof nitStep==='function') nitStep(M.x, M.z, L.to.x, L.to.z, 50*(d.speed||1), dt);
+          if(L.t>12 && inW){ L.mode='water'; L.t=0; L.dur=rnd(NITL.water[0], NITL.water[1]); return _wb.apply(this, arguments); }
+          if((Math.hypot(L.to.x-M.x, L.to.z-M.z)<6 || L.t>12) && !inW){ L.mode='land'; L.t=0; L.dur=rnd(NITL.land[0], NITL.land[1]); M.hover=false; M.h=0; M.pm=null; setState('idle', 1.5);
+            if(bubbleT<=0) predSay('idle'); }
+          return;
+        }
+        if(L.mode==='land'){
+          if(inW){ L.mode='water'; L.t=0; L.dur=rnd(NITL.water[0], NITL.water[1]); M.pm='fly'; return _wb.apply(this, arguments); }   // みずに はいったら およぐ（しずまない）
+          M.hover=false; M.h=0; M.pm=null;
+          if(predHungry() || L.t>L.dur){ L.mode='water'; L.t=0; L.dur=rnd(NITL.water[0], NITL.water[1]); M.pm='fly'; return _wb.apply(this, arguments); }
+          return 'normal';
+        }
+      }catch(e){ console.warn('[nitl]', e); }
+      return _wb.apply(this, arguments); }; }
+  // りくに いる あいだは、ほかの しくみ（みずへ もどす）より さきに「ふつう」
+  try{ Object.assign(window, {nlWaterPred}); }catch(e){}
+}
+
+/* ============================================================
+   v1.5.3 にわの おやさい：かいゆっくりが かってに たべる（BOOTH 寿司ししゃもさん 10/17 6:58・board bt_sushi1017_vegnora）
+   「飼っているゆっくりが勝手に食べ、恐らく野良ゆっくりが本来言う台詞を言いながら食べてしまう」
+   ・しらべ：にわの せつめいは「ゆっくりや のらが かってに たべる ことも」（しよう）。ただ、かいゆっくりも のらと おなじ
+     「ここは まりちゃの ゆっくりぷれいす！ おやさいさんは かってに はえてくる！」（はたけあらしの せりふ）で たべていた
+   → ・なついていて（なつき 50いじょう）ゲスで ない（ゲス度 30みまん）子は、おなかが ぺこぺこ（まんぷく 25みまん）で ない かぎり たべない
+     ・ゲス度 45みまん の かいゆっくりが たべる ときは「たべちゃった…」の せりふ（はたけあらしの せりふは ゲスと のら だけ）
+   ・のらが こない（かいゆっくりが さいだい の とき／にとりが いる とき）は いまの しよう：のらも すいそうの 1ぴき として はいるので、
+     いっぱいの ときは はいる ばしょが ない（カードに かいた）
+   ・VEGPET.on=false で もとどおり
+   ============================================================ */
+const VEGPET = { on:true, natsu:50, gesu:30, starving:25 };
+if(VEGPET.on && typeof st2TryEat==='function' && typeof st2Veg==='function'){
+  Object.assign(L, { st2VegEatPet:["おやさいさん… たべちゃった[のじぇ]… おいしい[のじぇ]…","ゆぅ… おなか すいてたから… ちょっとだけ[なのじぇ]…"] });
+  function vpNora(){ try{ const y=(S.yk||[])[YK_I]; return !!(y && y.st2); }catch(e){ return false; } }
+  function vpGood(){ try{ const p=PS(); return !vpNora() && (p.natsu||0)>=VEGPET.natsu && (p.gesu||0)<VEGPET.gesu; }catch(e){ return false; } }
+  { const _t=st2TryEat; st2TryEat=function(){
+      if(vpGood() && (S.full||0)>=VEGPET.starving){ const _v=st2Veg; st2Veg=function(){ return null; }; try{ return _t.apply(this, arguments); } finally{ st2Veg=_v; } }
+      return _t.apply(this, arguments); }; }
+  { const _s=say; say=function(k, o){
+      try{ if(k==='st2VegEat' && !vpNora() && (PS().gesu||0)<45) k='st2VegEatPet'; }catch(e){}
+      return _s.call(this, k, o); }; }
+  try{ Object.assign(window, {vpGood}); }catch(e){}
+}
+
+/* ============================================================
+   v1.5.3 はねを ちぎった 捕食種（BOOTH 寿司ししゃもさん 10/17 6:58・board bt_sushi1017_wingoff）
+   「飛行種は羽をちぎると完全に通常種状態になる。捕食行動は行わず、夜行性のれみふらも夜には寝るようになります」
+   ・しらべ：はねが ない とき（predCanFly=false）の のうみそ predGroundBrain は「ふつうの ゆっくりと おなじ」を かえす だけ だった
+   → はねが なくても 捕食種の まま：
+     ・おなかが すいて いて（かりの じかん：れみりゃ・ふらんは よる）ちかくに えものが いれば、はって ちかづいて かみつく
+       （なかまどうしの かみつきと おなじ しくみ。ひきはなせる。たべおわったら おなかが みちる）
+     ・よるに うごく しゅぞく（れみりゃ・ふらん）は、よるは ねない（めを さます）。ひるに ときどき ひるね
+   ・PGND.on=false で もとどおり
+   ============================================================ */
+const PGND = { on:true, huntRate:.12, napRate:.02 };
+if(PGND.on && typeof predGroundBrain==='function'){
+  Object.assign(L, { pgHunt:["…おなか すいた… えもの… みつけた…","はね なくても… かれる[のじぇ]…"], pgNightWake:["よるは… {me}の じかん…","…ねむく ない…"] });
+  { const _g=predGroundBrain; predGroundBrain=function(dt, d, p){
+      const r=_g.apply(this, arguments);
+      try{
+        if(isDead() || M.lifted || M._carried) return r;
+        // よるの しゅぞく：よるは ねない／ひるは ときどき ひるね
+        if(d.night){
+          if((M.state==='sleep' || M.state==='nap') && (isNight() || (typeof isDark==='function' && isDark())) && !M.inHouse){ setState('idle', 2); if(bubbleT<=0 && chance(.5)) predSay('pgNightWake',{cls:'soft'}); }
+          else if(!isNight() && M.state==='idle' && chance(dt*PGND.napRate) && typeof setState==='function'){ setState('nap', rnd(20,40)); }
+        }
+        // かり：おなかが すいて いて、かりの じかん
+        if(predHungry() && predNightOk(d) && ['idle','look','explore'].includes(M.state) && !M.next && chance(dt*PGND.huntRate)){
+          const j=predPick();
+          if(j>=0 && typeof fightStart==='function'){ M._pgHunt={id:S.yk[j].id, t:T}; predSay('pgHunt',{cls:'shout'}); fightStart(YK_I, j, 'bite'); }
+        }
+      }catch(e){ console.warn('[pground]', e); }
+      return r; }; }
+  // かみつきが おわったら（えものが よわった／しんだ）おなかが みちる
+  if(typeof fightTick==='function'){ const _ft=fightTick; fightTick=function(dt){
+      const F=M.fight, was=!!(F && F.role==='atk' && M._pgHunt);
+      const r=_ft.apply(this, arguments);
+      try{ if(was && !M.fight && typeof isPred==='function' && isPred()){ const p=BY(); p.pFull=Math.min(100, (p.pFull||0)+45); M._pgHunt=null; predSay('predFull',{cls:'shout'}); } }catch(e){}
+      return r; }; }
+}
+
+/* ============================================================
+   v1.5.3 ステージ第2弾：てまえまで 家具が おけない（BOOTH 寿司ししゃもさん 10/17 6:58・board bt_sushi1017_frontplace）
+   ・しらべ：にわ・おやしきの にわ・たけばやし・ちゅうしゃじょう・ゆきの よる は、え では じめんが いちばん てまえ まで
+     つづいて いるのに、ゆか（FLOOR_BOT）は え の まんなか あたり（front 650）で おわって いた
+     （家具・ゆっくり・もようがえ は ゆかの なか だけ。もりの しっち・ろじうら と おなじ もんだい）
+   → しっち・ろじうら と おなじ しくみ（zz_v141_shore の SH_DRY）で、ゆかを ガラスの すぐ うちがわ まで のばす
+     ・おくゆきの おおきさは え の おなじ ところで いままでと おなじ（とおくの ものが きゅうに おおきく ならない）
+     ・はじめて のばした とき、いま おいてある もの（家具・ビーだま・うんうん・ごはん）は え の おなじ ばしょに のこす（v を ちぢめる）
+     ・かっぱの かわ は てまえが かわ（みず）なので そのまま
+   ・ST2F.on=false で もとどおり
+   ============================================================ */
+const ST2F = { on:true, stages:{niwa:1000, yashiki:1000, take:1000, chusha:1000, yuki:1000} };
+if(ST2F.on && typeof SH_DRY==='object'){ Object.assign(SH_DRY, ST2F.stages); }
+
+/* ============================================================
+   v1.5.3 とぶ 捕食種が じぶんで じめんに おりる（BOOTH 寿司ししゃもさん 10/17 6:58・board bt_sushi1017_predact）
+   「飛行しているきめぇ丸・ふらん・れみりゃは既存のアクションがほぼできない。羽をむしって地上に下ろすとできる」
+   ・しらべ：とべる あいだは 捕食種の のうみそ（predBrain）が ずっと うごかしていて、ふつうの のうみそ（あそぶ・かぐ・おせわ）に
+     まわる ことが なかった（羽が ない ときだけ predGroundBrain が 'normal' を かえす）
+   → おなかが すいていない（または かりの じかんで ない）ときは、ときどき じぶんで じめんに おりて しばらく ふつうの ゆっくりと
+     おなじように すごす（あそぶ・かぐ・おせわが できる）。羽は たたむ
+   ・おなかが すいて かりの じかんに なった／じかんが きた（40〜90びょう）ら また とぶ。ねている・べんきょう・おうちの なかでは とばない
+   ・あそぶ・おせわの シートを ひらいた ときも、すぐに おりてくる（かり・つかみ ちゅうは のぞく）
+   ・FLAND.on=false で もとどおり
+   ============================================================ */
+const FLAND = { on:true, rate:.035, minFly:8, ground:[40,90], descend:90, log:[] };
+if(FLAND.on && typeof predBrain==='function'){
+  Object.assign(L, { flLand:["ちょっと… おりる[のじぇ]…","ふぅ… ひとやすみ…"], flUp:["また とぶ[のじぇ]！","おそら… いく…"] });
+  const busy = ()=>['hunt','carry','suck','lurk','kyGo','kyStudy','toPerch','perch','crash'].includes(M.pm) || M._carried || M.lifted;
+  const stay = ()=>['sleep','nap','study','house','sleepHouse','box','trapped','yaki','shock','eat','play','toilet'].includes(M.state) || M.inHouse || M.boxed;
+  function flLandStart(fast){
+    const x=clamp(M.x, XMIN+40, XMAX-40), z=clamp(M.z, FLOOR_TOP+12, FLOOR_BOT-10);
+    M.pm='landGo'; M.pt=0; M.pLand={x, z, fast:!!fast}; M.pW=null;
+  }
+  Object.assign(window, { flLandStart });
+  const _pb=predBrain; predBrain=function(dt, d, p){
+    try{
+      d=d||predDef(); p=p||BY();
+      if(isPred() && d && d.kind==='fly' && predCanFly()){
+        const huntTime = predHungry() && predNightOk(d);
+        if(M.pm==='landGo' && M.pLand){
+          M.pt=(M.pt||0)+dt; M.hover=true; p.pFull=Math.max(0, predFull()-dt*.18);
+          const q=M.pLand, k=Math.min(1, dt*(q.fast?3:1.2));
+          M.x+=(q.x-M.x)*k; M.z+=(q.z-M.z)*k; M.h=Math.max(0, M.h-dt*FLAND.descend*(q.fast?2.5:1)); M.rot=0;
+          if(M.h<=1 || M.pt>6){
+            M.h=0; M.vh=0; M.hover=false; M.pm='land'; M.pt=0; M.pLand=null; M.pGT=rnd(FLAND.ground[0], FLAND.ground[1]);
+            if(M.state==='move'){ M.state='idle'; M.stT=0; M.stDur=2; M.next=null; }
+            FLAND.log.push('land'); if(bubbleT<=0) predSay('flLand',{cls:'soft'});
+          }
+          return 'landGo';
+        }
+        if(M.pm==='land'){
+          M.hover=false; p.pFull=Math.max(0, predFull()-dt*.18);
+          S.full=Math.max(S.full||0, Math.min(100, p.pFull+30));
+          M.pGT=(M.pGT||0)-dt;
+          if((huntTime || M.pGT<=0) && !stay() && !M.fight){
+            M.pm='fly'; M.pt=0; M.hover=true; if(M.h<30) M.h=30; M.state='idle'; M.stT=0; M.stDur=3; M.next=null; M.target=null;
+            FLAND.log.push('up'); if(bubbleT<=0) predSay('flUp',{cls:'soft'});
+            return _pb.apply(this, arguments);
+          }
+          return 'normal';
+        }
+        if(M.pm==='fly' && !huntTime && M.pt>FLAND.minFly && !busy() && chance(dt*FLAND.rate)){ flLandStart(false); return 'landGo'; }
+      } else if(M.pm==='land' || M.pm==='landGo'){ M.pm='fly'; M.pLand=null; }
+    }catch(e){ console.warn('[flyland]', e); }
+    return _pb.apply(this, arguments);
+  };
+  // じめんでは 羽を たたむ
+  if(typeof predFlap==='function'){ const _pf=predFlap; predFlap=function(){ if(M.pm==='land') return .05; if(M.pm==='landGo') return .18+Math.sin(T*8)*.3; return _pf.apply(this, arguments); }; }
+  // シートを ひらいたら おりてくる
+  const flSheet=()=>{ try{ if(isPred() && predDef().kind==='fly' && predCanFly() && M.pm==='fly' && !busy()) flLandStart(true); }catch(e){} };
+  if(typeof openPlaySheet==='function'){ const _f=openPlaySheet; openPlaySheet=function(){ flSheet(); return _f.apply(this, arguments); }; }
+  if(typeof openCareSheet==='function'){ const _f=openCareSheet; openCareSheet=function(){ flSheet(); return _f.apply(this, arguments); }; }
+  if(typeof statusText==='function'){ const _st=statusText; statusText=function(){ try{ if(typeof isPred==='function' && isPred()){ if(M.pm==='land' && M.state==='idle') return 'じめんで ひとやすみ'; if(M.pm==='landGo') return 'じめんに おりてくる'; } }catch(e){} return _st.apply(this, arguments); }; }
+}
+
+/* ============================================================
+   v1.5.3 からだが きえて 羽だけ になる への そなえ（BOOTH mora3さん 10/17 9:05・board bt_mora3_wingonly1017）
+   「飛べる捕食種全部、爪楊枝が刺さっていたりお飾りがなんらかの破損状態にあると、羽部分しか表示されない」
+   ・しらべ：PC の Chromium（ふつう・メモリせつやく・1.5.2 公開版）では、こげ・やぶれ・とった・つまようじ どれも からだが でた（再現せず）
+   ・羽は まいかい パックの 絵から じかに かく。からだは「こわれた おかざり」などの とき 加工した 絵（variantSprite の canvas）を つかい、
+     いちど つくると とっておく（VAR_CACHE）。パックの 絵が まだ ひらいていない（スマホで あとから ひらく・メモリで すてられた）
+     しゅんかんに つくると、からっぽの 絵が とっておかれて、そのあと ずっと からだだけ でない おそれ が ある
+   → 加工した 絵が からっぽ なら とっておかず、ふつうの 絵で かく（つぎの フレームで また つくりなおす）。あんよの かざり（anyoDecor）も おなじ
+   ・VG.on=false で もとどおり
+   ============================================================ */
+const VG = { on:true, log:[] };
+function vgInk(c){
+  if(!c || typeof c.getContext!=='function') return true;
+  if(c._vg!==undefined) return c._vg;
+  let ok=false;
+  try{ const w=c.width, h=c.height; if(w && h){ const d=c.getContext('2d').getImageData(0,0,w,h).data; for(let k=3;k<d.length;k+=32){ if(d[k]>20){ ok=true; break; } } } }
+  catch(e){ ok=true; }
+  c._vg=ok; return ok;
+}
+if(VG.on){
+  if(typeof variantSprite==='function'){ const _v=variantSprite; variantSprite=function(name){
+      const r=_v.apply(this, arguments);
+      try{ if(r && !vgInk(r)){ for(const k in VAR_CACHE) if(VAR_CACHE[k]===r) delete VAR_CACHE[k]; if(VG.log.length<50) VG.log.push('var:'+SPX+name); return null; } }catch(e){}
+      return r; }; }
+  if(typeof anyoDecor==='function'){ const _a=anyoDecor; anyoDecor=function(A){
+      const r=_a.apply(this, arguments);
+      try{ if(r && !vgInk(r)){ for(const k in ANYO_CACHE) if(ANYO_CACHE[k]===r) delete ANYO_CACHE[k]; if(VG.log.length<50) VG.log.push('anyo'); return null; } }catch(e){}
+      return r; }; }
+}
 
 /* ============================================================
    v1.3.7a セーブの もどしで きえる どうぐ（X さつま揚げ@ゆ虐さん 10/7「浮島や ハスの おうちが 再起動で きえる」）
