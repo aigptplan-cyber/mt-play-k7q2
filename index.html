@@ -22905,7 +22905,7 @@ function hogoAdopt(){
    ② 警告：公式で ない ウェブサイトで ひらかれた ときだけ、上に 小さな おしらせ（とじられる）
       公式＝ファイルを じかに ひらく（file:）／公式の ブラウザ版（aigptplan-cyber.github.io）／localhost
    ============================================================ */
-const SEC_MARK = 'mt-gh-162-851bee3b';                     // release.py が 配布ごとに おきかえる
+const SEC_MARK = 'mt-gh-162a-ca803799';                     // release.py が 配布ごとに おきかえる
 const SEC_OK_HOSTS = ['aigptplan-cyber.github.io', 'localhost', '127.0.0.1', ''];
 function secHost(){ return (window.__SEC_HOST!=null) ? window.__SEC_HOST : (location.protocol==='file:' ? '' : location.hostname); }
 function secOfficial(){ const h=secHost(); return SEC_OK_HOSTS.includes(h); }
@@ -52751,6 +52751,22 @@ if(SHOPHIDE.on && typeof SH_OBJ==='object'){
       return r; }; }
 }
 try{ Object.assign(window, {SHOPHIDE}); }catch(e){}
+
+/* ============================================================
+   1.6.2a ショップ「いじわる」タブの どうぐの 絵が でかすぎる（Nexus 10/26 22:14 スマホの スクショ「これアイコンデカすぎ 他のやつとちゃんと合わせて」）
+   ・げんいん：ほかの タブの カードの 絵は <canvas class="ic">（zz_v150_shopui.js の css は canvas.ic だけ）。
+     いじわるの カード（zz_v162_gyshop.js）は <img class="ic"> なので 大きさの きまりが きかず、絵の もとの 大きさで でていた
+   ・なおし：img.ic にも canvas.ic と おなじ 大きさの きまりを つける（ふつう 46px・スマホ 38px・PC 40px／はば 44px）
+   ・GYICON.on=false で もとどおり
+   ============================================================ */
+const GYICON = { on:true };
+if(GYICON.on){ try{ const st=document.createElement('style'); st.id='gyicon-css';
+  st.textContent=
+   '#shu .shu-card img.ic{height:46px;width:auto;display:block;margin:0 auto 2px;max-width:100%;object-fit:contain}'+
+   '#shu.sp .shu-card img.ic{height:38px;width:auto}'+
+   '#shu.pc .shu-card img.ic{height:40px;max-width:44px;grid-row:span 2;margin:0;justify-self:center}';
+  document.head.appendChild(st); }catch(e){ console.warn('[gyicon]', e); } }
+try{ Object.assign(window, {GYICON}); }catch(e){}
 
 /* ============================================================
    v1.3.7a セーブの もどしで きえる どうぐ（X さつま揚げ@ゆ虐さん 10/7「浮島や ハスの おうちが 再起動で きえる」）
