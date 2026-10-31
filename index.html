@@ -368,7 +368,7 @@ body.wide .act kbd{font-family:var(--ui); font-size:9.5px; color:var(--ink-soft)
 </div>
 
 <script>
-window.MT_VER="1.6.6";
+window.MT_VER="1.6.6a";
 "use strict";
 /* ============================================================
    素材
@@ -23015,7 +23015,7 @@ function hogoAdopt(){
    ② 警告：公式で ない ウェブサイトで ひらかれた ときだけ、上に 小さな おしらせ（とじられる）
       公式＝ファイルを じかに ひらく（file:）／公式の ブラウザ版（aigptplan-cyber.github.io）／localhost
    ============================================================ */
-const SEC_MARK = 'mt-gh-166-9812031e';                     // release.py が 配布ごとに おきかえる
+const SEC_MARK = 'mt-gh-166a-17870576';                     // release.py が 配布ごとに おきかえる
 const SEC_OK_HOSTS = ['aigptplan-cyber.github.io', 'localhost', '127.0.0.1', ''];
 function secHost(){ return (window.__SEC_HOST!=null) ? window.__SEC_HOST : (location.protocol==='file:' ? '' : location.hostname); }
 function secOfficial(){ const h=secHost(); return SEC_OK_HOSTS.includes(h); }
@@ -53666,6 +53666,11 @@ if(GYKICK.on && typeof GYI==='object' && typeof GYI_RUN==='object' && typeof TOO
 // パッチノートの データ（tools/mk_patchnote.py が pk の section.txt から つくる・てで かえない）
 const PATCH_NOTES = [
 {
+"v": "1.6.6a",
+"d": "2026/11/01",
+"t": "【ふえたこと】\n・せってい「草が生える」「木の実が落ちる」「虫が出る」を べつべつに、「この水槽」「全部の水槽」で 切り替えられます\n・捨てた子が すぐには 出ていかず、しばらく その場で すがります。放っておくと 野良として 住みつき、3回 しばくと 出ていきます\n【かわったこと】\n・ゆうかの 名前欄を「ゆうか」に しました（しゃべるときの「わたし」は そのまま）\n・ゲスの 野良は、ごはんより 先に 畑の おやさいを ねらいます\n【直したこと】\n・希少種が 新しい水槽の さいしょの子・からっぽの水槽・保護ゆ から 選べていた\n・水槽を ふやしたり 行き来したりすると、巣穴・木の上の おうちが できず てきとうな 場所で 寝ていた（夜に 作った水槽の さいしょの子も）\n・「しんでしまう」OFF なのに、くだしあまあまの 食べさせすぎで 死んでいた\n・あんよを 焼いた子が 寝ているときに 水槽を 行き来すると、寝床へ ワープしていた\n・ゆうかの 畑しごとが「おぼえ 0%」のままだった\n・畑の おやさいを「たべて いい」に している子が 食べても、「かってに たべた」になって ゲス度が 上がっていた"
+},
+{
 "v": "1.6.6",
 "d": "2026/10/31",
 "t": "【ふえたこと】\n・希少種パック（有料・さなえ・めーりん・らん・ゆうか・もみじ の 5種）に 対応しました\n・希少種は「おむかえ」には 出ません。ショップの「ゆっくり」の たなに 1日 30% で しつけ済みの 子が 1匹 ならびます（15,000〜32,000円）。にわ・ステージに 来る のらも 15% で 希少種に なります\n・希少種の 定番の なかや くせ：らん と ちぇん は さいしょから なかよし、もみじ は きめぇまる を こわがらない、ふらん は めーりん を おそわない、ゆうか は 畑しごとが とくい で 畑を あらす 子を ゆるさない など\n・希少種の うんうんは その子の 中身の いろ に なります\n・希少種を いたに しばると、ハゲの だんかいに あわせた 絵に なります\n【かわったこと】\n・まりちゃの「まわる」を、正面を とおる 1回転に 描きなおしました\n【直したこと】\n・きりかぶハウスで 3匹 いじょう 寝ると、いちばん 左の 子が 雨で とけていた"
@@ -58773,6 +58778,401 @@ if(RARESPT.on && typeof SPZ_LIST==='object' && typeof spzHTML==='function'){
   try{ sync(); }catch(err){}
 }
 try{ Object.assign(window, {RARESPT}); }catch(e){}
+
+/* ============================================================
+   1.6.6a 希少種が「おむかえ」の ほかの いりぐちから えらべて しまう（X ナコスさん 10/31 21:58・ユシュー・ホズキンスさん 22:19「新しい水槽作る時に希少種が選べてしまう」・カード x_rare_newtank1031）
+   ・しらべた こと：zz_v164_rareget.js の ③ は おむかえシートの button[data-sp] だけを けしていた
+     のこっていた いりぐち（どれも zz_v137_tank.js・zz_v143_hogoyu.js が 自分で SPECIES から 一覧を つくる）：
+       a) おむかえシートの「すいそうを ふやす → ② さいしょに すむ 子」（button[data-first="s<しゅぞく>"]）← 報告の もの
+       b) からっぽの すいそうの「だれを すまわせる？」（#tk-empty button[data-en]）
+       c)「ほごゆを むかえる」（hogoAdopt が SPECIES から ランダムに えらぶ）
+   ・なおし：a・b は ボタンを けす。c は 希少種を ぬいた 一覧から えらぶ（ykAdd を その あいだだけ すりかえ）
+   ・希少種の 手に いれかたは これまでどおり ショップの たな（1日30%）と 野良（15%）だけ
+   ・RAREFIRST.on=false で もとどおり
+   ============================================================ */
+const RAREFIRST = { on:true };
+if(RAREFIRST.on){
+  const rfIs=sp=>{ try{ return !!(typeof RARE_SP==='object' && RARE_SP[sp] && SPECIES[sp] && SPECIES[sp].rare); }catch(e){ return false; } };
+  // a) すいそうを ふやす の さいしょに すむ 子
+  if(typeof openAdoptSheet==='function'){ const _o=openAdoptSheet; openAdoptSheet=function(){ const r=_o.apply(this, arguments);
+      try{ sheet.querySelectorAll('button[data-first^="s"]').forEach(b=>{ if(rfIs(b.dataset.first.slice(1))) b.remove(); }); }catch(e){}
+      return r; }; }
+  // b) からっぽの すいそう
+  if(typeof tankEmptyAsk==='function'){ const _t=tankEmptyAsk; tankEmptyAsk=function(){ const r=_t.apply(this, arguments);
+      try{ document.querySelectorAll('#tk-empty button[data-en]').forEach(b=>{ if(rfIs(b.dataset.en)) b.remove(); }); }catch(e){}
+      return r; }; }
+  // c) ほごゆ：希少種が えらばれたら、希少種で ない 子に かえる
+  if(typeof hogoAdopt==='function'){ const _h=hogoAdopt; hogoAdopt=function(){
+      const _add=ykAdd;
+      ykAdd=function(sp){ if(rfIs(sp)){ const L=Object.entries(SPECIES).filter(([k,v])=>(!v.spx || SP_RAW[v.spx+'smile']) && k!=='suijo' && !rfIs(k)).map(([k])=>k); if(L.length) sp=L[Math.floor(Math.random()*L.length)]; } return _add.apply(this, [sp, ...[].slice.call(arguments,1)]); };
+      try{ return _h.apply(this, arguments); } finally { ykAdd=_add; } }; }
+}
+try{ Object.assign(window, {RAREFIRST}); }catch(e){}
+
+/* ============================================================
+   1.6.6a あたらしい すいそうを「あきの もりの すあな」などで つくると、巣穴が おうちに ならない
+   （X ユシュー・ホズキンスさん 10/31 22:3x「あきのねもとの巣穴、巣穴をおうちと認識しておらず適当な場所で寝ますね。」・カード x_kagachi_suanasleep1031）
+   ・しらべ（/home/claude/work/suana2.js）：ステージを えらびなおした とき（setStageK）は st2Snap が「はいけいの おうち」（bgHome）を つくる。
+     でも「すいそうを ふやす」（tankNew）で そのまま すあな の すいそうを つくった とき・すいそうを いききした とき（tankGo）は
+     st2Snap が よばれず、bgHome が ない まま → ねる ばしょ（sleepSpot）が みつからず、その場で ねる
+     （すあな・もりの きのうえ・おやしき・かまくら など bgHome の ある ステージ ぜんぶ）
+   ・なおし：tankNew・tankGo の あとで、ステージに bgHome が あれば st2Snap（ない ときだけ つくる・いちを あわせる）
+   ・10/31 24:0x 追加：よるに すいそうを つくると、さいしょの 子が つくった しゅんかん（巣穴が できる まえ）に その場で ねて しまい、
+     あさまで 巣穴に はいらない（t_v166_tankhome の きのうえ が ときどき NG だった げんいん）
+     → tankNew の あと、巣穴が ある のに 巣穴で ない ところで ねている 子を 巣穴で ねかせなおす（startSleep）
+   ・TANKHOME.on=false で もとどおり
+   ============================================================ */
+const TANKHOME = { on:true };
+function thSnap(){
+  if(!TANKHOME.on) return;
+  try{ if(typeof st2K==='function' && st2K() && typeof st2Snap==='function'){ st2Snap(); if(typeof syncWorld==='function') syncWorld(); } }catch(e){ console.warn('[tankhome]', e); }
+  try{ if(typeof rojiSnap==='function') rojiSnap(); }catch(e){}
+}
+function thBed(){
+  if(!TANKHOME.on) return;
+  try{ (S.yk||[]).forEach((y,i)=>ykDo(i, ()=>{
+    if(M.state!=='sleep' || M.hover || M.hidden || isDead()) return;
+    const s=sleepSpot(); if(!s || s.kind!=='house') return;
+    if(Math.abs(M.x-s.x)>40 || Math.abs(M.z-s.z)>20) startSleep(); })); }catch(e){ console.warn('[tankhome bed]', e); }
+}
+if(typeof tankNew==='function'){ const _n=tankNew; tankNew=function(){ const r=_n.apply(this, arguments); try{ thSnap(); thBed(); setTimeout(()=>{ thSnap(); thBed(); }, 0); }catch(e){} return r; }; }
+if(typeof tankGo==='function'){ const _g=tankGo; tankGo=function(){ const r=_g.apply(this, arguments); try{ thSnap(); setTimeout(thSnap, 0); }catch(e){} return r; }; }
+try{ Object.assign(window, {TANKHOME, thBed}); }catch(e){}
+
+/* ============================================================
+   1.6.6a せってい「くさや むしが はえる」を くさ・きのみ・むし べつべつに／すいそう ごとに／ぜんぶの すいそうに
+   （Nexus 10/31 23:19「これそれぞれ選択してオフにできるように あと水槽ごとに設定できるように」
+    Nexus 10/31 23:33「これに加えてすべての水槽に適用させるのもそれぞれ入れて」
+    もと：X ユシュー・ホズキンスさん 10/31 22:00「やすり制裁水槽に滅茶苦茶虫が湧きます。」・カード x_kagachi_yasurimushi1031）
+   ・いままで：S.set.wild（ぜんぶの すいそう きょうつう）1つで くさ（grassList）・きのみ（nutList）・むし（bugMax）を まとめて ON/OFF（zz_v136_fix.js）
+   ・これから：すいそう ごとの S.wildT = {grass, nut, bug}（すいそうの なかみ と いっしょに きりかわる：TANK_GLOBAL に いれない）
+       S.wildT が ない すいそう（いままでの セーブ・あたらしい すいそう）は いままでの S.set.wild に したがう
+   ・せってい：くさ／きのみ／むし の 3行。1行に スイッチ 2つ
+       「この水槽」＝いま 見ている すいそう だけ
+       「全部の水槽」＝ぜんぶの すいそうを いっきに ON/OFF（ぜんぶ ON の ときだけ ON に みえる）
+   ・WILDSPLIT.on=false で もとどおり
+   ============================================================ */
+const WILDSPLIT = { on:true };
+const WS_KEYS=['grass','nut','bug'];
+function wsBase(){ return !(S.set && S.set.wild===false); }
+function wsGet(k){
+  try{ if(S.wildT && typeof S.wildT[k]==='boolean') return S.wildT[k]; }catch(e){}
+  return wsBase();
+}
+function wsGetAt(j, k){
+  if(j===S.tankI) return wsGet(k);
+  try{ const w=S.tanks[j].snap && S.tanks[j].snap.wildT; if(w && typeof w[k]==='boolean') return w[k]; }catch(e){}
+  return wsBase();
+}
+function wsAll(k){ try{ return (S.tanks||[0]).every((t,j)=>wsGetAt(j,k)); }catch(e){ return wsGet(k); } }
+// いままで ぜんぶ OFF（S.set.wild=false）だった ひとは、すいそう ごとの 値に うつして から S.set.wild を ON に もどす
+function wsMigrate(){
+  if(!(S.set && S.set.wild===false)) return;
+  try{ (S.tanks||[]).forEach((t,j)=>{ if(j!==S.tankI && t.snap && !t.snap.wildT) t.snap.wildT={grass:false, nut:false, bug:false}; }); }catch(e){}
+  if(!S.wildT) S.wildT={grass:false, nut:false, bug:false};
+  S.set.wild=true;
+}
+function wsFill(){ if(!S.wildT) S.wildT={grass:wsGet('grass'), nut:wsGet('nut'), bug:wsGet('bug')}; }
+function wsBugOff(){ try{ BUGS.forEach(b=>b.leave=true); }catch(e){} }
+function wsSet(k, v){
+  wsMigrate(); wsFill();
+  S.wildT[k]=!!v;
+  if(k==='bug' && !v) wsBugOff();
+  try{ save(); }catch(e){}
+}
+function wsSetAll(k, v){
+  wsMigrate(); wsFill();
+  S.wildT[k]=!!v;
+  try{ (S.tanks||[]).forEach((t,j)=>{ if(j===S.tankI || !t.snap) return;
+    if(!t.snap.wildT) t.snap.wildT={grass:wsBase(), nut:wsBase(), bug:wsBase()};
+    t.snap.wildT[k]=!!v; }); }catch(e){}
+  if(k==='bug' && !v) wsBugOff();
+  try{ save(); }catch(e){}
+}
+if(WILDSPLIT.on){
+  if(typeof grassList==='function'){ const _g=grassList; grassList=function(){ if(!wsGet('grass')) return []; return _g.apply(this, arguments); }; }
+  if(typeof nutList==='function'){ const _n=nutList; nutList=function(){ if(!wsGet('nut')) return []; return _n.apply(this, arguments); }; }
+  if(typeof bugMax==='function'){ const _b=bugMax; bugMax=function(){ if(!wsGet('bug')) return 0; return _b.apply(this, arguments); }; }
+  // 1つの スイッチ（S.set.wild）の かわりに 3行（1行に「この水槽」「全部の水槽」の 2つ）
+  const WS_ROWS=[
+    ['grass','草が生える','OFFにすると草が生えません','くさ はえる しぜん'],
+    ['nut','木の実が落ちる','どんぐり・くり。OFFにすると落ちません','きのみ どんぐり くり おちる しぜん'],
+    ['bug','虫が出る','OFFにすると虫が出ません','むし ちょうちょ ばった いもむし でる しぜん'],
+  ];
+  const wsCss=()=>{ if(document.getElementById('ws-css')) return; const st=document.createElement('style'); st.id='ws-css';
+    st.textContent='.ws-two{display:flex; gap:10px; flex:none;} .ws-two label{display:flex; flex-direction:column; align-items:center; gap:3px; font-size:10px; color:var(--ink-soft); cursor:pointer;}';
+    document.head.appendChild(st); };
+  if(typeof openSettings==='function'){ const _o=openSettings; openSettings=function(){
+      try{ if(typeof SETUI_ITEMS!=='undefined' && !SETUI_ITEMS.some(r=>r[0]==='set-wild-grass')){
+        const k=SETUI_ITEMS.findIndex(r=>r[0]==='set-wild');
+        const add=WS_ROWS.map(w=>['set-wild-'+w[0],'tank',w[1],w[2],w[3]+' この水槽 全部の水槽']);
+        if(k>=0) SETUI_ITEMS.splice(k+1, 0, ...add); else SETUI_ITEMS.push(...add); } }catch(e){}
+      const r=_o.apply(this, arguments);
+      try{
+        if(sheetKind!=='set' || document.getElementById('set-wild-grass')) return r;
+        const old=sheet.querySelector('#set-wild'); const at=old && old.closest('.row'); if(!at) return r;
+        wsCss();
+        let prev=at; const allIn={};
+        const refresh=()=>WS_KEYS.forEach(k=>{ const a=document.getElementById('set-wild-'+k), b=allIn[k]; if(a) a.checked=wsGet(k); if(b) b.checked=wsAll(k); });
+        for(const w of WS_ROWS){
+          const row=document.createElement('div'); row.className='row';
+          row.dataset.sk=(w[3]+' '+w[1]+' この水槽 全部の水槽').toLowerCase();
+          row.innerHTML=`<span>${w[1]}<small>${w[2]}</small></span><div class="ws-two">`+
+            `<label>この水槽<input class="sw" id="set-wild-${w[0]}" type="checkbox" ${wsGet(w[0])?'checked':''}></label>`+
+            `<label>全部の水槽<input class="sw" id="set-wild-${w[0]}-all" type="checkbox" ${wsAll(w[0])?'checked':''}></label></div>`;
+          prev.insertAdjacentElement('afterend', row); prev=row;
+          allIn[w[0]]=row.querySelector('#set-wild-'+w[0]+'-all');
+          row.querySelector('#set-wild-'+w[0]).addEventListener('change', ev=>{ wsSet(w[0], ev.target.checked); refresh(); });
+          allIn[w[0]].addEventListener('change', ev=>{ wsSetAll(w[0], ev.target.checked); refresh(); });
+        }
+        at.remove();
+      }catch(e){ console.warn('[wildsplit]', e); }
+      return r; }; }
+}
+try{ Object.assign(window, {WILDSPLIT, wsGet, wsGetAt, wsAll, wsSet, wsSetAll}); }catch(e){}
+
+/* ============================================================
+   1.6.6a すてた ゆっくりが すぐ でて いかない（ほっとくと のらとして すみつく／しばくと でていく）
+   （X ユシュー・ホズキンスさん 11/1 0:03「捨てたゆっくりが素直に出て行かずに、ほっといたら野良として住み着くか、
+     しばき回したら出ていく様になったらうれしいですね。」・カード x_kagachi_suteru1101・Nexus 11/1 0:31「採用」）
+   ・いままで（zz_v162_suteru.js）：「🚪 すてる」→ SUTERU.begSec びょう ないて すがる → すぐ でていく（st2LeaveTick）→ きえる
+   ・これから
+       ① すがった あとも でていかず、その場で「すてないで」と ないて いすわる（SUTESTAY.staySec びょう）
+          いすわって いる あいだの セリフは いまの suteOut／suteOutGesu（すてないで 系）だけ。あたらしい セリフは かかない
+       ② その あいだに しばく（つつく・いじわるで いたい ことを する）を SUTESTAY.hits かい → でていく（いままでの でていく うごき）
+       ③ しばかれずに staySec びょう たつ → のらとして すみつく
+          y.st2={v:'nora', from:'sute'}。ゲスの すがりかた（suteBegGesu）だった 子は ゲスの のら（おうち宣言 st2NoraGesu）、
+          ほかは いい子の のら（すませて ほしい st2NoraZen）＝いまの のらの しくみ（zz_v150_stage2_visit st2NoraAct）を そのまま つかう
+          → かいゆっくりに もどすのも いまの「かいゆっくりに する」（zz_v162_norakau）
+       ④ すみついた あとも しばく を hits かい（SUTESTAY.hitWin びょう いない）→ でていく
+   ・いすわって いる とちゅうで よみなおした 子は、きえずに そのまま のらに なる
+   ・SUTESTAY.on=false で もとどおり（すがったら すぐ でていく。あとから きりかえても よい：t_v162_suteru は false で まわす）
+   ============================================================ */
+const SUTESTAY = { on:true, staySec:60, hits:3, hitWin:30, lineSec:[7,12] };
+if(typeof SUTERU==='object' && typeof SUTE_LIVE!=='undefined'){
+  const BEG=SUTERU.begSec;
+  SUTERU.begSec=1e9;   // zz_v162_suteru の「すがったら でていく」を とめる（でていくのは ここで きめる）
+  const ssLeave=(sm)=>{   // でていく（いままでの うごき）
+    const y=S.yk[YK_I];
+    y.st2={v:'sute', m:'leave', t0:Date.now(), side:(M.x<(XMIN+XMAX)/2?-1:1)};
+    M.st2leave=1; M.st2leaveT=0; M.tears=Math.max(M.tears||0, 3);
+    if(sm){ sm.out=true; if(!M.lifted){ bubbleT=0; say(/Gesu/.test(sm.line)?'suteOutGesu':'suteOut', {cls:'shout', t:3}); express(/Gesu/.test(sm.line)?'angry':'cry3', 3); } }
+    try{ renderYkTabs(); }catch(e){}
+  };
+  const ssNora=(i, sm)=>{   // のらとして すみつく
+    const y=S.yk[i]; if(!y) return;
+    const k=SUTE_LIVE.indexOf(y.id); if(k>=0) SUTE_LIVE.splice(k,1);
+    const gesu = sm ? /Gesu/.test(sm.line) : ((y.ps && (y.ps.gesu||0)>=55) || false);
+    delete y.sute; delete y.suteStay;
+    y.st2={v:'nora', kind:gesu?'gesu':'zen', m:'come', from:'sute', t0:Date.now(), side:(MS[i] && MS[i].x<(XMIN+XMAX)/2)?-1:1};
+    ykDo(i, ()=>{ delete M._sute; M.tears=Math.max(M.tears||0, 1); setState('idle', .5);
+      try{ st2NoraAct(); }catch(e){ console.warn('[sutestay nora]', e); } });
+    note(`🚪 ${ykLabel(y)}は でていかずに、のらとして すみついた。`);
+    try{ renderYkTabs(); }catch(e){}
+    try{ save(); }catch(e){}
+  };
+  { const _up=update; update=function(dt){
+      // いすわって いる とちゅうで よみなおした 子：きえずに のらに する（zz_v162_suteru が けす まえに）
+      try{ if(SUTESTAY.on) for(let i=0;i<S.yk.length;i++){ const y=S.yk[i]; if(y && y.sute && y.suteStay && !SUTE_LIVE.includes(y.id) && !y.dead) ssNora(i, null); } }catch(e){}
+      _up.apply(this, arguments);
+      if(!SUTE_LIVE.length) return;
+      try{
+        for(let k=SUTE_LIVE.length-1;k>=0;k--){ const id=SUTE_LIVE[k], i=S.yk.findIndex(v=>v.id===id); if(i<0) continue;
+          let toNora=null;
+          ykDo(i, ()=>{ const sm=M._sute; if(!sm || isDead()) return;
+            if(!SUTESTAY.on){   // もとどおり：すがったら すぐ でていく（zz_v162_suteru と おなじ じかん）
+              if(!M.st2leave && !sm.stay && sm.t>=BEG){ const y=S.yk[YK_I]; y.st2={v:'sute', m:'leave', t0:Date.now(), side:(M.x<(XMIN+XMAX)/2?-1:1)}; M.st2leave=1; M.st2leaveT=0; M.tears=Math.max(M.tears||0, 3); }
+              if(M.st2leave && !sm.out && sm.t>=BEG+SUTERU.outSec){ sm.out=true; if(!M.lifted){ bubbleT=0; say(/Gesu/.test(sm.line)?'suteOutGesu':'suteOut', {cls:'shout', t:3}); express(/Gesu/.test(sm.line)?'angry':'cry3', 3); } }
+              return; }
+            if(M.st2leave) return;
+            if(!sm.stay && sm.t>=BEG){ sm.stay=true; sm.stayT=0; sm.hit=0; sm.lineT=rnd(...SUTESTAY.lineSec); S.yk[YK_I].suteStay=1; try{ save(); }catch(e){} }
+            if(!sm.stay) return;
+            sm.stayT+=Math.min(dt,.1);
+            if(sm.hit>=SUTESTAY.hits){ ssLeave(sm); return; }
+            sm.lineT-=Math.min(dt,.1);
+            if(sm.lineT<=0){ sm.lineT=rnd(...SUTESTAY.lineSec);
+              if(!M.lifted && M.state!=='sleep' && bubbleT<=0){ say(/Gesu/.test(sm.line)?'suteOutGesu':'suteOut', {cls:'shout', t:3}); express(/Gesu/.test(sm.line)?'angry':'cry3', 2.5); M.tears=Math.max(M.tears||0, 2); } }
+            if(sm.stayT>=SUTESTAY.staySec) toNora=sm;
+          });
+          if(toNora) ssNora(i, toNora);
+        }
+      }catch(e){ console.warn('[sutestay]', e); }
+    }; }
+  // しばく：つつく・いたい こと（hurt）。やけど など つづけて よばれる ものは 0.4びょうに 1かい
+  const ssHit=()=>{ try{ if(!SUTESTAY.on) return;
+      const y=S.yk[YK_I]; if(!y || isDead()) return;
+      const now=performance.now()/1000;
+      if(M._ssHitAt && now-M._ssHitAt<.4) return; M._ssHitAt=now;
+      const sm=M._sute;
+      if(sm && sm.stay && !M.st2leave){ sm.hit=(sm.hit||0)+1; return; }
+      const s=y.st2;
+      if(s && s.v==='nora' && s.from==='sute' && s.m!=='leave'){
+        if(!M._ssHit0 || now-M._ssHit0>SUTESTAY.hitWin){ M._ssHit0=now; M._ssHitN=0; }
+        M._ssHitN=(M._ssHitN||0)+1;
+        if(M._ssHitN>=SUTESTAY.hits){ M._ssHitN=0; try{ st2Leave(); }catch(e){} note(`🚪 のらの ${ykLabel(y)}が でていった。`); }
+      }
+    }catch(e){} };
+  if(typeof poke==='function'){ const _p=poke; poke=function(){ const r=_p.apply(this, arguments); ssHit(); return r; }; }
+  if(typeof hurt==='function'){ const _h=hurt; hurt=function(){ const r=_h.apply(this, arguments); ssHit(); return r; }; }
+}
+try{ Object.assign(window, {SUTESTAY}); }catch(e){}
+
+/* ============================================================
+   1.6.6a ゆうかの なまえ欄が「わたし」（一人称）に なる
+   （X メインク〜ンさん 10/31 23:32「さなえが わたし になってるw お迎えしても名前変なまま」→ 画像は ゆうか・カード x_gaku_yukaname1101
+    Nexus 11/1 0:31「② ゆうかだけ名前の欄を『ゆうか』にする（しゃべるときは『わたし』のまま）」）
+   ・しらべ：なまえ欄（いまの子 ▾・ゆっくりの タブ）・にっし・ほかの子が よぶ なまえ は ykLabel(y)＝y.me（一人称）
+     ゆうかの 一人称は「わたし」（資料 28386106・zz_v164_rarelines.js）なので なまえ欄も「わたし」に なっていた
+     （さなえ・らん・めーりん・もみじ は 一人称が 種の なまえ なので おきない）
+   ・なおし：ゆうかで 一人称が「わたし」の 子は ykLabel を「ゆうか」に する。しゃべる ときの 一人称（{me}・S.me）は わたし の まま
+   ・ショップの たなの カード（skName(x)＝x.me）も おなじ（メインク〜ンさんの 画像の たなの カードも「わたし」だった）
+   ・YUKANAME.on=false で もとどおり
+   ============================================================ */
+const YUKANAME = { on:true, sp:{ yuka:{ me:'わたし', name:'ゆうか' } } };
+if(typeof ykLabel==='function'){ const _l=ykLabel; ykLabel=function(y){
+    try{ const d=YUKANAME.on && y && YUKANAME.sp[y.sp]; if(d && (!y.me || y.me===d.me)) return d.name; }catch(e){}
+    return _l.apply(this, arguments); }; }
+if(typeof skName==='function'){ const _s=skName; skName=function(x){
+    try{ const d=YUKANAME.on && x && YUKANAME.sp[x.sp]; if(d && (!x.me || x.me===d.me)) return d.name; }catch(e){}
+    return _s.apply(this, arguments); }; }
+try{ Object.assign(window, {YUKANAME}); }catch(e){}
+
+/* ============================================================
+   1.6.6a「しんでしまう」OFF なのに くだしあまあまの たべさせすぎで しぬ
+   （X ハチスさん 11/1 1:14「死なないに設定した水槽でくだしあまあま食べさせ続けたら死んでしもうた…」・カード x_hachisu_kudadeath1101）
+   ・しらべ：zz_v143_logic.js ④（くだし たべさせすぎ）は うんうんが でる たびに けんこうを へらし、0 で die('kudashi') を よぶ。
+     deathOn()（せっていの「しんでしまう」）を みて いない。ほかの しにかた（おなか・びょうき・かび など）は
+     OFF なら けんこう 8（hpFloor）で とまるのに、くだし だけ とまらなかった
+   ・なおし：「しんでしまう」OFF の ときは kudaTick の なかの die('kudashi') と「くだしあまあまを たべすぎて…」の 1行を とめ、
+     けんこうは hpFloor（8）で とめる（ほかの しにかたと おなじ）。ON の ときは いままで どおり
+   ・KUDADOFF.on=false で もとどおり
+   ============================================================ */
+const KUDADOFF = { on:true };
+if(typeof kudaTick==='function'){ const _k=kudaTick; kudaTick=function(){
+    if(!KUDADOFF.on || deathOn()) return _k.apply(this, arguments);
+    const d0=die, n0=note;
+    die=function(c){ if(c==='kudashi') return; return d0.apply(this, arguments); };
+    note=function(t){ if(typeof t==='string' && /くだしあまあまを たべすぎて/.test(t)) return; return n0.apply(this, arguments); };
+    try{ return _k.apply(this, arguments); }
+    finally{ die=d0; note=n0; try{ if(!isDead() && S.health<hpFloor()) S.health=hpFloor(); }catch(e){} } }; }
+try{ Object.assign(window, {KUDADOFF}); }catch(e){}
+
+/* ============================================================
+   1.6.6a あんよを やいた（うごけない）子が ねている ときに すいそうを いききすると、ねどこ（おうち）へ ワープ する
+   （X ユシュー・ホズキンスさん 10/31 23:3x「あんよ焼きした個体とかが眠ってる時水槽入れ替えると寝床に行ってしまいます。」・カード x_kagachi_anyobed1101）
+   ・しらべ：すいそうを ひらく とき（tankRebuild・zz_v137_tank）、よるなら startSleep で ねどこ（sleepSpot）へ ワープ する。
+     ふつうは zz_v139_keeppos が まえの いちに もどすが、zz_v151_sushi1016（3）が「おうち・どうくつで ねた 子は ねどこの まま」に
+     して いる ので、あんよの けがで うごけない 子（S.anyo 30 いじょう）も ねどこへ いって しまう
+   ・なおし：すいそうを ひらく あいだの startSleep で、あんよの けがで うごけない 子は ねどこに のこさない
+     → keeppos が まえに いた ところに もどす（そこで ねた まま）
+   ・ANYOBED.on=false で もとどおり
+   ============================================================ */
+const ANYOBED = { on:true, anyo:30 };
+if(typeof startSleep==='function'){ const _s=startSleep; startSleep=function(){
+    const r=_s.apply(this, arguments);
+    try{ if(ANYOBED.on && typeof SU16==='object' && SU16.rb && (S.anyo||0)>=ANYOBED.anyo) delete M._su16; }catch(e){}
+    return r; }; }
+try{ Object.assign(window, {ANYOBED}); }catch(e){}
+
+/* ============================================================
+   1.6.6a ゆうかは はたけしごとを はじめから おぼえているのに、おせわの「はたけしごと」が「おぼえ 0%」
+   （X ユシュー・ホズキンスさん 10/31 23:3x「ゆうか種は畑仕事を最初から覚えてますが、畑仕事を覚えさせるコマンドが0%であるのが気になりますね。」
+    ・カード x_kagachi_yukafarm1101）
+   ・しらべ：zz_v165_rarerel3 B1 は fmLv（おぼえの あたい）だけ ゆうかを 100 に して いた。
+     おせわの 行（zz_v162_farmyk の openSubSheet）は y.fmL を そのまま みる ので 0% に なっていた
+   ・なおし：ゆうか（RRL3.b1 が ON の とき）は y.fmL を 100 に そろえる（「おぼえた」の 1行は ださない）
+     → おせわの 行は いまの「おぼえた（ときどき じぶんで おせわ）」の 表示に なる
+   ・YUKAFARM.on=false で もとどおり
+   ============================================================ */
+const YUKAFARM = { on:true };
+function yfSync(){
+  if(!YUKAFARM.on || !(typeof RRL3==='object' && RRL3.b1)) return;
+  try{ for(const y of (S.yk||[])) if(y && y.sp==='yuka' && !y.st2 && (y.fmL||0)<100) y.fmL=100;
+       for(const t of (S.tanks||[])) for(const y of ((t && t.snap && t.snap.yk)||[])) if(y && y.sp==='yuka' && !y.st2 && (y.fmL||0)<100) y.fmL=100; }catch(e){}
+}
+if(typeof openSubSheet==='function'){ const _o=openSubSheet; openSubSheet=function(){ yfSync(); return _o.apply(this, arguments); }; }
+setInterval(yfSync, 2000); setTimeout(yfSync, 0);
+try{ Object.assign(window, {YUKAFARM, yfSync}); }catch(e){}
+
+/* ============================================================
+   1.6.6a はいってきた ゲスの のらは、ごはん（フード）より はたけの おやさいを さきに たべる
+   （X ユシュー・ホズキンスさん 10/31 23:26「侵入してきたゲスの野良個体は、フードより畑の作物を優先して食べてくれたら制裁が捗りますね。」
+    ・カード x_kagachi_farmfirst1031・Nexus 11/1 1:46 作業中へ）
+   ・資料：docs/資料メモ_20261014_のら・はたけ・せいっさい.md
+       1. のらは「おやさいさんは かってに はえてくる」と おもって はたけを あらす【定番・7作者】／群れで はたけに おしよせる【定番】
+       2. はたけを あらす 子は せいっさい【定番】→ いまの zz_v150_niwaseisai（いい子が ぷくー → せいっさい）が そのまま うごく
+   ・いままで：のらも ふつうの 子と おなじ。はたけを ねらうのは きめる たびに 45%（st2TryEat）で、ごはんが あれば ごはんへ／
+       ほかの 子の ごはんを よこどり（zz_gesu2 gs2StealTick・のらの むれ）
+   ・これから：ゲスの のら（st2.v='nora' で kind='gesu' か ゲスど 55 いじょう・でていく とちゅう で ない）は、
+       おなかが すいていて（まんぷく 85 みまん）、みえる ところに みのった おやさいが ある ときは
+       ① きめる とき FARMFIRST.p（9わり）で はたけへ（ごはんより さき）
+       ② ほかの 子の ごはんの よこどりは しない（はたけが ある あいだ）
+     おやさいが ない／みのって いない ときは いままで どおり ごはんを たべる。セリフは いまの もの（st2VegSee・st2VegEat）だけ
+   ・FARMFIRST.on=false で もとどおり
+   ============================================================ */
+const FARMFIRST = { on:true, p:.9, full:85, gesu:55 };
+function ffGesuNora(i){
+  try{ const k=i===undefined ? YK_I : i, y=S.yk[k]; if(!y || y.dead || !y.st2 || y.st2.v!=='nora' || y.st2.m==='leave') return false;
+       if(y.st2.kind==='gesu') return true; let g=0; ykDo(k, ()=>{ g=PS().gesu||0; }); return g>=FARMFIRST.gesu; }catch(e){ return false; }
+}
+function ffRipe(){
+  try{ if(typeof st2K!=='function' || !st2K() || typeof st2Veg!=='function') return false; const a=st2Veg(); if(!a) return false;
+       return a.some((g,i)=>g>=1 && st2Visible(st2VegPos(i).x)); }catch(e){ return false; }
+}
+// st2TryEat（zz_v150_stage2）の はたけの ぶん と おなじ うごき（かならず いく）
+function ffGoVeg(){
+  if(isSuijo() || (typeof isPred==='function' && isPred()) || (typeof refusesNature==='function' && refusesNature())) return false;
+  const a=st2Veg(); if(!a) return false;
+  const ripe=a.map((g,i)=>g>=1?i:-1).filter(i=>i>=0 && st2Visible(st2VegPos(i).x)); if(!ripe.length) return false;
+  ripe.sort((i,j)=>Math.hypot(st2VegPos(i).x-M.x,st2VegPos(i).z-M.z)-Math.hypot(st2VegPos(j).x-M.x,st2VegPos(j).z-M.z));
+  const i=ripe[Math.min(ripe.length-1, Math.floor(Math.random()*2))], p=st2VegPos(i), off=(M.x>p.x?1:-1)*20*depthScale(p.z), sk=st2K();
+  if(Math.random()<.4) say('st2VegSee',{cls:'shout'});
+  goTo(clamp(p.x+off,XMIN,XMAX), Math.min(FLOOR_BOT-3,p.z+2), {fn:()=>{ M.face=p.x>M.x?1:-1; setState('graze', 2.6, {grazeT:{k:'st2veg', i, sk}}); express('eat3',2.6); fxText('むーしゃ',M.x+M.face*20,M.z-40,{size:12}); }, label:'おやさいを たべに いってる'}, 55, 'hop');
+  return true;
+}
+if(typeof decide==='function'){ const _d=decide; decide=function(){
+    try{
+      if(FARMFIRST.on && !isDead() && !M.lifted && !M.st2leave && !(sleepTime()||S.sleepy>92) && (S.anyo||0)<30 && S.poopNeed<100
+         && S.full<FARMFIRST.full && ffGesuNora() && ffRipe() && Math.random()<FARMFIRST.p){
+        if(ffGoVeg()) return;
+      }
+    }catch(e){ console.warn('[farmfirst]', e); }
+    return _d.apply(this, arguments); }; }
+if(typeof gs2StealTick==='function'){ const _s=gs2StealTick; gs2StealTick=function(){
+    try{ if(FARMFIRST.on && S.full<FARMFIRST.full && ffGesuNora() && ffRipe()) return; }catch(e){}
+    return _s.apply(this, arguments); }; }
+try{ Object.assign(window, {FARMFIRST, ffGesuNora, ffRipe}); }catch(e){}
+
+/* ============================================================
+   1.6.6a はたけの おやさい「たべて いい」に して いる 子が たべても「かってに たべた」あつかい に なる
+   ・報告：BOOTH 田邉大介さん（a1f8de68）11/1 2:26「ver1.6.6: いえのやさいをたべていいに設定しているゆっくりが勝手に食べてしまった判定されてしまう」
+     ・カード bt_a1f8_vegokeat1101
+   ・しらべた こと
+     - おやさいを たべおわる ところ（zz_v150_stage2 の grazeDone・k==='st2veg'）は、だれが たべても
+       ① ゲスど ＋1.5（psAdd('gesu',1.5)）② にっき「〇〇が はたけの おやさいを かってに たべた。（ゲスど すこし ↑）」
+       （セリフは ゲス 45みまんの かいゆなら zz_v153_vegpet → zz_v153_serifufix で もう yummy「むーしゃむーしゃ、しあわせー！！」。ここは かえない）
+     - 10/23 の「たべて いい／たべちゃ だめ」（zz_v162_vegrule）・10/28 の「たべて いい なら たべる」（zz_v164_vegok）は
+       たべに いくか どうか だけ を かえて いて、たべおわった ときの ①② は そのまま だった
+   ・げんいん：「たべて いい」の 子が たべても、きまりを やぶった ときと おなじ「かってに たべた」に なる
+   ・なおし：「たべて いい」の かいゆ（zz_v164_vegok の vegOkFree と おなじ：のらで ない・「たべちゃ だめ」で ない）が たべた ときは
+       ① ゲスど を あげない ② にっきは「〇〇が はたけの おやさいを たべた。」（セリフは そのまま）
+       「たべちゃ だめ」を やぶった 子・のらは いままで どおり（かってに たべた・ゲスど ↑）
+   ・セリフ・見た目は かえない。VEGOKEAT.on=false で もとどおり
+   ============================================================ */
+const VEGOKEAT = { on:true };
+if(typeof grazeDone==='function' && typeof psAdd==='function'){
+  let voe=false;
+  { const _g=grazeDone; grazeDone=function(){
+      const t=M.grazeT;
+      let ok=false; try{ ok = VEGOKEAT.on && t && t.k==='st2veg' && typeof vegOkFree==='function' && vegOkFree(); }catch(e){}
+      if(!ok) return _g.apply(this, arguments);
+      voe=true; try{ return _g.apply(this, arguments); } finally{ voe=false; } }; }
+  { const _p=psAdd; psAdd=function(k, d){ if(voe && k==='gesu' && d>0) return; return _p.apply(this, arguments); }; }
+  { const _n=note; note=function(text){
+      if(voe && typeof text==='string' && /はたけの おやさいを かってに たべた/.test(text)) text=text.replace('かってに たべた。（ゲスど すこし ↑）','たべた。').replace('かってに たべた','たべた');
+      return _n.call(this, text); }; }
+}
+try{ Object.assign(window, {VEGOKEAT}); }catch(e){}
 
 /* ============================================================
    v1.3.7a セーブの もどしで きえる どうぐ（X さつま揚げ@ゆ虐さん 10/7「浮島や ハスの おうちが 再起動で きえる」）
