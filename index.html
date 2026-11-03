@@ -368,7 +368,7 @@ body.wide .act kbd{font-family:var(--ui); font-size:9.5px; color:var(--ink-soft)
 </div>
 
 <script>
-window.MT_VER="1.6.8";
+window.MT_VER="1.6.8a";
 "use strict";
 /* ============================================================
    素材
@@ -22997,7 +22997,7 @@ function hogoAdopt(){
    ② 警告：公式で ない ウェブサイトで ひらかれた ときだけ、上に 小さな おしらせ（とじられる）
       公式＝ファイルを じかに ひらく（file:）／公式の ブラウザ版（aigptplan-cyber.github.io）／localhost
    ============================================================ */
-const SEC_MARK = 'mt-gh-168-f4c3435b';                     // release.py が 配布ごとに おきかえる
+const SEC_MARK = 'mt-gh-168a-e26c757e';                     // release.py が 配布ごとに おきかえる
 const SEC_OK_HOSTS = ['aigptplan-cyber.github.io', 'localhost', '127.0.0.1', ''];
 function secHost(){ return (window.__SEC_HOST!=null) ? window.__SEC_HOST : (location.protocol==='file:' ? '' : location.hostname); }
 function secOfficial(){ const h=secHost(); return SEC_OK_HOSTS.includes(h); }
@@ -53651,6 +53651,11 @@ if(GYKICK.on && typeof GYI==='object' && typeof GYI_RUN==='object' && typeof TOO
 // パッチノートの データ（tools/mk_patchnote.py が pk の section.txt から つくる・てで かえない）
 const PATCH_NOTES = [
 {
+"v": "1.6.8a",
+"d": "2026/11/04",
+"t": "【直したこと】\n・便秘薬を選ぶと、画面に長いコードの文字が出ていた\n・時間の進み方が「リアル」の時、草刈りのお仕事とショップの預かりの残り時間が減らず、日付が変わるまで帰ってこなかった"
+},
+{
 "v": "1.6.8",
 "d": "2026/11/03",
 "t": "【増えたこと】\n・お薬「便秘薬」をショップで売り始めました（1個250円）。便秘の子に飲ませると、うんうんが出るようになります\n・にとりも水上まりさと同じように、お魚を狩って食べたり、水草の家具の上で休んだりするようになりました\n・捕食種も、仲良くなった子（襲わない子）とならキャッチボールで遊びます。飛ぶ子は地面に降りてボールを返します\n・おふねの水上まりさ同士は「ゆっくりしていってね」・お歌・一緒にお魚狩りで、水の中のつむり同士は挨拶・お歌で仲良くなります。にとりは、にとり同士と、仲良しのつむりとだけ挨拶・お歌をします（水上まりさとはしません）\n・設定「水槽」に「自然の食べ物の量（少なめ／ふつう／多め）」を追加しました。草・木の実・虫の量が変わります\n・トランポリン・ボール・すぃー・シーソー・すべり台で遊ぶと、体力が少しずつ伸びます\n・マナーテープを剥がすと痛がるようになりました\n・野良を処理しても、飼いゆはかばわなくなりました（ほっとします）。いい子の野良を飼うと、だんだん仲良くなります\n【変わったこと】\n・雨の時は、ドスのおうちで雨宿りします（止むまで出てきません）\n・ドスのおうちでおうち宣言をした子は、夜はドスのおうちの中で寝ます\n・ドスのおうちに入った子が「おうちの なか」の窓に映るようになりました\n・こちゃが奥へ進む時は、こたつの後ろ姿になります\n【直したこと】\n・死んだつむり・こちゃのアイコンが、帽子をかぶったまりちゃになっていた\n・にとりが水草の家具の近くで上下にぶれる／上に乗ると動けなくなっていた\n・にとりが陸を這う時、顔の絵のまま滑っていた\n・おすもうで相手が死んでいないのに「つぶしてしまった…」と言っていた\n・あまあまペーストを食べた子を、ぐったりした子が襲いに行っていた／襲う相手がいないと印が残って、その子がペーストを食べなくなっていた\n・偽まりちゃ（おさげ残しハゲ）のおさげの根元が肌色になっていた"
@@ -60793,7 +60798,7 @@ try{ Object.assign(window, {WILDQROW}); }catch(e){}
        B) じだんだ中（M.jidanda）の つむり・こちゃ は backwobble の かわりに 正面の おこった かお（angry）。ぴょんぴょん（bitan の つぶれ）は そのまま
        ・捕食種 は ためした が、angry に すると 羽 だけ かかれて からだが きえた（羽の きりわけ #b・パックの 絵の よみこみ）→ いれない（のこり）
    ・11/3 Nexus 10:5x 見本「奥へは後ろ姿」→「こちゃだけ入れて」：A は こちゃ（こたつ）だけ（SHV.backKinds）。
-     B（じだんだ 正面）は まだ へんじ まち → SHV.jd=false（入れない）
+     B（じだんだ 正面）は 11/3 23:1x Nexus 見本「このまま入れる」→ SHV.jd=true（つむり・こちゃ。捕食種は いれない まま）
    ・SHV.on=false で もとどおり（SHV.back・SHV.jd で べつべつ）
    ============================================================ */
 const SHV = { on:true, back:true, backKinds:['kotatsu'], jd:false };
@@ -60806,6 +60811,34 @@ const SHV = { on:true, back:true, backKinds:['kotatsu'], jd:false };
       if(SHV.jd && M.jidanda && M.state==='bitan' && n==='backwobble' && sh && SP.angry) return 'angry';
     }catch(e){}
     return n;
+  }; }
+
+/* ============================================================
+   v1.6.9 候補：くさかりの おしごと が かえって こない（X Bo'z(佐藤田中)さん 11/3 21:54「残り時間があと3時間から減らなくて帰ってこない」）
+   ・しらべ：shopNow() は S.gameDay と S.gameMin から つくる。じかんの すすみかたが「リアル」の とき advanceClock が S.gameMin を
+     すすめない → shopNow() が とまる → おしごと（3じかん）・ショップの あずかりの のこりが へらない。日づけが かわると やっと もどる。
+     全部の子を いかせたか どうかは かんけい ない（1ぴきでも おきる）
+   ・なおし：リアルの ときは shopNow() の「分」を げんじつの とけいから とる（zz_v162_gy_doku の gdkNow と おなじ かんがえ）
+   ・JOBREAL.on=false で もとどおり
+   ============================================================ */
+const JOBREAL = { on:true };
+{ const _sn=shopNow; shopNow=function(){
+    if(JOBREAL.on && S.set && !S.set.daySpeed){ const d=new Date(); return (S.gameDay||0)*1440 + d.getHours()*60 + d.getMinutes(); }
+    return _sn.apply(this, arguments);
+  }; }
+
+/* ============================================================
+   v1.6.9 候補：便秘薬を えらぶと 画面に ながい コードが でる（X Havoc Shaw さん 11/4 2:22・Nexus 2:28「確認、修正」）
+   ・しらべ：zz_seiri_toolcursor.js の med_* の カーソルは MED[…].ic（えもじ）を fillText で かく。
+     便秘薬（zz_v167_benpimed）だけ ic が SVG の もじれつ なので、その もじが そのまま 画面に かかれて いた。
+     zz_v167_benpimed は toolIcon（ボタンの 絵）だけ カプセルに して、カーソルの ほうを わすれて いた（1.6.7 から）
+   ・なおし：便秘薬の カーソルは Nexus 11/2 に きめた カプセルの 絵（benpiCapsule）で かく
+   ・BENPICUR.on=false で もとどおり
+   ============================================================ */
+const BENPICUR = { on:true };
+if(typeof benpiCapsule==='function'){ const _d=drawToolCursor; drawToolCursor=function(g,k,x,y){
+    if(BENPICUR.on && k==='med_benpi'){ benpiCapsule(g, x+6, y-6, 40); return; }
+    return _d.apply(this, arguments);
   }; }
 
 /* ============================================================
