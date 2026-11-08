@@ -369,12 +369,12 @@ body.wide .act kbd{font-family:var(--ui); font-size:9.5px; color:var(--ink-soft)
 
 <script>
 "use strict";
-window.MT_VER="1.7.0";
+window.MT_VER="1.7.1";
 "use strict";
 /* ============================================================
    素材
    ============================================================ */
-const ATLAS_SRC = "a2.webp?v=170";
+const ATLAS_SRC = "a2.webp?v=171";
 const SP_RAW = {"smile":[1692,1917,213,195],"side":[0,2894,183,191],"joy":[1397,4390,195,176],"squish":[1702,3277,196,186],"back":[1527,1298,199,205],"oh":[1590,1717,206,197],"relax":[208,5100,205,173],"excited":[587,4569,191,176],"angry":[654,4210,189,177],"sleep":[1301,8859,192,137],"love":[0,4747,194,175],"worry":[264,4210,193,178],"doya":[0,4924,196,174],"blank":[949,5795,185,169],"laugh":[940,6644,184,164],"strain":[1394,8257,180,150],"lovelove":[0,5275,188,172],"dizzy":[0,8101,171,154],"amaama":[994,9386,53,50],"cry3":[803,8713,151,143],"back_nohat":[683,3654,190,184],"braid":[566,9270,32,85],"cry3_burnt":[0,2313,223,192],"cry3_nohat":[1334,7466,190,157],"cry3_nohat_nobraid":[0,7466,192,158],"cry3_torn":[1085,2894,213,188],"dead":[1354,6137,185,167],"dead2":[342,6476,185,166],"hat":[1464,9001,209,133],"side_nohat":[556,6811,177,164],"sleep_nohat":[594,7305,194,159],"smile_nohat":[0,7305,196,159],"smile_nohat_nobraid":[1446,7142,197,160],"worry_nohat":[1526,7466,189,157],"mv_backDR_1":[1328,3087,192,187,-0.4],"mv_backDR_2":[1300,2894,190,188,0.0],"mv_backDR_3":[225,2313,198,192,4.3],"mv_backDR_4":[1817,2313,189,192,7.0],"mv_backR_1":[1522,3087,192,187,-0.4],"mv_backR_2":[1492,2894,190,188,0.0],"mv_backR_3":[425,2313,198,192,4.3],"mv_backR_4":[0,2507,189,192,7.0],"r:back_nohat":[970,6137,190,167],"r:braid":[529,9270,35,85],"r:cry3":[546,9001,151,135],"r:cry3_burnt":[699,9001,151,135],"r:cry3_nohat":[1810,8101,190,153],"r:cry3_nohat_nobraid":[1385,8412,192,149],"r:cry3_torn":[852,9001,151,135],"r:hat":[179,7943,230,155],"r:nbf|back_nohat":[1162,6137,190,167],"r:nbf|cry3":[1005,9001,151,135],"r:nbf|cry3_burnt":[1158,9001,151,135],"r:nbf|cry3_nohat":[0,8257,190,153],"r:nbf|cry3_torn":[1311,9001,151,135],"r:nbf|side":[1822,5449,175,171],"r:nbf|side_nohat":[191,7626,177,157],"r:nbf|sleep":[0,9270,193,114],"r:nbf|sleep_nohat":[805,7943,194,154],"r:nbf|smile":[1512,4747,200,174],"r:nbf|smile_nohat":[743,7466,196,157],"r:nbf|worry":[1197,7943,193,154],"r:nbf|worry_nohat":[774,7785,189,156],"r:side":[0,5622,175,171],"r:side_nohat":[370,7626,177,157],"r:sleep":[195,9270,193,114],"r:sleep_nohat":[1001,7943,194,154],"r:smile":[1714,4747,200,174],"r:smile_nohat":[941,7466,196,157],"r:smile_nohat_nobraid":[411,7943,197,155],"r:worry":[1392,7943,193,154],"r:worry_nohat":[965,7785,189,156],"nb|angry":[845,4210,189,177,0,0],"nb|back_nohat":[371,9386,42,59,0,98],"nb|blank":[1136,5795,185,169,0,0],"nb|crawl":[51,9386,67,62,4,91],"nb|cry3":[956,8713,151,143,0,0],"nb|cry3_burnt":[1525,6307,55,167,152,23],"nb|cry3_nohat":[390,9270,43,93,147,63],"nb|cry3_torn":[1433,6307,90,167,116,21],"nb|dizzy":[173,8101,171,154,0,0],"nb|doya":[198,4924,196,174,0,0],"nb|doze":[1226,9270,107,79,2,87],"nb|excited":[780,4569,191,176,0,0],"nb|hide":[1769,9001,179,129,0,0],"nb|joy":[1594,4390,195,176,0,0],"nb|laugh":[1126,6644,184,164,0,0],"nb|love":[196,4747,194,175,0,0],"nb|lovelove":[190,5275,188,172,0,0],"nb|mv_backDL_1":[1801,6811,150,163,13,20],"nb|mv_backDL_2":[224,9386,49,59,10,124],"nb|mv_backDL_3":[793,9270,49,84,14,104],"nb|mv_backDL_4":[275,9386,46,59,16,131],"nb|mv_backDR_1":[1002,8859,43,139,4,48],"nb|mv_backDR_2":[1609,9270,49,77,7,111],"nb|mv_backDR_3":[415,9386,47,58,6,134],"nb|mv_backDR_4":[1723,9001,44,132,8,60],"nb|mv_backL_1":[0,6977,149,163,14,20],"nb|mv_backL_2":[1558,9270,49,78,19,105],"nb|mv_backL_3":[844,9270,49,84,14,104],"nb|mv_backL_4":[323,9386,46,59,16,131],"nb|mv_backR_1":[1047,8859,43,139,4,48],"nb|mv_backR_2":[895,9270,40,84,0,104],"nb|mv_backR_3":[1023,9270,51,81,10,111],"nb|mv_backR_4":[1675,9001,46,132,6,60],"nb|mv_back_1":[106,8713,183,143,7,52],"nb|mv_back_2":[658,9386,45,53,1,133],"nb|mv_back_3":[1076,9270,50,81,8,111],"nb|mv_back_4":[1020,8257,46,153,3,50],"nb|mv_front_1":[1128,9270,47,80,144,111],"nb|mv_front_2":[1444,9270,55,78,129,107],"nb|mv_front_3":[120,9386,50,62,140,93],"nb|mv_front_4":[1754,9270,52,67,143,105],"nb|mv_jump":[1660,9270,45,76,80,82],"nb|mv_side_1":[1952,9270,49,65,68,91],"nb|mv_side_2":[771,9386,61,52,55,125],"nb|mv_side_3":[464,9386,52,57,39,81],"nb|mv_side_4":[1862,9270,43,67,43,76],"nb|mv_turn_1":[1049,9386,52,50,52,130],"nb|oh":[1798,1717,206,197,0,0],"nb|puku3":[0,8564,156,147,0,0],"nb|relax":[415,5100,205,173,0,0],"nb|side":[435,9270,92,89,14,97],"nb|sing":[192,8257,172,153,0,0],"nb|sleep":[705,9386,64,52,118,84],"nb|sleep_nohat":[0,8713,104,144,81,13],"nb|smile":[0,2116,213,195,0,0],"nb|smile_nohat":[1793,8713,92,142,100,13],"nb|squish":[0,3466,196,186,0,0],"nb|strain":[1576,8257,180,150,0,0],"nb|tilt":[151,6977,176,162,0,0],"nb|worry":[459,4210,193,178,0,0],"nb|worry_nohat":[741,9270,50,84,134,71],"kzpero1":[530,6644,205,164],"kzpero2":[737,6644,201,164],"dentart1":[342,9001,202,135],"dentart2":[1709,4569,250,175],"dentart3":[0,847,331,226],"r:kzpero1":[1139,7466,193,157],"r:kzpero2":[540,7466,201,157],"p_bfly1":[600,9270,81,84],"p_bfly2":[683,9270,56,84],"p_cater":[1157,9386,72,42],"p_hopper":[572,9386,84,54],"p_acorn":[897,9386,41,52],"p_chestnut":[940,9386,52,51],"p_grass":[937,9270,84,81],"p_wxdev":[1814,9139,150,120],"p_shell_f":[1186,4924,240,173],"p_shell_s":[1314,599,240,233],"p_kota_f":[212,3654,260,184],"p_kota_s":[350,6137,220,167],"p_desk":[1071,599,241,240],"p_board":[195,599,247,245],"p_harisen":[0,599,193,246],"p_trap_open":[1080,1298,233,211],"p_trap_shut":[684,1512,212,202],"p_lie_up":[342,1075,300,215],"p_lie_dn":[684,1717,300,197],"p_bind_board":[1248,8564,360,144],"p_lie_up2":[0,340,420,257],"p_lie_up3":[753,0,440,309],"p_lie_dn_hat":[986,1717,300,197],"p_tsu_b":[444,599,246,245],"p_kocha_s":[1556,599,406,232],"p_kocha_b":[692,599,377,243],"p_takadai":[0,0,751,338],"dl_kocha_burst":[1380,3466,340,185],"dl_kocha_char":[188,6644,340,164],"dl_kocha_dry":[760,5275,340,171],"dl_kocha_flat":[362,9139,340,128],"dl_kocha_frost":[979,2116,340,194],"dl_kocha_halves":[692,8101,340,153],"dl_kocha_squash":[1472,9139,340,124],"dl_kocha_vomit":[735,6811,340,163],"dl_maricha_burst":[1240,1512,340,198],"dl_maricha_char":[1321,2116,340,192],"dl_maricha_dry":[1359,847,340,221],"dl_maricha_flat":[1109,8713,340,142],"dl_maricha_frost":[396,1298,340,211],"dl_maricha_halves":[1582,6307,340,166],"dl_maricha_squash":[899,7626,340,156],"dl_maricha_vomit":[675,847,340,223],"dl_reimu_char":[416,1917,340,196],"dl_reimu_dry":[184,5966,340,168],"dl_reimu_flat":[1495,8859,340,136],"dl_reimu_frost":[1113,4026,340,180],"dl_reimu_halves":[946,1075,340,214],"dl_reimu_squash":[762,7142,340,160],"dl_reimu_vomit":[1582,1512,340,198],"dl_tsumuri_burst":[898,1512,340,199],"dl_tsumuri_char":[185,2894,340,190],"dl_tsumuri_dry":[333,847,340,224],"dl_tsumuri_flat":[1180,7305,340,158],"dl_tsumuri_frost":[844,340,340,254],"dl_tsumuri_halves":[1630,1075,340,212],"dl_tsumuri_squash":[1077,6811,340,163],"dl_tsumuri_vomit":[1701,847,340,221],"p_lie_dn_reimu":[915,3841,340,182],"p_lie_dn_reimu_hat":[1257,3841,340,182],"p_lie_dn_tsumuri":[1186,340,340,246],"p_lie_dn_tsumuri_hat":[1528,340,340,246],"p_lie_dn_kocha":[582,3277,340,186],"p_lie_dn_kocha_hat":[924,3277,340,186],"dl_reimu_burst":[0,1512,340,203],"angry_nohat":[1036,4210,189,177],"nb|angry_nohat":[1227,4210,189,177,0,0],"blank_nohat":[1323,5795,185,169],"nb|blank_nohat":[1510,5795,185,169,0,0],"dizzy_nohat":[346,8101,171,154],"nb|dizzy_nohat":[519,8101,171,154,0,0],"doya_nohat":[396,4924,196,174],"excited_nohat":[973,4569,191,176],"nb|excited_nohat":[1166,4569,191,176,0,0],"joy_nohat":[1791,4390,195,176],"nb|joy_nohat":[0,4569,195,176,0,0],"laugh_nohat":[1312,6644,184,164],"nb|laugh_nohat":[1498,6644,184,164,0,0],"love_nohat":[392,4747,194,175],"nb|love_nohat":[588,4747,194,175,0,0],"lovelove_nohat":[380,5275,188,172],"nb|lovelove_nohat":[570,5275,188,172,0,0],"oh_nohat":[0,1917,206,197],"nb|oh_nohat":[208,1917,206,197,0,0],"puku3_nohat":[158,8564,156,147],"nb|puku3_nohat":[316,8564,156,147,0,0],"relax_nohat":[622,5100,205,173],"sing_nohat":[366,8257,172,153],"nb|sing_nohat":[540,8257,172,153,0,0],"squish_nohat":[198,3466,196,186],"nb|squish_nohat":[396,3466,196,186,0,0],"strain_nohat":[1758,8257,180,150],"nb|strain_nohat":[0,8412,180,150,0,0],"tilt_nohat":[329,6977,176,162],"nb|tilt_nohat":[507,6977,176,162,0,0],"eat3_nohat":[896,8412,161,150],"doze_nohat":[1639,6476,175,166],"hide_nohat":[0,9139,179,129],"mv_jump_nohat":[1267,6307,164,167],"backwobble_nohat":[1090,6476,181,166],"crawl_nohat":[714,8257,151,153],"dead_nohat":[1541,6137,185,167],"dead2_nohat":[529,6476,185,166],"pero_nohat":[199,2701,196,191],"pero2_nohat":[793,2701,191,191],"suri_nohat":[1372,2701,190,191],"suri2_nohat":[1479,2507,197,191],"mv_front_1_nohat":[1496,1917,194,196],"mv_front_2_nohat":[1722,3466,225,185],"mv_front_3_nohat":[610,7943,193,155],"mv_front_4_nohat":[1386,5100,207,172],"mv_side_1_nohat":[1534,7785,182,156],"mv_side_2_nohat":[0,4210,262,178],"mv_side_3_nohat":[1092,8859,207,138],"mv_side_4_nohat":[649,8713,152,143],"mv_turn_1_nohat":[474,3654,207,184],"mv_turn_2_nohat":[527,2894,184,189],"nb|doze_nohat":[1335,9270,107,79,2,87],"nb|mv_front_1_nohat":[1177,9270,47,80,144,111],"nb|mv_front_2_nohat":[1501,9270,55,78,129,107],"nb|mv_front_3_nohat":[172,9386,50,62,140,93],"nb|mv_front_4_nohat":[1808,9270,52,67,143,105],"nb|mv_jump_nohat":[1707,9270,45,76,80,82],"nb|mv_side_1_nohat":[0,9386,49,65,68,91],"nb|mv_side_2_nohat":[834,9386,61,52,55,125],"nb|mv_side_3_nohat":[518,9386,52,57,39,81],"nb|mv_side_4_nohat":[1907,9270,43,67,43,76],"nb|mv_turn_1_nohat":[1103,9386,52,50,52,130],"mv_back_1_nohat":[1100,1917,196,196],"mv_back_2_nohat":[990,3466,193,186],"mv_back_3_nohat":[1425,2313,194,192],"mv_back_4_nohat":[0,1298,196,212],"mv_backL_1_nohat":[187,3841,180,183],"mv_backL_2_nohat":[1397,3654,185,183],"mv_backL_3_nohat":[576,3087,186,188],"mv_backL_4_nohat":[215,2116,189,195],"mv_backR_1_nohat":[1716,3087,192,187],"mv_backR_2_nohat":[1684,2894,190,188],"mv_backR_3_nohat":[625,2313,198,192],"mv_backR_4_nohat":[191,2507,189,192],"mv_backDL_1_nohat":[369,3841,180,183],"mv_backDL_2_nohat":[1584,3654,185,183],"mv_backDL_3_nohat":[764,3087,186,188],"mv_backDL_4_nohat":[406,2116,189,195],"mv_backDR_1_nohat":[0,3277,192,187],"mv_backDR_2_nohat":[0,3087,190,188],"mv_backDR_3_nohat":[825,2313,198,192],"mv_backDR_4_nohat":[382,2507,189,192],"mv_spin_1_nohat":[0,4026,185,182],"mv_spin_2_nohat":[0,4390,175,177],"mv_spin_3_nohat":[1152,4747,178,175],"mv_spin_4_nohat":[561,4026,182,182],"mv_spin_5_nohat":[1418,4210,178,177],"mv_spin_6_nohat":[1428,4924,206,173],"mv_spin_7_nohat":[529,5622,187,170],"mv_spin_8_nohat":[718,5622,168,170],"mv_spin_9_nohat":[1228,5622,165,170],"mv_spin_10_nohat":[875,3654,172,184],"r:angry_nohat":[1091,6977,192,161],"r:nbf|angry_nohat":[1285,6977,192,161],"r:blank_nohat":[1587,7943,192,154],"r:nbf|blank_nohat":[1781,7943,192,154],"r:dizzy_nohat":[1610,8564,175,144],"r:nbf|dizzy_nohat":[1787,8564,175,144],"r:doya_nohat":[790,7305,193,159],"r:nbf|doya_nohat":[985,7305,193,159],"r:excited_nohat":[1645,7142,190,160],"r:nbf|excited_nohat":[1837,7142,190,160],"r:joy_nohat":[572,6137,197,167],"r:nbf|joy_nohat":[771,6137,197,167],"r:laugh_nohat":[0,7785,193,156],"r:nbf|laugh_nohat":[195,7785,193,156],"r:love_nohat":[1717,7466,189,157],"r:nbf|love_nohat":[0,7626,189,157],"r:lovelove_nohat":[874,8564,185,146],"r:nbf|lovelove_nohat":[1061,8564,185,146],"r:oh_nohat":[1102,5275,203,171],"r:nbf|oh_nohat":[1307,5275,203,171],"r:puku3_nohat":[360,8859,156,140],"r:nbf|puku3_nohat":[518,8859,156,140],"r:relax_nohat":[198,7305,196,159],"r:nbf|relax_nohat":[396,7305,196,159],"r:sing_nohat":[0,8859,178,140],"r:nbf|sing_nohat":[180,8859,178,140],"r:squish_nohat":[1595,5100,197,172],"r:nbf|squish_nohat":[1794,5100,197,172],"r:strain_nohat":[291,8713,177,143],"r:nbf|strain_nohat":[470,8713,177,143],"r:tilt_nohat":[382,7142,188,161],"r:nbf|tilt_nohat":[572,7142,188,161],"r:eat3_nohat":[1068,8257,161,151],"r:nbf|eat3_nohat":[1231,8257,161,151],"r:doze_nohat":[182,8412,180,150],"r:nbf|doze_nohat":[364,8412,180,150],"r:hide_nohat":[1104,9139,182,126],"r:mv_jump_nohat":[549,7626,173,157],"r:nbf|mv_jump_nohat":[724,7626,173,157],"r:backwobble_nohat":[546,8412,173,150],"r:nbf|backwobble_nohat":[721,8412,173,150],"r:crawl_nohat":[1579,8412,170,147],"r:nbf|crawl_nohat":[1751,8412,170,147],"r:dead_nohat":[1034,8101,192,153],"r:dead2_nohat":[1228,8101,192,153],"r:pero_nohat":[378,5449,179,171],"r:pero2_nohat":[177,5622,174,171],"r:suri_nohat":[1102,5449,178,171],"r:suri2_nohat":[559,5449,179,171],"r:mv_front_1_nohat":[1266,3277,216,186],"r:nbf|mv_front_1_nohat":[1484,3277,216,186],"r:mv_front_2_nohat":[531,4390,228,176],"r:nbf|mv_front_2_nohat":[761,4390,228,176],"r:mv_front_3_nohat":[474,8564,198,146],"r:nbf|mv_front_3_nohat":[674,8564,198,146],"r:mv_front_4_nohat":[1522,7305,212,158],"r:nbf|mv_front_4_nohat":[1736,7305,212,158],"r:mv_side_1_nohat":[186,6811,183,164],"r:nbf|mv_side_1_nohat":[371,6811,183,164],"r:mv_side_2_nohat":[955,2507,260,191],"r:nbf|mv_side_2_nohat":[1217,2507,260,191],"r:mv_side_3_nohat":[704,9139,198,128],"r:nbf|mv_side_3_nohat":[904,9139,198,128],"r:mv_side_4_nohat":[676,8859,161,139],"r:nbf|mv_side_4_nohat":[839,8859,161,139],"r:mv_turn_1_nohat":[685,6977,201,161],"r:nbf|mv_turn_1_nohat":[888,6977,201,161],"r:mv_turn_2_nohat":[1697,5795,182,169],"r:nbf|mv_turn_2_nohat":[0,5966,182,169],"r:mv_back_1_nohat":[991,4390,201,176],"r:mv_back_2_nohat":[1729,5622,193,169],"r:mv_back_3_nohat":[792,4924,195,174],"r:mv_back_4_nohat":[594,3466,196,186],"r:mv_backL_1_nohat":[197,4569,193,176],"r:mv_backL_2_nohat":[1479,6977,190,161],"r:mv_backL_3_nohat":[1816,6476,186,165],"r:mv_backL_4_nohat":[1718,7785,177,156],"r:mv_backR_1_nohat":[1684,6644,184,164],"r:mv_backR_2_nohat":[555,6307,179,167],"r:mv_backR_3_nohat":[784,4747,182,175],"r:mv_backR_4_nohat":[0,5449,187,171],"r:mv_backDL_1_nohat":[0,7142,189,161],"r:mv_backDL_2_nohat":[1419,6811,189,163],"r:mv_backDL_3_nohat":[573,5795,186,169],"r:mv_backDL_4_nohat":[1244,5966,183,168],"r:mv_backDR_1_nohat":[1156,7785,187,156],"r:mv_backDR_2_nohat":[1512,5275,189,171],"r:mv_backDR_3_nohat":[1583,7626,194,156],"r:mv_backDR_4_nohat":[390,7785,190,156],"r:mv_spin_1_nohat":[1282,5449,178,171],"r:mv_spin_2_nohat":[1359,4569,173,176],"r:mv_spin_3_nohat":[917,6307,173,167],"r:mv_spin_4_nohat":[187,6307,182,167],"r:mv_spin_5_nohat":[868,5966,186,168],"r:mv_spin_6_nohat":[195,5795,187,169],"r:mv_spin_7_nohat":[0,6137,173,168],"r:mv_spin_8_nohat":[1036,5100,173,173],"r:mv_spin_9_nohat":[1614,5966,176,168],"r:mv_spin_10_nohat":[194,7466,171,158],"nbf|backwobble_nohat":[1273,6476,181,166],"nbf|hide_nohat":[181,9139,179,129],"nbf|mv_backDL_1_nohat":[551,3841,180,183],"nbf|mv_backDL_2_nohat":[1771,3654,185,183],"nbf|mv_backDL_3_nohat":[952,3087,186,188],"nbf|mv_backDL_4_nohat":[597,2116,189,195],"nbf|mv_backDR_1_nohat":[194,3277,192,187],"nbf|mv_backDR_2_nohat":[192,3087,190,188],"nbf|mv_backDR_3_nohat":[1025,2313,198,192],"nbf|mv_backDR_4_nohat":[573,2507,189,192],"nbf|mv_backL_1_nohat":[733,3841,180,183],"nbf|mv_backL_2_nohat":[0,3841,185,183],"nbf|mv_backL_3_nohat":[1140,3087,186,188],"nbf|mv_backL_4_nohat":[788,2116,189,195],"nbf|mv_backR_1_nohat":[388,3277,192,187],"nbf|mv_backR_2_nohat":[384,3087,190,188],"nbf|mv_backR_3_nohat":[1225,2313,198,192],"nbf|mv_backR_4_nohat":[764,2507,189,192],"nbf|mv_back_1_nohat":[1298,1917,196,196],"nbf|mv_back_2_nohat":[1185,3466,193,186],"nbf|mv_back_3_nohat":[1621,2313,194,192],"nbf|mv_back_4_nohat":[198,1298,196,212],"r:nbf|hide_nohat":[1288,9139,182,126],"r:nbf|mv_backDL_1_nohat":[191,7142,189,161],"r:nbf|mv_backDL_2_nohat":[1610,6811,189,163],"r:nbf|mv_backDL_3_nohat":[761,5795,186,169],"r:nbf|mv_backDL_4_nohat":[1429,5966,183,168],"r:nbf|mv_backDR_1_nohat":[1345,7785,187,156],"r:nbf|mv_backDR_2_nohat":[1703,5275,189,171],"r:nbf|mv_backDR_3_nohat":[1779,7626,194,156],"r:nbf|mv_backDR_4_nohat":[582,7785,190,156],"r:nbf|mv_backL_1_nohat":[392,4569,193,176],"r:nbf|mv_backL_2_nohat":[1671,6977,190,161],"r:nbf|mv_backL_3_nohat":[0,6644,186,165],"r:nbf|mv_backL_4_nohat":[0,7943,177,156],"r:nbf|mv_backR_1_nohat":[0,6811,184,164],"r:nbf|mv_backR_2_nohat":[736,6307,179,167],"r:nbf|mv_backR_3_nohat":[968,4747,182,175],"r:nbf|mv_backR_4_nohat":[189,5449,187,171],"r:nbf|mv_back_1_nohat":[1194,4390,201,176],"r:nbf|mv_back_2_nohat":[0,5795,193,169],"r:nbf|mv_back_3_nohat":[989,4924,195,174],"r:nbf|mv_back_4_nohat":[792,3466,196,186],"r:nbf|mv_spin_1_nohat":[1462,5449,178,171],"r:nbf|mv_spin_10_nohat":[367,7466,171,158],"r:nbf|mv_spin_2_nohat":[1534,4569,173,176],"r:nbf|mv_spin_3_nohat":[1092,6307,173,167],"r:nbf|mv_spin_4_nohat":[371,6307,182,167],"r:nbf|mv_spin_5_nohat":[1056,5966,186,168],"r:nbf|mv_spin_6_nohat":[384,5795,187,169],"r:nbf|mv_spin_7_nohat":[175,6137,173,168],"r:nbf|mv_spin_8_nohat":[1211,5100,173,173],"r:nbf|mv_spin_9_nohat":[1792,5966,176,168],"dl_maricha_burst_nohat":[0,1717,340,198],"dl_maricha_char_nohat":[1663,2116,340,192],"dl_maricha_dry_nohat":[0,1075,340,221],"dl_maricha_flat_nohat":[1451,8713,340,142],"dl_maricha_frost_nohat":[738,1298,340,211],"dl_maricha_halves_nohat":[0,6476,340,166],"dl_maricha_squash_nohat":[1241,7626,340,156],"dl_maricha_vomit_nohat":[1017,847,340,223],"dl_reimu_burst_nohat":[342,1512,340,203],"dl_reimu_char_nohat":[758,1917,340,196],"dl_reimu_dry_nohat":[526,5966,340,168],"dl_reimu_flat_nohat":[0,9001,340,136],"dl_reimu_frost_nohat":[1455,4026,340,180],"dl_reimu_halves_nohat":[1288,1075,340,214],"dl_reimu_squash_nohat":[1104,7142,340,160],"dl_reimu_vomit_nohat":[342,1717,340,198],"p_lie_dn_nohat":[1288,1717,300,197],"p_lie_up_nohat":[644,1075,300,215],"p_lie_up2_nohat":[422,340,420,257],"p_lie_up3_nohat":[1195,0,440,309],"p_lie_dn_reimu_nohat":[1599,3841,340,182],"nbf|eat3":[1059,8412,161,150],"nbf|dead":[1728,6137,185,167],"nbf|dead2":[716,6476,185,166],"nbf|pero":[397,2701,196,191],"nbf|pero2":[986,2701,191,191],"nbf|suri":[1564,2701,190,191],"nbf|suri2":[1678,2507,197,191],"nbf|dead2_nohat":[903,6476,185,166],"nbf|pero_nohat":[595,2701,196,191],"nbf|pero2_nohat":[1179,2701,191,191],"nbf|suri_nohat":[1756,2701,190,191],"r:nbf|dead_nohat":[1422,8101,192,153],"r:nbf|dead2_nohat":[1616,8101,192,153],"r:nbf|pero_nohat":[740,5449,179,171],"r:nbf|pero2_nohat":[353,5622,174,171],"r:nbf|suri_nohat":[1642,5449,178,171],"r:nbf|suri2_nohat":[921,5449,179,171],"nbf|relax_nohat":[829,5100,205,173],"nbf|doya_nohat":[594,4924,196,174],"nbf|eat3_nohat":[1222,8412,161,150],"nbf|dead_nohat":[0,6307,185,167],"nbf|crawl_nohat":[867,8257,151,153],"nbf|suri2_nohat":[0,2701,197,191],"nbf|mv_turn_2_nohat":[713,2894,184,189],"nbf|mv_spin_1_nohat":[187,4026,185,182],"nbf|mv_spin_2_nohat":[177,4390,175,177],"nbf|mv_spin_3_nohat":[1332,4747,178,175],"nbf|mv_spin_4_nohat":[745,4026,182,182],"nbf|mv_spin_5_nohat":[1598,4210,178,177],"nbf|mv_spin_6_nohat":[1636,4924,206,173],"nbf|mv_spin_10_nohat":[1049,3654,172,184],"bkx":[1315,1298,210,209],"r:bkx":[0,3654,210,185],"nbf|back":[1728,1298,199,205],"nbf|backwobble":[1456,6476,181,166],"nbf|mv_spin_1":[374,4026,185,182,-6.8],"nbf|mv_spin_2":[354,4390,175,177,-0.4],"nbf|mv_spin_4":[929,4026,182,182,-12.3],"nbf|mv_spin_5":[1778,4210,178,177,-15.7],"nbf|mv_spin_6":[0,5100,206,173,-4.7],"nbf|mv_spin_8":[888,5622,168,170,0.0],"nbf|mv_spin_9":[1395,5622,165,170,-0.4],"nbf|mv_spin_10":[1223,3654,172,184,-0.4],"nbf|mv_turn_2":[899,2894,184,189],"nbf|mv_spin_8_nohat":[1058,5622,168,170],"nbf|mv_spin_9_nohat":[1562,5622,165,170],"backwobble":[2576,70216,181,166],"crawl":[11997,70216,151,153],"doze":[2761,70216,175,166],"eat3":[13442,70216,161,150],"hide":[1406,70388,179,129],"mv_backDL_1":[4721,70000,180,183,0.0],"mv_backDL_2":[4905,70000,185,183,-1.9],"mv_backDL_3":[2688,70000,186,188,-2.3],"mv_backDL_4":[598,70000,189,195,0.0],"mv_backL_1":[5094,70000,180,183,0.0],"mv_backL_2":[5278,70000,185,183,-1.9],"mv_backL_3":[2878,70000,186,188,-2.3],"mv_backL_4":[791,70000,189,195,0.0],"mv_back_1":[200,70000,196,196,14.0],"mv_back_2":[3068,70000,193,186,8.6],"mv_back_3":[984,70000,194,192,0.0],"mv_back_4":[0,70000,196,212,-3.1],"mv_front_1":[400,70000,194,196],"mv_front_2":[4105,70000,225,185],"mv_front_3":[11408,70216,193,155],"mv_front_4":[9985,70000,207,172],"mv_jump":[914,70216,164,167],"mv_side_1":[9300,70216,182,156],"mv_side_2":[6220,70000,262,178],"mv_side_3":[1195,70388,207,138],"mv_side_4":[15977,70216,152,143],"mv_spin_1":[5845,70000,185,182,-6.8],"mv_spin_10":[4334,70000,172,184,-0.4],"mv_spin_2":[6486,70000,175,177,-0.4],"mv_spin_3":[8469,70000,178,175,-5.1],"mv_spin_4":[6034,70000,182,182,-12.3],"mv_spin_5":[6665,70000,178,177,-15.7],"mv_spin_6":[9421,70000,206,173,-4.7],"mv_spin_7":[13596,70000,187,170,1.3],"mv_spin_8":[13787,70000,168,170,0.0],"mv_spin_9":[13959,70000,165,170,-0.4],"mv_turn_1":[4510,70000,207,184],"mv_turn_2":[2500,70000,184,189],"pero":[1182,70000,196,191],"pero2":[1382,70000,191,191],"puku3":[14329,70216,156,147],"r:angry":[4636,70216,192,161],"r:back":[5467,70000,185,183],"r:backwobble":[13607,70216,173,150],"r:blank":[11605,70216,192,154],"r:crawl":[14489,70216,170,147],"r:dead":[12152,70216,192,153],"r:dead2":[12348,70216,192,153],"r:dizzy":[15619,70216,175,144],"r:doya":[6984,70216,193,159],"r:doze":[13784,70216,180,150],"r:eat3":[13112,70216,161,151],"r:excited":[6596,70216,190,160],"r:hide":[1993,70388,182,126],"r:joy":[1082,70216,197,167],"r:laugh":[9486,70216,193,156],"r:love":[8560,70216,189,157],"r:lovelove":[14837,70216,185,146],"r:mv_backDL_1":[4832,70216,189,161,-3.7],"r:mv_backDL_2":[4070,70216,189,163,2.4],"r:mv_backDL_3":[14128,70000,186,169,-0.9],"r:mv_backDL_4":[15656,70000,183,168,0.2],"r:mv_backDR_1":[9683,70216,187,156,2.5],"r:mv_backDR_2":[10598,70000,189,171,-5.1],"r:mv_backDR_3":[9874,70216,194,156,3.6],"r:mv_backDR_4":[10072,70216,190,156,1.1],"r:mv_backL_1":[6847,70000,193,176,-3.0],"r:mv_backL_2":[5025,70216,190,161,2.0],"r:mv_backL_3":[2940,70216,186,165,0.0],"r:mv_backL_4":[10266,70216,177,156,-2.6],"r:mv_backR_1":[3320,70216,184,164,0.8],"r:mv_backR_2":[1283,70216,179,167,1.4],"r:mv_backR_3":[8651,70000,182,175,1.2],"r:mv_backR_4":[10791,70000,187,171,4.6],"r:mv_back_1":[7044,70000,201,176,2.6],"r:mv_back_2":[14318,70000,193,169,3.4],"r:mv_back_3":[9023,70000,195,174,-1.5],"r:mv_back_4":[3265,70000,196,186,-1.5],"r:mv_front_1":[3465,70000,216,186],"r:mv_front_2":[7249,70000,228,176],"r:mv_front_3":[15026,70216,198,146],"r:mv_front_4":[7778,70216,212,158],"r:mv_jump":[8753,70216,173,157],"r:mv_side_1":[3508,70216,183,164],"r:mv_side_2":[1577,70000,260,191],"r:mv_side_3":[1589,70388,198,128],"r:mv_side_4":[865,70388,161,139],"r:mv_spin_1":[10982,70000,178,171,1.3],"r:mv_spin_10":[7994,70216,171,158,1.1],"r:mv_spin_2":[7481,70000,173,176,0.4],"r:mv_spin_3":[1466,70216,173,167,0.5],"r:mv_spin_4":[1643,70216,182,167,2.5],"r:mv_spin_5":[15843,70000,186,168,-1.7],"r:mv_spin_6":[14515,70000,187,169,-2.7],"r:mv_spin_7":[16033,70000,173,168,-7.3],"r:mv_spin_8":[9631,70000,173,173,0.2],"r:mv_spin_9":[0,70216,176,168,-1.2],"r:mv_turn_1":[5219,70216,201,161],"r:mv_turn_2":[14706,70000,182,169],"r:nbf|angry":[5424,70216,192,161],"r:nbf|back":[5656,70000,185,183],"r:nbf|backwobble":[13968,70216,173,150],"r:nbf|blank":[11801,70216,192,154],"r:nbf|crawl":[14663,70216,170,147],"r:nbf|dead":[12544,70216,192,153],"r:nbf|dead2":[12740,70216,192,153],"r:nbf|dizzy":[15798,70216,175,144],"r:nbf|doya":[7181,70216,193,159],"r:nbf|doze":[14145,70216,180,150],"r:nbf|eat3":[13277,70216,161,151],"r:nbf|excited":[6790,70216,190,160],"r:nbf|hide":[2179,70388,182,126],"r:nbf|joy":[1829,70216,197,167],"r:nbf|laugh":[10447,70216,193,156],"r:nbf|love":[8930,70216,189,157],"r:nbf|lovelove":[15228,70216,185,146],"r:nbf|mv_backDL_1":[5620,70216,189,161],"r:nbf|mv_backDL_2":[4263,70216,189,163],"r:nbf|mv_backDL_3":[14892,70000,186,169],"r:nbf|mv_backDL_4":[180,70216,183,168],"r:nbf|mv_backDR_1":[10644,70216,187,156],"r:nbf|mv_backDR_2":[11164,70000,189,171],"r:nbf|mv_backDR_3":[10835,70216,194,156],"r:nbf|mv_backDR_4":[11033,70216,190,156],"r:nbf|mv_backL_1":[7658,70000,193,176],"r:nbf|mv_backL_2":[5813,70216,190,161],"r:nbf|mv_backL_3":[3130,70216,186,165],"r:nbf|mv_backL_4":[11227,70216,177,156],"r:nbf|mv_backR_1":[3695,70216,184,164],"r:nbf|mv_backR_2":[2030,70216,179,167],"r:nbf|mv_backR_3":[8837,70000,182,175],"r:nbf|mv_backR_4":[11357,70000,187,171],"r:nbf|mv_back_1":[7855,70000,201,176],"r:nbf|mv_back_2":[15082,70000,193,169],"r:nbf|mv_back_3":[9222,70000,195,174],"r:nbf|mv_back_4":[3685,70000,196,186],"r:nbf|mv_front_1":[3885,70000,216,186],"r:nbf|mv_front_2":[8060,70000,228,176],"r:nbf|mv_front_3":[15417,70216,198,146],"r:nbf|mv_front_4":[8169,70216,212,158],"r:nbf|mv_jump":[9123,70216,173,157],"r:nbf|mv_side_1":[3883,70216,183,164],"r:nbf|mv_side_2":[1841,70000,260,191],"r:nbf|mv_side_3":[1791,70388,198,128],"r:nbf|mv_side_4":[1030,70388,161,139],"r:nbf|mv_spin_1":[11548,70000,178,171],"r:nbf|mv_spin_10":[8385,70216,171,158],"r:nbf|mv_spin_2":[8292,70000,173,176],"r:nbf|mv_spin_3":[2213,70216,173,167],"r:nbf|mv_spin_4":[2390,70216,182,167],"r:nbf|mv_spin_5":[367,70216,186,168],"r:nbf|mv_spin_6":[15279,70000,187,169],"r:nbf|mv_spin_7":[557,70216,173,168],"r:nbf|mv_spin_8":[9808,70000,173,173],"r:nbf|mv_spin_9":[734,70216,176,168],"r:nbf|mv_turn_1":[6007,70216,201,161],"r:nbf|mv_turn_2":[15470,70000,182,169],"r:nbf|oh":[11730,70000,203,171],"r:nbf|pero":[11937,70000,179,171],"r:nbf|pero2":[12120,70000,174,171],"r:nbf|puku3":[181,70388,156,140],"r:nbf|relax":[7378,70216,196,159],"r:nbf|sing":[341,70388,178,140],"r:nbf|squish":[10196,70000,197,172],"r:nbf|strain":[16133,70216,177,143],"r:nbf|suri":[12298,70000,178,171],"r:nbf|suri2":[12480,70000,179,171],"r:nbf|tilt":[6212,70216,188,161],"r:oh":[12663,70000,203,171],"r:pero":[12870,70000,179,171],"r:pero2":[13053,70000,174,171],"r:puku3":[523,70388,156,140],"r:relax":[7578,70216,196,159],"r:sing":[683,70388,178,140],"r:squish":[10397,70000,197,172],"r:strain":[0,70388,177,143],"r:suri":[13231,70000,178,171],"r:suri2":[13413,70000,179,171],"r:tilt":[6404,70216,188,161],"sing":[12936,70216,172,153],"suri":[2105,70000,190,191],"suri2":[2299,70000,197,191],"tilt":[4456,70216,176,162]};
 // しゅぞくごとの 絵：いまの しゅぞくの 接頭辞（れいみゅ＝"r:"）つきの 絵が あれば そちらを つかう
 let SPX = '';
@@ -1489,6 +1489,22 @@ function headPos(){
   const tx = M.tilt ? Math.sin(M.tilt)*h*s*.5 : 0, ty = M.tilt ? (1-Math.cos(M.tilt))*h*s*.4 : 0;
   return {x:M.x+tx, y:by-h*s*.55+ty, w:w*s, h:h*s, top:by-h*s+ty};
 }
+/* 11/8 1.7.1（BOOTH 寿司ししゃもさん 11/6・bt_sushi1106 の 10「記憶ペースト・霧吹き・バット などの 当たり判定が 先端寄りで 狭い」）
+   ・しらべ：あたりは ゆびの 1てん だけ。でも どうぐの 絵（drawToolCursor）は ゆびの よこに でる
+       記憶ペースト・ホイホイ・テープ・ちゅうしゃ：ゆびの みぎうえ（x+4〜、y-2 から うえ。zz_v162_gy_tools／zz_v169_mean）
+       きりふき：ゆびの みぎ（まんなか x+34, y-6・たかさ 58。zz_seiri_toolcursor）
+       バット：ゆびが もつ ところ・まわして みぎうえへ（-6,-52 の 54×54。zz_v162_gy_tools）
+     → 絵を その子に かさねても あたらず、ゆびの さき（絵の はし）だけが あたって いた
+   ・なおし：その どうぐの とき は、絵の ある ところ（3×3 の てん）でも あたる。ゆびの てんが いちばん さき（絵は かえない）
+     ykPickAt（m_multi.js）は ゆびの てんで あたる 子を さきに えらぶ（HITBODY.off） */
+const HITBODY = { on:true, off:false, gy:['gy_kioku','gy_hoihoi','gy_tape','gy_chusha'] };
+function hitBodyPts(px, py){
+  const k=TOOL.cur, out=[], grid=(x0,y0,x1,y1,rot)=>{ for(const a of [.2,.5,.8]) for(const b of [.2,.5,.8]){ let x=x0+(x1-x0)*a, y=y0+(y1-y0)*b; if(rot){ const c=Math.cos(rot), s=Math.sin(rot); [x,y]=[x*c-y*s, x*s+y*c]; } out.push([px+x, py+y]); } };
+  if(HITBODY.gy.includes(k)){ let w=44, h=34; try{ const im=gyImg(k.slice(3)); if(im && im.naturalWidth){ const s=Math.min(44/im.naturalWidth, 34/im.naturalHeight); w=im.naturalWidth*s; h=im.naturalHeight*s; } }catch(e){} grid(4, -h-2, 4+w, -2); }
+  else if(k==='kiri'){ let w=40; try{ if(KIRI_IMG.ok) w=58*KIRI_IMG.im.width/KIRI_IMG.im.height; }catch(e){} grid(34-w/2, -6-29, 34+w/2, -6+29); }
+  else if(k==='gy_bat'){ let c=0, sw=0; try{ c=TOOL.gyBat ? clamp((performance.now()-TOOL.gyBat.t0)/GYTOOLS.batCharge, 0, 1) : 0; sw=TOOL.gyBatSw>0 ? Math.sin((1-TOOL.gyBatSw/.25)*Math.PI) : 0; }catch(e){} grid(-6, -52, 48, 2, -.2-c*1.0+sw*1.3); }
+  return out;
+}
 function hitMari(px,py){
   if(M.hidden) return null;
   const [w,h] = spriteSize(currentSprite());
@@ -1498,6 +1514,7 @@ function hitMari(px,py){
   else { cx=M.x; cy=M.z-M.h-h*s*.5; }
   const rx=w*s*.55, ry=h*s*.58;
   const d=((px-cx)/rx)**2+((py-cy)/ry)**2;
+  if(d>1 && HITBODY.on && !HITBODY.off){ try{ if(TOOL.cur) for(const [x,y] of hitBodyPts(px, py)) if(((x-cx)/rx)**2+((y-cy)/ry)**2<=1) return {cx,cy,rel:(y-(cy-ry))/(2*ry), body:true}; }catch(e){} }
   return d<=1 ? {cx,cy,rel:(py-(cy-ry))/(2*ry)} : null;
 }
 
@@ -4193,6 +4210,8 @@ function ykBubble(i){
 }
 // よみこみ直後に よぶ：むかしの セーブ（1ぴき）を「ゆっくり 1ぴき目」に する
 function ykInit(){
+  // 11/8 1.7.1：かたづけた しんだ子の わく（u_misc.js ykDropCleared）は ほかに 子が いれば けす（のこった セーブも なおす）。みんな わくなら 1つだけ のこす
+  if(S.yk && S.yk.length>1 && S.yk.some(y=>y && y.dead && y.dead.cleared)){ const live=S.yk.filter(y=>y && !(y.dead && y.dead.cleared)); S.yk = live.length ? live : [S.yk[0]]; }
   if(!S.yk || !S.yk.length){
     const y = {id:uid()}; for(const k of YK_KEYS) y[k] = S[k];
     y.sp = y.sp || 'maricha'; if(!y.me) y.me = rollMe(y.sp);
@@ -4213,6 +4232,7 @@ let FOCUS_T = -9;
 function ykFocus(i){ if(!S.yk[i]) return; FOCUS = i; FOCUS_T = T; S.focus = i; ykEnter(i); if(typeof drawPortrait==='function') drawPortrait(); if(typeof renderYkTabs==='function') renderYkTabs(); }
 // あたらしい ゆっくりを おむかえ
 function ykAdd(sp){
+  ykDropCleared();   // 11/8 かたづけた しんだ子の わく（u_misc.js）は かずに いれない
   if(S.yk.length >= YK_MAX) return false;
   ykSave();
   const y = {id:uid(), sp, full:80, mood:75, clean:Math.max(S.clean,70), health:100, xp:0, lv:1, poopNeed:30, sleepy:20,
@@ -4226,6 +4246,7 @@ function ykAdd(sp){
   });
   note(`あたらしい ${SPECIES[sp].name}が テラリウムに やってきた！`);
   if(typeof SFX!=='undefined') SFX.happy();
+  if(ykDropCleared()) ykFocus(S.yk.length-1);   // 11/8 もとは u_misc.js の つつみ
   renderYkTabs(); save();
   return true;
 }
@@ -4335,10 +4356,13 @@ function socialSprite(){
 }
 // つついた ところに いる子を えらぶ（手前の子が ゆうせん）
 function ykPickAt(x, y){
-  if(hitMari(x,y)) return FOCUS;   // いま えらんでいる子に あたっていれば そのまま
-  let best=-1, bz=-1e9;
-  ykEach(i=>{ if(!isDead() || true){ const h=hitMari(x,y); if(h){ const z=M.lifted?1e6:M.z; if(z>bz){ bz=z; best=i; } } } });
-  return best;
+  // 11/8 どうぐの 絵でも あたる（d_mari.js HITBODY）：さきに ゆびの てん だけで さがし、いなければ 絵の ところで さがす
+  const pick=()=>{ if(hitMari(x,y)) return FOCUS;   // いま えらんでいる子に あたっていれば そのまま
+    let best=-1, bz=-1e9;
+    ykEach(i=>{ if(!isDead() || true){ const h=hitMari(x,y); if(h){ const z=M.lifted?1e6:M.z; if(z>bz){ bz=z; best=i; } } } });
+    return best; };
+  const off=HITBODY.off; HITBODY.off=true; let r; try{ r=pick(); } finally{ HITBODY.off=off; }
+  return r>=0 ? r : pick();
 }
 cv.addEventListener('pointerdown', e=>{
   if(S.yk.length<2 || ED.on || press) return;
@@ -4366,7 +4390,7 @@ function openAdoptSheet(){
   const opt = Object.entries(SPECIES).filter(([k,v])=>!v.spx || SP_RAW[v.spx+'smile'] || window.__YK_ALL).map(([k,v])=>`<button type="button" class="btn" data-sp="${k}" ${full?'disabled':''}>${v.name}</button>`).join('');
   const rel = S.yk.length>1 ? `<h3 class="sub">おわかれ</h3><p class="edit-help">・すいそうから 出して、ほかの おうちへ おくりだします（もとに もどせません）</p><div class="fix">${S.yk.map((y,i)=>`<button type="button" class="btn" data-rel="${i}">${ykLabel(y)}（${SPECIES[y.sp].name}）</button>`).join('')}</div>` : '';
   openSheet('adopt', `<div class="sheet-h"><h2>おむかえ</h2><button class="x" type="button" aria-label="とじる">✕</button></div>
-  <p class="memo" style="font-size:14px;line-height:1.7">すいそうに なかまを むかえます（いま ${S.yk.length}ひき／さいだい ${YK_MAX}ひき）${full?'<br><b>いっぱいです。むかえるには だれかと おわかれしてください。</b>':''}</p>
+  <p class="memo" style="font-size:14px;line-height:1.7">すいそうに なかまを むかえます（いま ${ykLiveN(S.yk)}ひき／さいだい ${YK_MAX}ひき）${full?'<br><b>いっぱいです。むかえるには だれかと おわかれしてください。</b>':''}</p>
   <div class="fix">${opt}</div>
   ${rel}
   <p class="edit-help">・うえの なまえを タップすると、おせわする子を きりかえられます<br>・すいそうの なかで タップした子にも きりかわります</p>`);
@@ -4609,7 +4633,13 @@ function anyoStay(){
   if(bubbleT<=0 && chance(.45)) say('anyoStay', {cls:'sleepy'});
 }
 function rubTick(dt){
+  // 11/8 1.7.1：すいちゅうの つむりを もちあげた とき は こすれない（もとは zz_v136b_fix.js の つつみ・ここへ うつした）
+  if(typeof uwOk==='function' && uwOk()) return;
   const bottom = M.ly - M.grabDy, sp = Math.abs(M.pvx);
+  // 11/8 1.7.1（BOOTH 寿司ししゃもさん 11/6・bt_sushi1106 の 4「にとりを 水面から 出そうと すると 足が 擦れる」）：
+  //   かっぱの かわ など 水が いちばん てまえ（FLOOR_BOT）まで ある ステージでは、てまえで みずの うえを うごかしても ゆかに こすって いた
+  //   → てまえが みず なら こすれない（ゆかの ところは いままで どおり）
+  if(bottom>=FLOOR_BOT-6 && typeof waterAt==='function'){ try{ if(waterAt(M.lx, Math.min(bottom, FLOOR_BOT-1))) return; }catch(e){} }
   if(bottom>=FLOOR_BOT-6 && bottom<=FLOOR_BOT+46 && sp>140){   // すいそうの いちばん てまえ（がめんの した）に こすりつけた ときだけ
     anyoHurt(sp*dt*.02, 'rub'); if(isDead()) return;
     M.rubT=(M.rubT||0)+dt; M.tears=Math.max(M.tears,1);
@@ -6188,12 +6218,18 @@ const _mx_deathTick = deathTick;
 deathTick = function(dt){ if(S.dead && S.dead.cleared){ M.hidden=true; return; } return _mx_deathTick(dt); };
 const _mx_newMari = newMari;
 newMari = function(){ M.hidden=false; return _mx_newMari.apply(this, arguments); };
-const _mx_ykAdd = ykAdd;
-ykAdd = function(sp){
-  const r=_mx_ykAdd(sp);
-  if(r){ let rm=false; for(let i=S.yk.length-1;i>=0;i--) if(S.yk[i].dead && S.yk[i].dead.cleared && S.yk.length>1){ ykRemoveQuiet(i); rm=true; } if(rm){ ykFocus(S.yk.length-1); renderYkTabs(); } }
-  return r;
-};
+/* 11/8 1.7.1（BOOTH 寿司ししゃもさん 11/6・bt_sushi1106 の 6）：いじわるで さいごの 子を しなせると 水槽の かずが 0に ならず 1の まま・8ひき いれられない
+   ・しらべ：さいごの 子が しんで からだが なくなる（ミキサー・やく／そうじで かたづける／うめる）と、S.yk に「かたづけた しんだ子（dead.cleared）」の
+     わくが 1つ のこる（S.yk は からに できない）。それを 水槽の ボタンの かず（tankBar）・おむかえ の「いま Nひき」が かぞえて いた。
+     わくを けすのは ykAdd（おむかえ・ショップ）だけ で、あずかりばこから もどす（ykAddY）・おひっこし（tankMove・tankGo）は けさない →
+     わく＋7ひき で「いっぱい」に なり 8ひきめが はいらない
+   ・なおし：わくを かぞえない（ykLiveN）・ゆっくりが ふえる 入口で わくを けす（ykDropCleared／ykNoCleared）・よみこみ（ykInit）でも けす（もう こわれた セーブも なおる）
+     ykAdd の つつみ（_mx_ykAdd）は m_multi.js の ykAdd の なかへ うつした（つつみ 1まい へらした） */
+function ykIsCleared(y){ return !!(y && y.dead && y.dead.cleared); }
+function ykLiveN(list){ let n=0; for(const y of (list||[])) if(y && !ykIsCleared(y)) n++; return n; }
+function ykNoCleared(list){ return (list||[]).filter(y=>y && !ykIsCleared(y)); }
+// いまの 水槽：ほかに 子が いれば わくを けす（さいごの 1つは のこす）。けしたら true
+function ykDropCleared(){ let rm=false; for(let i=S.yk.length-1;i>=0;i--) if(ykIsCleared(S.yk[i]) && S.yk.length>1){ ykRemoveQuiet(i); rm=true; } return rm; }
 
 /* ============================================================
    うごき：もるもる・びたんびたん
@@ -6930,13 +6966,20 @@ function ageDays(){ return Math.max(0, (S.gameDay||0) - (S.bornDay||0)); }
 const _by_startPoop = startPoop;
 startPoop = function(onToilet){
   const p=BY();
+  /* 11/8 1.7.1（BOOTH 寿司ししゃもさん 11/6・bt_sushi1106 の 12「げろまず系だけ与えても便秘にならない」）
+     ・しらべ：げろまずー 1かい ＋14。でも ①じかんで へる（おきて いる あいだ 1ぷん .01＝1日 14 ぐらい）②うんうんの とき 40 いじょう なら −40
+       → ふつうに おなかが すいた ときに あげると 1日 1〜2かい・うんうんは その あいだに でるので、60（べんぴ）に とどかない
+         （シミュで 2.5日・げろまずー だけ：さいだい 14）。うえの「それなりー／げろまずーばかりだと でなくなる」に ならない
+     ・なおし：げろまずー ばかり（p.yuckRun>0）の あいだは ①②を しない。②は「いちど べんぴに なった（p.benpiHard）」あとの すっきり だけ
+       ほかの ものを たべたら いままで どおり（それなりー・まぜた ごはんは かえない） */
   if(p.benpi>=60 && !isDead()){
     setState('strain', 3.5); say('benpi'); express('strain',3.2); M.tears=.8; S.poopNeed=Math.max(70,S.poopNeed-25); psAdd('stress',3);
+    p.benpiHard=true;
     if(chance(.25)){ p.benpi=Math.max(0,p.benpi-30); }
     return;
   }
   const was=p.benpi; _by_startPoop(onToilet);
-  if(was>=40){ p.benpi=Math.max(0,p.benpi-40); { const _id=(S.yk[YK_I]||{}).id; setTimeout(()=>ykDoById(_id,()=>{ if(!isDead()) say('benpiOk',{cls:'shout'}); }), 1600); } }
+  if(was>=40 && (p.benpiHard || !(p.yuckRun>0))){ p.benpiHard=false; p.benpi=Math.max(0,p.benpi-40); { const _id=(S.yk[YK_I]||{}).id; setTimeout(()=>ykDoById(_id,()=>{ if(!isDead()) say('benpiOk',{cls:'shout'}); }), 1600); } }
 };
 
 /* ---------- おねしょ ---------- */
@@ -7261,6 +7304,9 @@ function gyWaterTick(dt){
 }
 /* ---------- とうめいな はこ（ながめがかり） ---------- */
 function gyBoxIn(){
+  // 11/7 X ユシューさん（x_kagachi_bindbox1107）：しばった 子・どうぐ（ミキサーなど）に はいって いる 子は はこに いれない（はこ→しばる と おなじく とめる。いれると はこが かかれず セリフだけ はこに なっていた）
+  if(M.trapped){ toast('いたに しばられて いる ときは できません'); return; }
+  if(PS().gyM){ toast('いまは できません'); return; }
   M.boxed={x:M.x, z:M.z, t:0}; M.h=0; setState('box',3); express('oh',1.2); say('boxIn',{cls:'shout'}); SFX.plop && SFX.plop();
   note(`${S.me}を とうめいな はこに とじこめた。`); save();
 }
@@ -13897,8 +13943,7 @@ function pfVia(wp, args){
 function pfUwLift(){ return typeof uwOk==='function' && uwOk(); }
 const _pf_fxCrushTick = fxCrushTick;
 fxCrushTick = function(dt){ if(M.lifted && pfUwLift()) M.crushIn=0; return _pf_fxCrushTick(dt); };
-const _pf_rubTick = rubTick;
-rubTick = function(dt){ if(pfUwLift()) return; return _pf_rubTick(dt); };
+/* rubTick の つつみ（_pf_rubTick）は n_nature.js の rubTick へ うつした（11/8） */
 
 /* ============================================================
    patch_misc（10/6）：B3 ごはん・B6 ほっぺ・B8 じどうそうじき・B9 おいけの せりふ
@@ -14154,7 +14199,7 @@ function tankGo(j, quiet, carryId){
   const t=S.tanks[j], dst=t.snap || tankFresh('normal');
   // carryId：いまの すいそうの その子を いっしょに つれていく（さいごの 1ぴきの おひっこし）
   if(carryId!==undefined){ const k=(cur.snap.yk||[]).findIndex(y=>y.id===carryId);
-    if(k>=0){ const y=cur.snap.yk.splice(k,1)[0]; y.dead=y.dead||null; cur.snap.focus=0; (dst.yk=dst.yk||[]).push(y); dst.focus=dst.yk.length-1; } }
+    if(k>=0){ const y=cur.snap.yk.splice(k,1)[0]; y.dead=y.dead||null; cur.snap.focus=0; (dst.yk=ykNoCleared(dst.yk)).push(y); dst.focus=dst.yk.length-1; } }   // 11/8 かたづけた しんだ子の わくは けす
   tankLoadIn(dst); t.snap=null; S.tankI=j;
   tankRebuild();
   if(!quiet) tankBanner(`${tankIcon(j)} ${tankName(j)}`);
@@ -14206,7 +14251,7 @@ function tankRebuild(){
 function tankMove(i, j, follow){
   if(j===S.tankI || !S.tanks[j] || !S.yk[i]) return false;
   const dst=S.tanks[j].snap || (S.tanks[j].snap=tankFresh('normal'));
-  if((dst.yk||[]).length >= YK_MAX){ toast(`${tankName(j)}は いっぱいです`); return false; }
+  if(ykLiveN(dst.yk) >= YK_MAX){ toast(`${tankName(j)}は いっぱいです`); return false; }   // 11/8 かたづけた しんだ子の わくは かぞえない
   if(S.yk[i].sp==='suijo' && !tankHasSuiWater(j)){ toast(`${tankName(j)}には みずが ないので 水上まりちゃは すめません`); return false; }
   if(follow || S.yk.length<2){
     // さいごの 1ぴき（または からっぽの すいそうへ）：その子と いっしょに うつりさきへ いく
@@ -14221,7 +14266,7 @@ function tankMove(i, j, follow){
   const y=S.yk[i], label=ykLabel(y), dname=tankName(j);
   ykRemoveQuiet(i);
   y.dead = y.dead || null;
-  (dst.yk = dst.yk || []).push(y);
+  (dst.yk = ykNoCleared(dst.yk)).push(y);
   note(`${label}を「${dname}」へ おひっこし させた。`);
   toast(`${label} → ${tankIcon(j)} ${dname}`);
   renderYkTabs(); tankBar(); save();
@@ -14303,7 +14348,7 @@ function tankBar(){
   const tabs=document.getElementById('yktabs'); if(!tabs || !S.tanks) return;
   let bar=document.getElementById('tankbar');
   if(!bar){ bar=document.createElement('div'); bar.id='tankbar'; tabs.parentNode.insertBefore(bar, tabs); }
-  bar.innerHTML = S.tanks.map((t,i)=>`<button type="button" class="tk${i===S.tankI?' on':''}" data-tank="${i}" title="${tankName(i)}（${tankYks(i).length}ひき）">${tankIcon(i)}${tankShort(i)}<small>${tankYks(i).length}</small></button>`).join('')
+  bar.innerHTML = S.tanks.map((t,i)=>`<button type="button" class="tk${i===S.tankI?' on':''}" data-tank="${i}" title="${tankName(i)}（${ykLiveN(tankYks(i))}ひき）">${tankIcon(i)}${tankShort(i)}<small>${ykLiveN(tankYks(i))}</small></button>`).join('')
     + (S.tanks.length<TANK_MAX ? `<button type="button" class="tk add" data-tankadd="1" title="すいそうを ふやす" aria-label="すいそうを ふやす">＋すいそう</button>` : '');
   const on=bar.querySelector('.tk.on'); if(on && bar.scrollWidth>bar.clientWidth){ const br=bar.getBoundingClientRect(), r=on.getBoundingClientRect(); if(r.left<br.left || r.right>br.right) bar.scrollLeft += r.left-br.left-8; }
   bar.querySelectorAll('[data-tank]').forEach(b=>b.addEventListener('click',()=>{ const j=+b.dataset.tank; if(j!==S.tankI){ tankGo(j); SFX.click&&SFX.click(); } }));
@@ -14355,7 +14400,7 @@ cv.addEventListener('pointercancel', ()=>{ TANK_HOT=-1; tankHint(-1); document.b
     const firstOpt = S.yk.map((y,i)=>`<button type="button" class="btn" data-first="m${i}" >${ykLabel(y)}を つれていく</button>`).join('')
       + Object.entries(SPECIES).filter(([k,v])=>!v.spx || SP_RAW[v.spx+'smile'] || window.__YK_ALL).map(([k,v])=>`<button type="button" class="btn" data-first="s${k}">あたらしい ${v.name}</button>`).join('');
     box.innerHTML = `<h3 class="sub">すいそう</h3>
-      <div class="fix">${S.tanks.map((t,j)=>`<button type="button" class="btn${j===S.tankI?' on':''}" data-gotank="${j}" ${j===S.tankI?'disabled':''}>${tankIcon(j)} ${tankName(j)}（${tankYks(j).length}ひき）${j===S.tankI?' ← いま みている':''}</button>`).join('')}</div>
+      <div class="fix">${S.tanks.map((t,j)=>`<button type="button" class="btn${j===S.tankI?' on':''}" data-gotank="${j}" ${j===S.tankI?'disabled':''}>${tankIcon(j)} ${tankName(j)}（${ykLiveN(tankYks(j))}ひき）${j===S.tankI?' ← いま みている':''}</button>`).join('')}</div>
       ${others.length ? `<h3 class="sub">おひっこし（すいそうを うつす）</h3>`  + S.yk.map((y,i)=>`<div class="tk-mv" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:4px 0;font-size:13px"><b style="min-width:6em">${ykLabel(y)}</b>${others.map(j=>`<button type="button" class="btn" data-mv="${i}:${j}" style="padding:3px 8px;font-size:12px">${tankIcon(j)} ${tankName(j)}へ</button>`).join('')}</div>`).join('') : ''}
       ${S.tanks.length<TANK_MAX ? `<h3 class="sub">すいそうを ふやす（${S.tanks.length}／${TANK_MAX}）</h3>
       <p class="edit-help">① ステージを えらぶ</p><div class="fix" id="tk-st">${stOpt}</div>
@@ -20918,8 +20963,12 @@ function doWash(){
   SFX.splash && SFX.splash();
   burst('drop', b.x, b.top+6, 14, {up:60, g:320});
   fxText('じゃばじゃば…', b.x+18, b.top-8, {size:15, color:'#3d6d94'});
-  M.sq=.25; M.sqV=-3; M.tears=Math.max(M.tears||0, 1.2);
-  express(gesu?'angry':'worry', 1.4); say(gesu?'washGesu':'washFear', {cls:'shout'});
+  // 11/8 1.7.1（BOOTH 寿司ししゃもさん 11/6・bt_sushi1106 の 4「にとりが 洗う時に 水を怖がる」）：みずに すむ 子（つむり＝s2Aqua・にとり＝みずの 捕食種）は こわがらない
+  //   にとりは 捕食種 なので s2Aqua（zz_v144_sushi2）に はいらず、washFear と こまりがお・なみだ に なって いた。せりふは もと から ある s2WashOk
+  let aqua=false; try{ aqua=(typeof s2Aqua==='function' && s2Aqua()) || (typeof isPred==='function' && isPred() && predDef().kind==='water'); }catch(e){}
+  M.sq=.25; M.sqV=-3; if(!aqua) M.tears=Math.max(M.tears||0, 1.2);
+  if(aqua){ express(gesu?'angry':'joy', 1.4); say(gesu?'washGesu':'s2WashOk', {cls:'shout'}); }
+  else { express(gesu?'angry':'worry', 1.4); say(gesu?'washGesu':'washFear', {cls:'shout'}); }
   const myId=(S.yk[YK_I]||{}).id;
   setTimeout(()=>ykDoById(myId, ()=>{
     if(isDead()) return;
@@ -22999,7 +23048,7 @@ function hogoAdopt(){
    ② 警告：公式で ない ウェブサイトで ひらかれた ときだけ、上に 小さな おしらせ（とじられる）
       公式＝ファイルを じかに ひらく（file:）／公式の ブラウザ版（aigptplan-cyber.github.io）／localhost
    ============================================================ */
-const SEC_MARK = 'mt-gh-170-3a38dfab';                     // release.py が 配布ごとに おきかえる
+const SEC_MARK = 'mt-gh-171-54a4aead';                     // release.py が 配布ごとに おきかえる
 const SEC_OK_HOSTS = ['aigptplan-cyber.github.io', 'localhost', '127.0.0.1', ''];
 function secHost(){ return (window.__SEC_HOST!=null) ? window.__SEC_HOST : (location.protocol==='file:' ? '' : location.hostname); }
 function secOfficial(){ const h=secHost(); return SEC_OK_HOSTS.includes(h); }
@@ -25748,7 +25797,10 @@ function st2NightKey(){ const h=gameHour(); return gameDayNo() - (h<6 ? 1 : 0); 
 function st2LeaveTick(dt){
   M.st2leaveT=(M.st2leaveT||0)+dt;
   const y=S.yk[YK_I], s=y.st2, side=s.side || (M.x<(XMIN+XMAX)/2?-1:1), ex=st2Edge(side);
-  if(typeof isPred==='function' && isPred()){
+  // 11/8 X ベーグル眠りさん：羽を むしられて とべない 捕食種は とんで かえらない（下の のらと おなじ あるいて かえる）
+  const _flyAway = typeof isPred==='function' && isPred() && (PRED_DEF[S.sp].kind==='water' || (typeof predCanFly!=='function' || predCanFly()));
+  if(typeof isPred==='function' && isPred() && !_flyAway){ M.hover=false; M.h=0; if(M.pm==='leave' || M.pm==='fly') M.pm=null; }
+  if(_flyAway){
     M.hover=true; M.pm='leave';
     if(PRED_DEF[S.sp].kind==='water'){ M.st2fade=Math.min(1, M.st2leaveT/2.5); M.h=-Math.min(20, M.st2leaveT*8); }
     else { M.h+=dt*90; M.x+=side*dt*130; M.face=side; M.st2fade=Math.min(1, Math.max(0, M.st2leaveT-1)/1.6); }
@@ -34736,9 +34788,10 @@ function brMakeYk(kid, par){
 }
 // あたらしい 子（もう ある いれもの y）を いまの すいそうに いれる
 function ykAddY(y, x, z){
+  ykDropCleared();   // 11/8 1.7.1 かたづけた しんだ子の わく（u_misc.js）は かずに いれない・ふえたら けす
   if(S.yk.length>=YK_MAX) return -1;
   ykSave();
-  y.dead=y.dead||null; S.yk.push(y); const i=S.yk.length-1;
+  y.dead=y.dead||null; S.yk.push(y); let i=S.yk.length-1;
   MS.push(newM());
   YK_CTX.push({bubble: ykBubble(i), bubbleT:0, TRY_ACT:null, FLOOR_HAT:null, sadTalkT:20, MEANC:0, HIDE_WANT:false, PICKS:[]});
   ykDo(i, ()=>{
@@ -34747,6 +34800,7 @@ function ykAddY(y, x, z){
     if(typeof isSuijo==='function' && isSuijo() && typeof suiWaterPoint==='function'){ try{ const w=suiWaterPoint(); if(w){ M.x=w.x; M.z=w.z; } }catch(e){} }
     setState('idle',2);
   });
+  if(ykDropCleared()){ i=S.yk.indexOf(y); ykFocus(i); }
   try{ renderYkTabs(); }catch(e){}
   return i;
 }
@@ -34834,10 +34888,10 @@ function azBack(k, j){
     const i=ykAddY(y); ykDo(i, ()=>{ jump(220); say('hello',{cls:'shout'}); });
   } else {
     const sn=S.tanks[j].snap || (S.tanks[j].snap=tankFresh('normal'));
-    if((sn.yk||[]).length>=YK_MAX){ toast(`${tankName(j)}は いっぱいです`); return false; }
+    if(ykLiveN(sn.yk)>=YK_MAX){ toast(`${tankName(j)}は いっぱいです`); return false; }
     az().splice(k,1); delete y.azT; y.lastTouch=Date.now();
     y.azSkip=Math.max(0,(Date.now()-(sn.lastSeen||Date.now()))/60000);   // その すいそうを つぎに みたとき、あずけていた ぶんは すすめない
-    (sn.yk=sn.yk||[]).push(y);
+    (sn.yk=ykNoCleared(sn.yk)).push(y);
   }
   note(`${ykLabel(y)}を あずかりばこから ${S.tanks?tankName(j):'すいそう'}へ もどした。`);
   try{ renderYkTabs(); tankBar(); }catch(e){}
@@ -34948,6 +35002,7 @@ finishEat = function(){
   if(!t) return;
   const p=BY();
   p.benpi = clamp(p.benpi + (t==='yuck'?14:t==='soso'?9:t==='happy'?-6:-4), 0, 100);
+  p.yuckRun = t==='yuck' ? (p.yuckRun||0)+1 : 0;   // 11/8 1.7.1 げろまずー を つづけて たべた かず（ほかの ものを たべたら 0）
 }; }
 
 // ── もと：z_gyaku.js:118
@@ -35051,7 +35106,8 @@ tickStats = function(minutes, awake){
   if(p.kabi<100) p.kabi = clamp(p.kabi + minutes*(risk - (S.clean>70 && p.wet<20 ? .12 : 0)), 0, 100);
   else { p.kabi = Math.min(300, p.kabi + minutes*.04); S.health = Math.max(hpFloor(), S.health - minutes*(typeof KABI_V2!=='undefined'?.006:.05)*(p.kabi/100)); if(S.health<=0 && deathOn()) die('kabi'); }
   // べんぴ（たべた ものは たべた ときに たす）
-  if(p.benpi>0 && awake) p.benpi = Math.max(0, p.benpi - minutes*.01);
+  //   11/8 1.7.1：げろまずー ばかり（p.yuckRun：つづけて げろまずー を たべた かず）の あいだは へらない（下の startPoop の コメント）
+  if(p.benpi>0 && awake && !(p.yuckRun>0)) p.benpi = Math.max(0, p.benpi - minutes*.01);
   // じゅみょう
   const age=ageDays();
   if(age > p.life*.8 && !p.oldSaid){ p.oldSaid=true; say('old',{cls:'sleepy'}); note(`${S.me||'まりちゃ'}が「つかれやすく なった」と いっている。`); }
@@ -53653,6 +53709,11 @@ if(GYKICK.on && typeof GYI==='object' && typeof GYI_RUN==='object' && typeof TOO
 // パッチノートの データ（tools/mk_patchnote.py が pk の section.txt から つくる・てで かえない）
 const PATCH_NOTES = [
 {
+"v": "1.7.1",
+"d": "2026/11/08",
+"t": "【直したこと】\n・ミキサーを回してすぐステージを変えると、入れた子が生き残り、ミキサーのステージに戻ると歩いている子が消えてペーストになっていた（回したあとにステージを変えると、その場でミキサーが終わるようにしました。回す前なら子はミキサーから出ます）\n・板に縛った子を透明な箱に入れられて、箱が表示されなかった（縛られている間は箱に入れられないようにしました）\n・いじわるで最後の子が死んで体がなくなると、水槽の数が0にならず1のままで、8匹入れられなかった\n・ドスのおうちで寝るとき、水槽を切り替えたりゲームを開き直したりすると、入口で見えたまま固まって寝ていた\n・にとりを洗うと水を怖がっていた／かっぱの川などで、水の上で持ち上げて動かすと、あんよが擦れていた\n・記憶ペースト・きりふき・バットなどの当たりが道具の先だけで狭かった（道具の絵を子に重ねれば当たるようにしました）\n・げろまずー味だけを食べさせても便秘にならなかった（げろまずー味ばかり続けて食べると便秘になるようにしました）\n・にわに夜とんでくるれみりゃ・ふらんの羽をむしっても、帰るときは飛んで行っていた（とべない子は歩いて帰るようにしました）"
+},
+{
 "v": "1.7.0",
 "d": "2026/11/06",
 "t": "【増えたこと】\n・収穫した野菜を、ごはんのアイテムとしてどの水槽でも使えるようになりました（床に置く・子に手渡しする）\n・せりふが増えました（持ち上げた時・ごちそうの時・おかざりを取られた時・うそをつく時）\n【直したこと】\n・図鑑に捕食種の説明がなかった\n・図鑑のお世話の説明に、野菜が持っている数だけ並んでいた\n・ショップの依頼の文が見切れて全文を読めなかった\n・店員の「その子が独りになっちまう」の言い方がおかしかった\n・とまり木で寝ている捕食種に便秘薬を飲ませても、うんうんをしなかった"
@@ -60687,6 +60748,8 @@ function dsSpot(){
     return r; }; }
 { const _ub=updateBrain; updateBrain=function(dt){
     try{ if(M._dsPend){ if(M.state==='dosIn' && M._dosLine && !isDead()){ const y=S.yk[YK_I]; if(y) y.dosHome=M._dsPend; } M._dsPend=null; } }catch(e){}
+    // 11/8 入口で みえた まま ねて いる（ゲームを ひらいた とき など・下の dsTuck）→ なかで ねる
+    try{ if(DOSSLEEP.on && M.state==='sleep' && !M.hidden && !M.lifted && !isDead() && (S.yk[YK_I]||{}).dosHome){ const s=dsSpot(); if(s && Math.hypot(s.x-M.x, s.z-M.z)<14 && objById(s.o.id)) dsTuck(s); } }catch(e){}
     return _ub.apply(this, arguments); }; }
 // ねる ばしょ
 { const _f=sleepSpot; sleepSpot=function(){
@@ -60699,11 +60762,24 @@ function dsSpot(){
     try{ if(DOSSLEEP.on && opt && opt.label==='クッションに むかってる'){ const d=dsSpot(); if(d && Math.abs(d.x-x)<1 && Math.abs(d.z-z)<1){ opt.label='ドスの おうちに かえってる'; opt.obj=d.o.id; } } }catch(e){}
     return _g.apply(this, arguments); }; }
 // なかで ねる（どうくつと おなじ：かくれる）
+//   11/8 1.7.1（BOOTH 寿司ししゃもさん 11/6・bt_sushi1106 の 7「ドスの家で寝る時、入口で固まって寝る（水槽を切り替えると特に）」）
+//   しらべ：かくれずに 入口に みえて いたのは 2つ
+//     ・水槽を きりかえる：tankRebuild の あとで zz_v151_sushi1016 が「ねて いた ばしょ」（M._su16）に もどす。それを とるのは
+//       この つつみより うちがわ（M.hidden を つける まえ）なので、hidden:false に もどされて 入口で みえて ねる
+//     ・ゲームを ひらく：h_ui.js の boot → startInner の startSleep は この つつみが できる まえに はしる → ふつうの ところで ねて、
+//       そのあと zz_v139_keeppos が 入口（セーブした ところ）に もどす → 入口で みえて ねる（いま みている 子）
+//   なおし：dsTuck（入口に いて、なかで ねる）を 1つに して、M._su16 にも かく。
+//     ひらいた ときは ドスの おうちが まだ S.objects に ない（パックの あと）ので、updateBrain（うえ）で「入口で みえて ねて いる」子を なかに いれる
+function dsTuck(s){
+  M.x=s.x; M.z=s.z; M.h=0; M.hover=false; M.hidden=true; M.actObj=s.o.id; M._dsSleep=s.o.id;
+  if(M._su16) M._su16={x:M.x, z:M.z, h:0, hidden:true, actObj:s.o.id, hover:false};   // zz_v151_sushi1016 が もどす ばしょも なかに する
+}
 { const _f=startSleep; startSleep=function(){
     let s=null; try{ s=sleepSpot(); }catch(e){}
     const r=_f.apply(this, arguments);
-    try{ if(s && s.kind==='dos' && M.state==='sleep' && objById(s.o.id)){ M.x=s.x; M.z=s.z; M.h=0; M.hover=false; M.hidden=true; M.actObj=s.o.id; M._dsSleep=s.o.id; } }catch(e){ console.warn('[dossleep]', e); }
+    try{ if(s && s.kind==='dos' && M.state==='sleep' && objById(s.o.id)) dsTuck(s); }catch(e){ console.warn('[dossleep]', e); }
     return r; }; }
+
 // 「おうちの なか」まど：ねて いる あいだも「ドスの おうちの なか」
 if(typeof insideKind==='function'){ const _ik=insideKind; insideKind=function(){
     try{ if(DOSSLEEP.on && M.state==='sleep' && M.hidden && M._dsSleep && M.actObj===M._dsSleep && !M.lifted && !isDead()){
@@ -62138,6 +62214,22 @@ if(MEAN.on && typeof GYI==='object' && typeof GYI_RUN==='object' && typeof MEAN_
           else if(o.type==='gy_tsuri' && o.kids) tsuriTick(o,d);
           else if(o.type==='gy_slicer' && o.slT>0) o.slT-=d; }
         flushRM(); }catch(er){ console.warn('[mean tick]', er); } }; }
+
+  /* ---------- ステージを かえる とき（11/7 X ユシューさん x_kagachi_mxstage1107） ----------
+     ゆっくりは いっしょに うつるが ミキサーは もとの ステージに のこる。まえは 子だけ ミキサーから でて、ミキサーの kids と spin が のこり、
+     もどると つづきが うごいて そとを 歩いている 子が しんでいた。
+     ・まわって いる とちゅう：その ばで さいごまで（ノブを おした ときに きまっている）
+     ・いれた だけ：子を だして kids を からに
+     ステージの きりかえは s_stage.js に あり、ミキサーの 中身は ここに しか ないので setStageK を つつむ（かぶせる りゆう） */
+  { const _st=setStageK; setStageK=function(k){
+      try{ if(STAGE_DEF[k] && stageNow()!==k){
+          for(const o of (S.objects||[]).filter(q=>q && q.type==='gy_mixer')){
+            if(o.spin){ o.spin.fear=1; o.spin.q=[]; o.spin.t=MEAN.spin1+MEAN.spin2; mixerTick(o, 0); }
+            else if(kidsOf(o).length){ for(const id of kidsOf(o).slice()){ const i=kidIdx(id); if(i>=0) ykDo(i,()=>{ const s=PS().gyM; if(s && s.oid===o.id) leave(s); }); } o.kids=[]; }
+          }
+          flushRM();
+        } }catch(er){ console.warn('[mean stage]', er); }
+      return _st.apply(this, arguments); }; }
 
   /* ---------- ship に ない どうぐを はずす ---------- */
   const RUN0={foil:GYI_RUN.foil, furiko:GYI_RUN.furiko, tsuri:GYI_RUN.tsuri};   // TYPES に ない 2つは 関数を とっておく（パックが きたら もどす）
