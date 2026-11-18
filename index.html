@@ -369,12 +369,12 @@ body.wide .act kbd{font-family:var(--ui); font-size:9.5px; color:var(--ink-soft)
 
 <script>
 "use strict";
-window.MT_VER="1.7.5";
+window.MT_VER="1.7.6";
 "use strict";
 /* ============================================================
    素材
    ============================================================ */
-const ATLAS_SRC = "a2.webp?v=175";
+const ATLAS_SRC = "a2.webp?v=176";
 const SP_RAW = {"smile":[1692,1917,213,195],"side":[0,2894,183,191],"joy":[1397,4390,195,176],"squish":[1702,3277,196,186],"back":[1527,1298,199,205],"oh":[1590,1717,206,197],"relax":[208,5100,205,173],"excited":[587,4569,191,176],"angry":[654,4210,189,177],"sleep":[1301,8859,192,137],"love":[0,4747,194,175],"worry":[264,4210,193,178],"doya":[0,4924,196,174],"blank":[949,5795,185,169],"laugh":[940,6644,184,164],"strain":[1394,8257,180,150],"lovelove":[0,5275,188,172],"dizzy":[0,8101,171,154],"amaama":[994,9386,53,50],"cry3":[803,8713,151,143],"back_nohat":[683,3654,190,184],"braid":[566,9270,32,85],"cry3_burnt":[0,2313,223,192],"cry3_nohat":[1334,7466,190,157],"cry3_nohat_nobraid":[0,7466,192,158],"cry3_torn":[1085,2894,213,188],"dead":[1354,6137,185,167],"dead2":[342,6476,185,166],"hat":[1464,9001,209,133],"side_nohat":[556,6811,177,164],"sleep_nohat":[594,7305,194,159],"smile_nohat":[0,7305,196,159],"smile_nohat_nobraid":[1446,7142,197,160],"worry_nohat":[1526,7466,189,157],"mv_backDR_1":[1328,3087,192,187,-0.4],"mv_backDR_2":[1300,2894,190,188,0.0],"mv_backDR_3":[225,2313,198,192,4.3],"mv_backDR_4":[1817,2313,189,192,7.0],"mv_backR_1":[1522,3087,192,187,-0.4],"mv_backR_2":[1492,2894,190,188,0.0],"mv_backR_3":[425,2313,198,192,4.3],"mv_backR_4":[0,2507,189,192,7.0],"r:back_nohat":[970,6137,190,167],"r:braid":[529,9270,35,85],"r:cry3":[546,9001,151,135],"r:cry3_burnt":[699,9001,151,135],"r:cry3_nohat":[1810,8101,190,153],"r:cry3_nohat_nobraid":[1385,8412,192,149],"r:cry3_torn":[852,9001,151,135],"r:hat":[179,7943,230,155],"r:nbf|back_nohat":[1162,6137,190,167],"r:nbf|cry3":[1005,9001,151,135],"r:nbf|cry3_burnt":[1158,9001,151,135],"r:nbf|cry3_nohat":[0,8257,190,153],"r:nbf|cry3_torn":[1311,9001,151,135],"r:nbf|side":[1822,5449,175,171],"r:nbf|side_nohat":[191,7626,177,157],"r:nbf|sleep":[0,9270,193,114],"r:nbf|sleep_nohat":[805,7943,194,154],"r:nbf|smile":[1512,4747,200,174],"r:nbf|smile_nohat":[743,7466,196,157],"r:nbf|worry":[1197,7943,193,154],"r:nbf|worry_nohat":[774,7785,189,156],"r:side":[0,5622,175,171],"r:side_nohat":[370,7626,177,157],"r:sleep":[195,9270,193,114],"r:sleep_nohat":[1001,7943,194,154],"r:smile":[1714,4747,200,174],"r:smile_nohat":[941,7466,196,157],"r:smile_nohat_nobraid":[411,7943,197,155],"r:worry":[1392,7943,193,154],"r:worry_nohat":[965,7785,189,156],"nb|angry":[845,4210,189,177,0,0],"nb|back_nohat":[371,9386,42,59,0,98],"nb|blank":[1136,5795,185,169,0,0],"nb|crawl":[51,9386,67,62,4,91],"nb|cry3":[956,8713,151,143,0,0],"nb|cry3_burnt":[1525,6307,55,167,152,23],"nb|cry3_nohat":[390,9270,43,93,147,63],"nb|cry3_torn":[1433,6307,90,167,116,21],"nb|dizzy":[173,8101,171,154,0,0],"nb|doya":[198,4924,196,174,0,0],"nb|doze":[1226,9270,107,79,2,87],"nb|excited":[780,4569,191,176,0,0],"nb|hide":[1769,9001,179,129,0,0],"nb|joy":[1594,4390,195,176,0,0],"nb|laugh":[1126,6644,184,164,0,0],"nb|love":[196,4747,194,175,0,0],"nb|lovelove":[190,5275,188,172,0,0],"nb|mv_backDL_1":[1801,6811,150,163,13,20],"nb|mv_backDL_2":[224,9386,49,59,10,124],"nb|mv_backDL_3":[793,9270,49,84,14,104],"nb|mv_backDL_4":[275,9386,46,59,16,131],"nb|mv_backDR_1":[1002,8859,43,139,4,48],"nb|mv_backDR_2":[1609,9270,49,77,7,111],"nb|mv_backDR_3":[415,9386,47,58,6,134],"nb|mv_backDR_4":[1723,9001,44,132,8,60],"nb|mv_backL_1":[0,6977,149,163,14,20],"nb|mv_backL_2":[1558,9270,49,78,19,105],"nb|mv_backL_3":[844,9270,49,84,14,104],"nb|mv_backL_4":[323,9386,46,59,16,131],"nb|mv_backR_1":[1047,8859,43,139,4,48],"nb|mv_backR_2":[895,9270,40,84,0,104],"nb|mv_backR_3":[1023,9270,51,81,10,111],"nb|mv_backR_4":[1675,9001,46,132,6,60],"nb|mv_back_1":[106,8713,183,143,7,52],"nb|mv_back_2":[658,9386,45,53,1,133],"nb|mv_back_3":[1076,9270,50,81,8,111],"nb|mv_back_4":[1020,8257,46,153,3,50],"nb|mv_front_1":[1128,9270,47,80,144,111],"nb|mv_front_2":[1444,9270,55,78,129,107],"nb|mv_front_3":[120,9386,50,62,140,93],"nb|mv_front_4":[1754,9270,52,67,143,105],"nb|mv_jump":[1660,9270,45,76,80,82],"nb|mv_side_1":[1952,9270,49,65,68,91],"nb|mv_side_2":[771,9386,61,52,55,125],"nb|mv_side_3":[464,9386,52,57,39,81],"nb|mv_side_4":[1862,9270,43,67,43,76],"nb|mv_turn_1":[1049,9386,52,50,52,130],"nb|oh":[1798,1717,206,197,0,0],"nb|puku3":[0,8564,156,147,0,0],"nb|relax":[415,5100,205,173,0,0],"nb|side":[435,9270,92,89,14,97],"nb|sing":[192,8257,172,153,0,0],"nb|sleep":[705,9386,64,52,118,84],"nb|sleep_nohat":[0,8713,104,144,81,13],"nb|smile":[0,2116,213,195,0,0],"nb|smile_nohat":[1793,8713,92,142,100,13],"nb|squish":[0,3466,196,186,0,0],"nb|strain":[1576,8257,180,150,0,0],"nb|tilt":[151,6977,176,162,0,0],"nb|worry":[459,4210,193,178,0,0],"nb|worry_nohat":[741,9270,50,84,134,71],"kzpero1":[530,6644,205,164],"kzpero2":[737,6644,201,164],"dentart1":[342,9001,202,135],"dentart2":[1709,4569,250,175],"dentart3":[0,847,331,226],"r:kzpero1":[1139,7466,193,157],"r:kzpero2":[540,7466,201,157],"p_bfly1":[600,9270,81,84],"p_bfly2":[683,9270,56,84],"p_cater":[1157,9386,72,42],"p_hopper":[572,9386,84,54],"p_acorn":[897,9386,41,52],"p_chestnut":[940,9386,52,51],"p_grass":[937,9270,84,81],"p_wxdev":[1814,9139,150,120],"p_shell_f":[1186,4924,240,173],"p_shell_s":[1314,599,240,233],"p_kota_f":[212,3654,260,184],"p_kota_s":[350,6137,220,167],"p_desk":[1071,599,241,240],"p_board":[195,599,247,245],"p_harisen":[0,599,193,246],"p_trap_open":[1080,1298,233,211],"p_trap_shut":[684,1512,212,202],"p_lie_up":[342,1075,300,215],"p_lie_dn":[684,1717,300,197],"p_bind_board":[1248,8564,360,144],"p_lie_up2":[0,340,420,257],"p_lie_up3":[753,0,440,309],"p_lie_dn_hat":[986,1717,300,197],"p_tsu_b":[444,599,246,245],"p_kocha_s":[1556,599,406,232],"p_kocha_b":[692,599,377,243],"p_takadai":[0,0,751,338],"dl_kocha_burst":[1380,3466,340,185],"dl_kocha_char":[188,6644,340,164],"dl_kocha_dry":[760,5275,340,171],"dl_kocha_flat":[362,9139,340,128],"dl_kocha_frost":[979,2116,340,194],"dl_kocha_halves":[692,8101,340,153],"dl_kocha_squash":[1472,9139,340,124],"dl_kocha_vomit":[735,6811,340,163],"dl_maricha_burst":[1240,1512,340,198],"dl_maricha_char":[1321,2116,340,192],"dl_maricha_dry":[1359,847,340,221],"dl_maricha_flat":[1109,8713,340,142],"dl_maricha_frost":[396,1298,340,211],"dl_maricha_halves":[1582,6307,340,166],"dl_maricha_squash":[899,7626,340,156],"dl_maricha_vomit":[675,847,340,223],"dl_reimu_char":[416,1917,340,196],"dl_reimu_dry":[184,5966,340,168],"dl_reimu_flat":[1495,8859,340,136],"dl_reimu_frost":[1113,4026,340,180],"dl_reimu_halves":[946,1075,340,214],"dl_reimu_squash":[762,7142,340,160],"dl_reimu_vomit":[1582,1512,340,198],"dl_tsumuri_burst":[898,1512,340,199],"dl_tsumuri_char":[185,2894,340,190],"dl_tsumuri_dry":[333,847,340,224],"dl_tsumuri_flat":[1180,7305,340,158],"dl_tsumuri_frost":[844,340,340,254],"dl_tsumuri_halves":[1630,1075,340,212],"dl_tsumuri_squash":[1077,6811,340,163],"dl_tsumuri_vomit":[1701,847,340,221],"p_lie_dn_reimu":[915,3841,340,182],"p_lie_dn_reimu_hat":[1257,3841,340,182],"p_lie_dn_tsumuri":[1186,340,340,246],"p_lie_dn_tsumuri_hat":[1528,340,340,246],"p_lie_dn_kocha":[582,3277,340,186],"p_lie_dn_kocha_hat":[924,3277,340,186],"dl_reimu_burst":[0,1512,340,203],"angry_nohat":[1036,4210,189,177],"nb|angry_nohat":[1227,4210,189,177,0,0],"blank_nohat":[1323,5795,185,169],"nb|blank_nohat":[1510,5795,185,169,0,0],"dizzy_nohat":[346,8101,171,154],"nb|dizzy_nohat":[519,8101,171,154,0,0],"doya_nohat":[396,4924,196,174],"excited_nohat":[973,4569,191,176],"nb|excited_nohat":[1166,4569,191,176,0,0],"joy_nohat":[1791,4390,195,176],"nb|joy_nohat":[0,4569,195,176,0,0],"laugh_nohat":[1312,6644,184,164],"nb|laugh_nohat":[1498,6644,184,164,0,0],"love_nohat":[392,4747,194,175],"nb|love_nohat":[588,4747,194,175,0,0],"lovelove_nohat":[380,5275,188,172],"nb|lovelove_nohat":[570,5275,188,172,0,0],"oh_nohat":[0,1917,206,197],"nb|oh_nohat":[208,1917,206,197,0,0],"puku3_nohat":[158,8564,156,147],"nb|puku3_nohat":[316,8564,156,147,0,0],"relax_nohat":[622,5100,205,173],"sing_nohat":[366,8257,172,153],"nb|sing_nohat":[540,8257,172,153,0,0],"squish_nohat":[198,3466,196,186],"nb|squish_nohat":[396,3466,196,186,0,0],"strain_nohat":[1758,8257,180,150],"nb|strain_nohat":[0,8412,180,150,0,0],"tilt_nohat":[329,6977,176,162],"nb|tilt_nohat":[507,6977,176,162,0,0],"eat3_nohat":[896,8412,161,150],"doze_nohat":[1639,6476,175,166],"hide_nohat":[0,9139,179,129],"mv_jump_nohat":[1267,6307,164,167],"backwobble_nohat":[1090,6476,181,166],"crawl_nohat":[714,8257,151,153],"dead_nohat":[1541,6137,185,167],"dead2_nohat":[529,6476,185,166],"pero_nohat":[199,2701,196,191],"pero2_nohat":[793,2701,191,191],"suri_nohat":[1372,2701,190,191],"suri2_nohat":[1479,2507,197,191],"mv_front_1_nohat":[1496,1917,194,196],"mv_front_2_nohat":[1722,3466,225,185],"mv_front_3_nohat":[610,7943,193,155],"mv_front_4_nohat":[1386,5100,207,172],"mv_side_1_nohat":[1534,7785,182,156],"mv_side_2_nohat":[0,4210,262,178],"mv_side_3_nohat":[1092,8859,207,138],"mv_side_4_nohat":[649,8713,152,143],"mv_turn_1_nohat":[474,3654,207,184],"mv_turn_2_nohat":[527,2894,184,189],"nb|doze_nohat":[1335,9270,107,79,2,87],"nb|mv_front_1_nohat":[1177,9270,47,80,144,111],"nb|mv_front_2_nohat":[1501,9270,55,78,129,107],"nb|mv_front_3_nohat":[172,9386,50,62,140,93],"nb|mv_front_4_nohat":[1808,9270,52,67,143,105],"nb|mv_jump_nohat":[1707,9270,45,76,80,82],"nb|mv_side_1_nohat":[0,9386,49,65,68,91],"nb|mv_side_2_nohat":[834,9386,61,52,55,125],"nb|mv_side_3_nohat":[518,9386,52,57,39,81],"nb|mv_side_4_nohat":[1907,9270,43,67,43,76],"nb|mv_turn_1_nohat":[1103,9386,52,50,52,130],"mv_back_1_nohat":[1100,1917,196,196],"mv_back_2_nohat":[990,3466,193,186],"mv_back_3_nohat":[1425,2313,194,192],"mv_back_4_nohat":[0,1298,196,212],"mv_backL_1_nohat":[187,3841,180,183],"mv_backL_2_nohat":[1397,3654,185,183],"mv_backL_3_nohat":[576,3087,186,188],"mv_backL_4_nohat":[215,2116,189,195],"mv_backR_1_nohat":[1716,3087,192,187],"mv_backR_2_nohat":[1684,2894,190,188],"mv_backR_3_nohat":[625,2313,198,192],"mv_backR_4_nohat":[191,2507,189,192],"mv_backDL_1_nohat":[369,3841,180,183],"mv_backDL_2_nohat":[1584,3654,185,183],"mv_backDL_3_nohat":[764,3087,186,188],"mv_backDL_4_nohat":[406,2116,189,195],"mv_backDR_1_nohat":[0,3277,192,187],"mv_backDR_2_nohat":[0,3087,190,188],"mv_backDR_3_nohat":[825,2313,198,192],"mv_backDR_4_nohat":[382,2507,189,192],"mv_spin_1_nohat":[0,4026,185,182],"mv_spin_2_nohat":[0,4390,175,177],"mv_spin_3_nohat":[1152,4747,178,175],"mv_spin_4_nohat":[561,4026,182,182],"mv_spin_5_nohat":[1418,4210,178,177],"mv_spin_6_nohat":[1428,4924,206,173],"mv_spin_7_nohat":[529,5622,187,170],"mv_spin_8_nohat":[718,5622,168,170],"mv_spin_9_nohat":[1228,5622,165,170],"mv_spin_10_nohat":[875,3654,172,184],"r:angry_nohat":[1091,6977,192,161],"r:nbf|angry_nohat":[1285,6977,192,161],"r:blank_nohat":[1587,7943,192,154],"r:nbf|blank_nohat":[1781,7943,192,154],"r:dizzy_nohat":[1610,8564,175,144],"r:nbf|dizzy_nohat":[1787,8564,175,144],"r:doya_nohat":[790,7305,193,159],"r:nbf|doya_nohat":[985,7305,193,159],"r:excited_nohat":[1645,7142,190,160],"r:nbf|excited_nohat":[1837,7142,190,160],"r:joy_nohat":[572,6137,197,167],"r:nbf|joy_nohat":[771,6137,197,167],"r:laugh_nohat":[0,7785,193,156],"r:nbf|laugh_nohat":[195,7785,193,156],"r:love_nohat":[1717,7466,189,157],"r:nbf|love_nohat":[0,7626,189,157],"r:lovelove_nohat":[874,8564,185,146],"r:nbf|lovelove_nohat":[1061,8564,185,146],"r:oh_nohat":[1102,5275,203,171],"r:nbf|oh_nohat":[1307,5275,203,171],"r:puku3_nohat":[360,8859,156,140],"r:nbf|puku3_nohat":[518,8859,156,140],"r:relax_nohat":[198,7305,196,159],"r:nbf|relax_nohat":[396,7305,196,159],"r:sing_nohat":[0,8859,178,140],"r:nbf|sing_nohat":[180,8859,178,140],"r:squish_nohat":[1595,5100,197,172],"r:nbf|squish_nohat":[1794,5100,197,172],"r:strain_nohat":[291,8713,177,143],"r:nbf|strain_nohat":[470,8713,177,143],"r:tilt_nohat":[382,7142,188,161],"r:nbf|tilt_nohat":[572,7142,188,161],"r:eat3_nohat":[1068,8257,161,151],"r:nbf|eat3_nohat":[1231,8257,161,151],"r:doze_nohat":[182,8412,180,150],"r:nbf|doze_nohat":[364,8412,180,150],"r:hide_nohat":[1104,9139,182,126],"r:mv_jump_nohat":[549,7626,173,157],"r:nbf|mv_jump_nohat":[724,7626,173,157],"r:backwobble_nohat":[546,8412,173,150],"r:nbf|backwobble_nohat":[721,8412,173,150],"r:crawl_nohat":[1579,8412,170,147],"r:nbf|crawl_nohat":[1751,8412,170,147],"r:dead_nohat":[1034,8101,192,153],"r:dead2_nohat":[1228,8101,192,153],"r:pero_nohat":[378,5449,179,171],"r:pero2_nohat":[177,5622,174,171],"r:suri_nohat":[1102,5449,178,171],"r:suri2_nohat":[559,5449,179,171],"r:mv_front_1_nohat":[1266,3277,216,186],"r:nbf|mv_front_1_nohat":[1484,3277,216,186],"r:mv_front_2_nohat":[531,4390,228,176],"r:nbf|mv_front_2_nohat":[761,4390,228,176],"r:mv_front_3_nohat":[474,8564,198,146],"r:nbf|mv_front_3_nohat":[674,8564,198,146],"r:mv_front_4_nohat":[1522,7305,212,158],"r:nbf|mv_front_4_nohat":[1736,7305,212,158],"r:mv_side_1_nohat":[186,6811,183,164],"r:nbf|mv_side_1_nohat":[371,6811,183,164],"r:mv_side_2_nohat":[955,2507,260,191],"r:nbf|mv_side_2_nohat":[1217,2507,260,191],"r:mv_side_3_nohat":[704,9139,198,128],"r:nbf|mv_side_3_nohat":[904,9139,198,128],"r:mv_side_4_nohat":[676,8859,161,139],"r:nbf|mv_side_4_nohat":[839,8859,161,139],"r:mv_turn_1_nohat":[685,6977,201,161],"r:nbf|mv_turn_1_nohat":[888,6977,201,161],"r:mv_turn_2_nohat":[1697,5795,182,169],"r:nbf|mv_turn_2_nohat":[0,5966,182,169],"r:mv_back_1_nohat":[991,4390,201,176],"r:mv_back_2_nohat":[1729,5622,193,169],"r:mv_back_3_nohat":[792,4924,195,174],"r:mv_back_4_nohat":[594,3466,196,186],"r:mv_backL_1_nohat":[197,4569,193,176],"r:mv_backL_2_nohat":[1479,6977,190,161],"r:mv_backL_3_nohat":[1816,6476,186,165],"r:mv_backL_4_nohat":[1718,7785,177,156],"r:mv_backR_1_nohat":[1684,6644,184,164],"r:mv_backR_2_nohat":[555,6307,179,167],"r:mv_backR_3_nohat":[784,4747,182,175],"r:mv_backR_4_nohat":[0,5449,187,171],"r:mv_backDL_1_nohat":[0,7142,189,161],"r:mv_backDL_2_nohat":[1419,6811,189,163],"r:mv_backDL_3_nohat":[573,5795,186,169],"r:mv_backDL_4_nohat":[1244,5966,183,168],"r:mv_backDR_1_nohat":[1156,7785,187,156],"r:mv_backDR_2_nohat":[1512,5275,189,171],"r:mv_backDR_3_nohat":[1583,7626,194,156],"r:mv_backDR_4_nohat":[390,7785,190,156],"r:mv_spin_1_nohat":[1282,5449,178,171],"r:mv_spin_2_nohat":[1359,4569,173,176],"r:mv_spin_3_nohat":[917,6307,173,167],"r:mv_spin_4_nohat":[187,6307,182,167],"r:mv_spin_5_nohat":[868,5966,186,168],"r:mv_spin_6_nohat":[195,5795,187,169],"r:mv_spin_7_nohat":[0,6137,173,168],"r:mv_spin_8_nohat":[1036,5100,173,173],"r:mv_spin_9_nohat":[1614,5966,176,168],"r:mv_spin_10_nohat":[194,7466,171,158],"nbf|backwobble_nohat":[1273,6476,181,166],"nbf|hide_nohat":[181,9139,179,129],"nbf|mv_backDL_1_nohat":[551,3841,180,183],"nbf|mv_backDL_2_nohat":[1771,3654,185,183],"nbf|mv_backDL_3_nohat":[952,3087,186,188],"nbf|mv_backDL_4_nohat":[597,2116,189,195],"nbf|mv_backDR_1_nohat":[194,3277,192,187],"nbf|mv_backDR_2_nohat":[192,3087,190,188],"nbf|mv_backDR_3_nohat":[1025,2313,198,192],"nbf|mv_backDR_4_nohat":[573,2507,189,192],"nbf|mv_backL_1_nohat":[733,3841,180,183],"nbf|mv_backL_2_nohat":[0,3841,185,183],"nbf|mv_backL_3_nohat":[1140,3087,186,188],"nbf|mv_backL_4_nohat":[788,2116,189,195],"nbf|mv_backR_1_nohat":[388,3277,192,187],"nbf|mv_backR_2_nohat":[384,3087,190,188],"nbf|mv_backR_3_nohat":[1225,2313,198,192],"nbf|mv_backR_4_nohat":[764,2507,189,192],"nbf|mv_back_1_nohat":[1298,1917,196,196],"nbf|mv_back_2_nohat":[1185,3466,193,186],"nbf|mv_back_3_nohat":[1621,2313,194,192],"nbf|mv_back_4_nohat":[198,1298,196,212],"r:nbf|hide_nohat":[1288,9139,182,126],"r:nbf|mv_backDL_1_nohat":[191,7142,189,161],"r:nbf|mv_backDL_2_nohat":[1610,6811,189,163],"r:nbf|mv_backDL_3_nohat":[761,5795,186,169],"r:nbf|mv_backDL_4_nohat":[1429,5966,183,168],"r:nbf|mv_backDR_1_nohat":[1345,7785,187,156],"r:nbf|mv_backDR_2_nohat":[1703,5275,189,171],"r:nbf|mv_backDR_3_nohat":[1779,7626,194,156],"r:nbf|mv_backDR_4_nohat":[582,7785,190,156],"r:nbf|mv_backL_1_nohat":[392,4569,193,176],"r:nbf|mv_backL_2_nohat":[1671,6977,190,161],"r:nbf|mv_backL_3_nohat":[0,6644,186,165],"r:nbf|mv_backL_4_nohat":[0,7943,177,156],"r:nbf|mv_backR_1_nohat":[0,6811,184,164],"r:nbf|mv_backR_2_nohat":[736,6307,179,167],"r:nbf|mv_backR_3_nohat":[968,4747,182,175],"r:nbf|mv_backR_4_nohat":[189,5449,187,171],"r:nbf|mv_back_1_nohat":[1194,4390,201,176],"r:nbf|mv_back_2_nohat":[0,5795,193,169],"r:nbf|mv_back_3_nohat":[989,4924,195,174],"r:nbf|mv_back_4_nohat":[792,3466,196,186],"r:nbf|mv_spin_1_nohat":[1462,5449,178,171],"r:nbf|mv_spin_10_nohat":[367,7466,171,158],"r:nbf|mv_spin_2_nohat":[1534,4569,173,176],"r:nbf|mv_spin_3_nohat":[1092,6307,173,167],"r:nbf|mv_spin_4_nohat":[371,6307,182,167],"r:nbf|mv_spin_5_nohat":[1056,5966,186,168],"r:nbf|mv_spin_6_nohat":[384,5795,187,169],"r:nbf|mv_spin_7_nohat":[175,6137,173,168],"r:nbf|mv_spin_8_nohat":[1211,5100,173,173],"r:nbf|mv_spin_9_nohat":[1792,5966,176,168],"dl_maricha_burst_nohat":[0,1717,340,198],"dl_maricha_char_nohat":[1663,2116,340,192],"dl_maricha_dry_nohat":[0,1075,340,221],"dl_maricha_flat_nohat":[1451,8713,340,142],"dl_maricha_frost_nohat":[738,1298,340,211],"dl_maricha_halves_nohat":[0,6476,340,166],"dl_maricha_squash_nohat":[1241,7626,340,156],"dl_maricha_vomit_nohat":[1017,847,340,223],"dl_reimu_burst_nohat":[342,1512,340,203],"dl_reimu_char_nohat":[758,1917,340,196],"dl_reimu_dry_nohat":[526,5966,340,168],"dl_reimu_flat_nohat":[0,9001,340,136],"dl_reimu_frost_nohat":[1455,4026,340,180],"dl_reimu_halves_nohat":[1288,1075,340,214],"dl_reimu_squash_nohat":[1104,7142,340,160],"dl_reimu_vomit_nohat":[342,1717,340,198],"p_lie_dn_nohat":[1288,1717,300,197],"p_lie_up_nohat":[644,1075,300,215],"p_lie_up2_nohat":[422,340,420,257],"p_lie_up3_nohat":[1195,0,440,309],"p_lie_dn_reimu_nohat":[1599,3841,340,182],"nbf|eat3":[1059,8412,161,150],"nbf|dead":[1728,6137,185,167],"nbf|dead2":[716,6476,185,166],"nbf|pero":[397,2701,196,191],"nbf|pero2":[986,2701,191,191],"nbf|suri":[1564,2701,190,191],"nbf|suri2":[1678,2507,197,191],"nbf|dead2_nohat":[903,6476,185,166],"nbf|pero_nohat":[595,2701,196,191],"nbf|pero2_nohat":[1179,2701,191,191],"nbf|suri_nohat":[1756,2701,190,191],"r:nbf|dead_nohat":[1422,8101,192,153],"r:nbf|dead2_nohat":[1616,8101,192,153],"r:nbf|pero_nohat":[740,5449,179,171],"r:nbf|pero2_nohat":[353,5622,174,171],"r:nbf|suri_nohat":[1642,5449,178,171],"r:nbf|suri2_nohat":[921,5449,179,171],"nbf|relax_nohat":[829,5100,205,173],"nbf|doya_nohat":[594,4924,196,174],"nbf|eat3_nohat":[1222,8412,161,150],"nbf|dead_nohat":[0,6307,185,167],"nbf|crawl_nohat":[867,8257,151,153],"nbf|suri2_nohat":[0,2701,197,191],"nbf|mv_turn_2_nohat":[713,2894,184,189],"nbf|mv_spin_1_nohat":[187,4026,185,182],"nbf|mv_spin_2_nohat":[177,4390,175,177],"nbf|mv_spin_3_nohat":[1332,4747,178,175],"nbf|mv_spin_4_nohat":[745,4026,182,182],"nbf|mv_spin_5_nohat":[1598,4210,178,177],"nbf|mv_spin_6_nohat":[1636,4924,206,173],"nbf|mv_spin_10_nohat":[1049,3654,172,184],"bkx":[1315,1298,210,209],"r:bkx":[0,3654,210,185],"nbf|back":[1728,1298,199,205],"nbf|backwobble":[1456,6476,181,166],"nbf|mv_spin_1":[374,4026,185,182,-6.8],"nbf|mv_spin_2":[354,4390,175,177,-0.4],"nbf|mv_spin_4":[929,4026,182,182,-12.3],"nbf|mv_spin_5":[1778,4210,178,177,-15.7],"nbf|mv_spin_6":[0,5100,206,173,-4.7],"nbf|mv_spin_8":[888,5622,168,170,0.0],"nbf|mv_spin_9":[1395,5622,165,170,-0.4],"nbf|mv_spin_10":[1223,3654,172,184,-0.4],"nbf|mv_turn_2":[899,2894,184,189],"nbf|mv_spin_8_nohat":[1058,5622,168,170],"nbf|mv_spin_9_nohat":[1562,5622,165,170],"backwobble":[2576,70216,181,166],"crawl":[11997,70216,151,153],"doze":[2761,70216,175,166],"eat3":[13442,70216,161,150],"hide":[1406,70388,179,129],"mv_backDL_1":[4721,70000,180,183,0.0],"mv_backDL_2":[4905,70000,185,183,-1.9],"mv_backDL_3":[2688,70000,186,188,-2.3],"mv_backDL_4":[598,70000,189,195,0.0],"mv_backL_1":[5094,70000,180,183,0.0],"mv_backL_2":[5278,70000,185,183,-1.9],"mv_backL_3":[2878,70000,186,188,-2.3],"mv_backL_4":[791,70000,189,195,0.0],"mv_back_1":[200,70000,196,196,14.0],"mv_back_2":[3068,70000,193,186,8.6],"mv_back_3":[984,70000,194,192,0.0],"mv_back_4":[0,70000,196,212,-3.1],"mv_front_1":[400,70000,194,196],"mv_front_2":[4105,70000,225,185],"mv_front_3":[11408,70216,193,155],"mv_front_4":[9985,70000,207,172],"mv_jump":[914,70216,164,167],"mv_side_1":[9300,70216,182,156],"mv_side_2":[6220,70000,262,178],"mv_side_3":[1195,70388,207,138],"mv_side_4":[15977,70216,152,143],"mv_spin_1":[5845,70000,185,182,-6.8],"mv_spin_10":[4334,70000,172,184,-0.4],"mv_spin_2":[6486,70000,175,177,-0.4],"mv_spin_3":[8469,70000,178,175,-5.1],"mv_spin_4":[6034,70000,182,182,-12.3],"mv_spin_5":[6665,70000,178,177,-15.7],"mv_spin_6":[9421,70000,206,173,-4.7],"mv_spin_7":[13596,70000,187,170,1.3],"mv_spin_8":[13787,70000,168,170,0.0],"mv_spin_9":[13959,70000,165,170,-0.4],"mv_turn_1":[4510,70000,207,184],"mv_turn_2":[2500,70000,184,189],"pero":[1182,70000,196,191],"pero2":[1382,70000,191,191],"puku3":[14329,70216,156,147],"r:angry":[4636,70216,192,161],"r:back":[5467,70000,185,183],"r:backwobble":[13607,70216,173,150],"r:blank":[11605,70216,192,154],"r:crawl":[14489,70216,170,147],"r:dead":[12152,70216,192,153],"r:dead2":[12348,70216,192,153],"r:dizzy":[15619,70216,175,144],"r:doya":[6984,70216,193,159],"r:doze":[13784,70216,180,150],"r:eat3":[13112,70216,161,151],"r:excited":[6596,70216,190,160],"r:hide":[1993,70388,182,126],"r:joy":[1082,70216,197,167],"r:laugh":[9486,70216,193,156],"r:love":[8560,70216,189,157],"r:lovelove":[14837,70216,185,146],"r:mv_backDL_1":[4832,70216,189,161,-3.7],"r:mv_backDL_2":[4070,70216,189,163,2.4],"r:mv_backDL_3":[14128,70000,186,169,-0.9],"r:mv_backDL_4":[15656,70000,183,168,0.2],"r:mv_backDR_1":[9683,70216,187,156,2.5],"r:mv_backDR_2":[10598,70000,189,171,-5.1],"r:mv_backDR_3":[9874,70216,194,156,3.6],"r:mv_backDR_4":[10072,70216,190,156,1.1],"r:mv_backL_1":[6847,70000,193,176,-3.0],"r:mv_backL_2":[5025,70216,190,161,2.0],"r:mv_backL_3":[2940,70216,186,165,0.0],"r:mv_backL_4":[10266,70216,177,156,-2.6],"r:mv_backR_1":[3320,70216,184,164,0.8],"r:mv_backR_2":[1283,70216,179,167,1.4],"r:mv_backR_3":[8651,70000,182,175,1.2],"r:mv_backR_4":[10791,70000,187,171,4.6],"r:mv_back_1":[7044,70000,201,176,2.6],"r:mv_back_2":[14318,70000,193,169,3.4],"r:mv_back_3":[9023,70000,195,174,-1.5],"r:mv_back_4":[3265,70000,196,186,-1.5],"r:mv_front_1":[3465,70000,216,186],"r:mv_front_2":[7249,70000,228,176],"r:mv_front_3":[15026,70216,198,146],"r:mv_front_4":[7778,70216,212,158],"r:mv_jump":[8753,70216,173,157],"r:mv_side_1":[3508,70216,183,164],"r:mv_side_2":[1577,70000,260,191],"r:mv_side_3":[1589,70388,198,128],"r:mv_side_4":[865,70388,161,139],"r:mv_spin_1":[10982,70000,178,171,1.3],"r:mv_spin_10":[7994,70216,171,158,1.1],"r:mv_spin_2":[7481,70000,173,176,0.4],"r:mv_spin_3":[1466,70216,173,167,0.5],"r:mv_spin_4":[1643,70216,182,167,2.5],"r:mv_spin_5":[15843,70000,186,168,-1.7],"r:mv_spin_6":[14515,70000,187,169,-2.7],"r:mv_spin_7":[16033,70000,173,168,-7.3],"r:mv_spin_8":[9631,70000,173,173,0.2],"r:mv_spin_9":[0,70216,176,168,-1.2],"r:mv_turn_1":[5219,70216,201,161],"r:mv_turn_2":[14706,70000,182,169],"r:nbf|angry":[5424,70216,192,161],"r:nbf|back":[5656,70000,185,183],"r:nbf|backwobble":[13968,70216,173,150],"r:nbf|blank":[11801,70216,192,154],"r:nbf|crawl":[14663,70216,170,147],"r:nbf|dead":[12544,70216,192,153],"r:nbf|dead2":[12740,70216,192,153],"r:nbf|dizzy":[15798,70216,175,144],"r:nbf|doya":[7181,70216,193,159],"r:nbf|doze":[14145,70216,180,150],"r:nbf|eat3":[13277,70216,161,151],"r:nbf|excited":[6790,70216,190,160],"r:nbf|hide":[2179,70388,182,126],"r:nbf|joy":[1829,70216,197,167],"r:nbf|laugh":[10447,70216,193,156],"r:nbf|love":[8930,70216,189,157],"r:nbf|lovelove":[15228,70216,185,146],"r:nbf|mv_backDL_1":[5620,70216,189,161],"r:nbf|mv_backDL_2":[4263,70216,189,163],"r:nbf|mv_backDL_3":[14892,70000,186,169],"r:nbf|mv_backDL_4":[180,70216,183,168],"r:nbf|mv_backDR_1":[10644,70216,187,156],"r:nbf|mv_backDR_2":[11164,70000,189,171],"r:nbf|mv_backDR_3":[10835,70216,194,156],"r:nbf|mv_backDR_4":[11033,70216,190,156],"r:nbf|mv_backL_1":[7658,70000,193,176],"r:nbf|mv_backL_2":[5813,70216,190,161],"r:nbf|mv_backL_3":[3130,70216,186,165],"r:nbf|mv_backL_4":[11227,70216,177,156],"r:nbf|mv_backR_1":[3695,70216,184,164],"r:nbf|mv_backR_2":[2030,70216,179,167],"r:nbf|mv_backR_3":[8837,70000,182,175],"r:nbf|mv_backR_4":[11357,70000,187,171],"r:nbf|mv_back_1":[7855,70000,201,176],"r:nbf|mv_back_2":[15082,70000,193,169],"r:nbf|mv_back_3":[9222,70000,195,174],"r:nbf|mv_back_4":[3685,70000,196,186],"r:nbf|mv_front_1":[3885,70000,216,186],"r:nbf|mv_front_2":[8060,70000,228,176],"r:nbf|mv_front_3":[15417,70216,198,146],"r:nbf|mv_front_4":[8169,70216,212,158],"r:nbf|mv_jump":[9123,70216,173,157],"r:nbf|mv_side_1":[3883,70216,183,164],"r:nbf|mv_side_2":[1841,70000,260,191],"r:nbf|mv_side_3":[1791,70388,198,128],"r:nbf|mv_side_4":[1030,70388,161,139],"r:nbf|mv_spin_1":[11548,70000,178,171],"r:nbf|mv_spin_10":[8385,70216,171,158],"r:nbf|mv_spin_2":[8292,70000,173,176],"r:nbf|mv_spin_3":[2213,70216,173,167],"r:nbf|mv_spin_4":[2390,70216,182,167],"r:nbf|mv_spin_5":[367,70216,186,168],"r:nbf|mv_spin_6":[15279,70000,187,169],"r:nbf|mv_spin_7":[557,70216,173,168],"r:nbf|mv_spin_8":[9808,70000,173,173],"r:nbf|mv_spin_9":[734,70216,176,168],"r:nbf|mv_turn_1":[6007,70216,201,161],"r:nbf|mv_turn_2":[15470,70000,182,169],"r:nbf|oh":[11730,70000,203,171],"r:nbf|pero":[11937,70000,179,171],"r:nbf|pero2":[12120,70000,174,171],"r:nbf|puku3":[181,70388,156,140],"r:nbf|relax":[7378,70216,196,159],"r:nbf|sing":[341,70388,178,140],"r:nbf|squish":[10196,70000,197,172],"r:nbf|strain":[16133,70216,177,143],"r:nbf|suri":[12298,70000,178,171],"r:nbf|suri2":[12480,70000,179,171],"r:nbf|tilt":[6212,70216,188,161],"r:oh":[12663,70000,203,171],"r:pero":[12870,70000,179,171],"r:pero2":[13053,70000,174,171],"r:puku3":[523,70388,156,140],"r:relax":[7578,70216,196,159],"r:sing":[683,70388,178,140],"r:squish":[10397,70000,197,172],"r:strain":[0,70388,177,143],"r:suri":[13231,70000,178,171],"r:suri2":[13413,70000,179,171],"r:tilt":[6404,70216,188,161],"sing":[12936,70216,172,153],"suri":[2105,70000,190,191],"suri2":[2299,70000,197,191],"tilt":[4456,70216,176,162]};
 // しゅぞくごとの 絵：いまの しゅぞくの 接頭辞（れいみゅ＝"r:"）つきの 絵が あれば そちらを つかう
 let SPX = '';
@@ -1711,7 +1711,7 @@ function decide(){
   }
   if(S.poopNeed>=100){
     const t=objsOf('toilet')[0];
-    if(t && chance(typeof smartToiletP==='function' ? smartToiletP() : .75)){ const p=objPos(t); goTo(p.x, p.z+2, {fn:()=>startPoop(true), label:'トイレに むかってる', obj:t.id}, 50); }
+    const p=t&&objPos(t); if(t && !(ffOn() && !ffGo(p.x, p.z+2)) && chance(typeof smartToiletP==='function' ? smartToiletP() : .75)){ goTo(p.x, p.z+2, {fn:()=>startPoop(true), label:'トイレに むかってる', obj:t.id}, 50); }
     else startPoop(false);
     return;
   }
@@ -4313,7 +4313,7 @@ function ykAdd(sp){
 // なかまと ぶつかったら よける（あたまが ぶつかって すすめなく ならないように）
 const SOC_BUSY = ['sleep','stuck','nap','tramp','slide','broom','tunnel','social','bath','eat','poop','read','mirror'];
 function ykSeparate(dt){
-  if(S.yk.length<2 || M.lifted || M.hover || M.hidden || SOC_BUSY.includes(M.state)) return;
+  if(S.yk.length<2 || M.lifted || M.hover || M.hidden || SOC_BUSY.includes(M.state) || (typeof insideKind==='function' && insideKind())) return;   // 11/17 kiroku1117_g8 R2：へやの 中（まどに うつる 子）は おしあわない（6ぴきで 箱の 外へ おされて いた）
   if(M.next && /おうち|どうくつ/.test(M.next.label||'')) return;   // ねに かえる ときは ぶつからない
   const ds=depthScale(M.z);
   for(let j=0;j<MS.length;j++){
@@ -4774,6 +4774,12 @@ function anyoDecor(A){
   const W=A.sw, H=A.sh, c=document.createElement('canvas'); c.width=W; c.height=H; const g=c.getContext('2d');
   g.drawImage(A.img,A.sx,A.sy,W,H,0,0,W,H);
   g.globalCompositeOperation='source-atop';
+  anyoPaint(g,W,H,lv,sg,anko);
+  const keys=Object.keys(ANYO_CACHE); if(keys.length>80) delete ANYO_CACHE[keys[0]];
+  return ANYO_CACHE[key]=c;
+}
+// あんよの けが・ふやけ・あんこ を 絵の 下の はしに ぬる（11/17 x_tenni1116_tsuriago：吊るした 体の 先にも つかう）
+function anyoPaint(g,W,H,lv,sg,anko){
   if(sg){ const gr=g.createLinearGradient(0,H*.72,0,H); gr.addColorStop(0,'rgba(245,242,230,0)'); gr.addColorStop(1,'rgba(245,242,230,.75)'); g.fillStyle=gr; g.fillRect(0,H*.72,W,H*.28);
     g.strokeStyle='rgba(200,195,180,.6)'; g.lineWidth=W*.01; for(let i=0;i<5;i++){ g.beginPath(); g.moveTo(W*(.25+i*.12),H*.9); g.quadraticCurveTo(W*(.28+i*.12),H*.95,W*(.25+i*.12),H); g.stroke(); } }
   if(lv){
@@ -4783,8 +4789,6 @@ function anyoDecor(A){
     if(lv===2){ g.fillStyle='rgba(90,40,50,.5)'; for(let i=0;i<3;i++){ g.beginPath(); g.ellipse(W*(.34+i*.16), H*.95, W*.06, H*.03, 0, 0, Math.PI*2); g.fill(); } }
   }
   if(anko){ g.fillStyle='#4a2630'; g.beginPath(); g.ellipse(W*.5, H*.99, W*.36, H*.08, 0, 0, Math.PI*2); g.fill(); g.fillStyle='#5c3038'; for(let i=0;i<4;i++){ g.beginPath(); g.ellipse(W*(.32+i*.12), H*.93, W*.04, H*.03, 0, 0, Math.PI*2); g.fill(); } }
-  const keys=Object.keys(ANYO_CACHE); if(keys.length>80) delete ANYO_CACHE[keys[0]];
-  return ANYO_CACHE[key]=c;
 }
 
 /* ---------- じどうきゅうじき：おなかが すいた子が いて おさらが からなら だす ---------- */
@@ -6729,15 +6733,7 @@ function psRebel(kind){
 }
 
 /* ---------- こえかけ ---------- */
-/* 11/14 カード x_zeron1113_natsuki（X ゼロンさん 11/13「優しい言葉を連打するだけ！！…なつき度がぐんぐん上がっている」・Nexus 11/14「直す（設計係へ）」）
-   設計 docs/nem/design_req1114c.md §1：やさしい ことばの 2回め いこうは KINDRATE.gap びょう あけないと 数字（なつき・ストレス・ゆっくり・こわがり）が 動かない。
-   なつきの おまけ（+0.4）は 1日 KINDRATE.capDay 回 まで（p.used.kindN・日が かわると psOnce が 0 に もどす）。反応（顔・とぶ・セリフ・きらきら）は いままで どおり 出す。
-   PS_KIND_EFF＝いまの psVoice('kind') が 効いたか（zz_v133.js の こわがり が 見る）。KINDRATE.on=false で もとどおり */
-const KINDRATE = { on:true, gap:10, capDay:20 };
-window.KINDRATE=KINDRATE;
-let PS_KIND_EFF = false;
 function psVoice(kind){
-  PS_KIND_EFF=false;
   if(isDead()){ toast('もう こたえない…'); return; }
   if(M.state==='sleep' || M.state==='nap'){ toast('ねているので きこえないみたい'); return; }
   closeSheet(); touch();
@@ -6747,16 +6743,10 @@ function psVoice(kind){
       p.mornT=0; psAdd('natsu',6); psAdd('gesu',-1.5); psAdd('stress',-8);
       express('lovelove',2.6); jump(260); SFX.happy(); say('morningKind',{cls:'soft'});
       for(let k=0;k<4;k++) fx('heart',hp.x+rnd(-20,20),hp.top+rnd(0,16),{vy:-rnd(30,55),max:1.3});
-      note('あさの あいさつを した。とても うれしそう。'); PS_KIND_EFF=true; save(); return;
+      note('あさの あいさつを した。とても うれしそう。'); save(); return;
     }
-    if(rebel){ psAdd('gesu',2); p.rebelT=0; express('doya',2.2); say('vKindG'); note('わがままを あまやかした。'); PS_KIND_EFF=true; save(); return; }
-    const first=psOnce('kind');
-    const eff = first || !KINDRATE.on || (T-(M._kindT??-1e9)) >= KINDRATE.gap;   // 連打は 数字が 動かない（反応は 出る）
-    if(eff){ M._kindT=T;
-      if(first) psAdd('natsu',3);
-      else { p.used.kindN=(p.used.kindN||0)+1; if(!KINDRATE.on || p.used.kindN<=KINDRATE.capDay) psAdd('natsu',.4); }
-      psAdd('stress',-4); psAdd('yuk',1); }
-    PS_KIND_EFF=eff;
+    if(rebel){ psAdd('gesu',2); p.rebelT=0; express('doya',2.2); say('vKindG'); note('わがままを あまやかした。'); save(); return; }
+    psAdd('natsu', psOnce('kind') ? 3 : .4); psAdd('stress',-4); psAdd('yuk',1);
     if(p.gesu>=55){ express('doya',2); say('vKindG'); }
     else { express('happy',2.2); jump(200); say('vKind',{cls:'soft'}); burst('spark',hp.x,hp.top+8,6,{up:30}); }
     save(); return;
@@ -7223,7 +7213,7 @@ function noteRaw(text){ const o=NOTEME.on; NOTEME.on=false; try{ return note(tex
 note = function(text){
   if(typeof text==='string' && !noteMeClash()) text=noteMe(text);
   if(typeof text!=='string' || !S.yk || S.yk.length<2) return _by_note(text);
-  const names=[...new Set(S.yk.map(y=>ykLabel(y)))].sort((a,b)=>b.length-a.length), keep=[];
+  const names=[...new Set(S.yk.map(y=>ykLabel(y)).concat(SPECIES.tsumuri.name))].sort((a,b)=>b.length-a.length), keep=[];
   names.forEach((n,i)=>{ if(text.includes(n)){ text=text.split(n).join('\u0001'+i+'\u0002'); keep[i]=n; } });
   const sv=spText; spText=t=>{ t=sv(t); return t.replace(/\u0001(\d+)\u0002/g,(m,i)=>keep[+i]); };
   try{ return _by_note(text); } finally{ spText=sv; }
@@ -9001,6 +8991,7 @@ function shopSend(course){
   if(isDead()){ toast('もう…'); return; }
   const y=S.yk[YK_I]; if(!y) return;
   if(y.away){ toast('いまは ショップに いるよ'); return; }
+  if(PS().gyM || PS().gyFoil){ toast('いまは できません'); return; }
   if(M.boxed) gyBoxOut && gyBoxOut();
   if(M.trapped){ M.trapped=null; }
   say('shopGo');
@@ -10454,7 +10445,7 @@ function placeBubble(){
   bubble.style.setProperty('--tail', clamp(50+(px-cx)/bw*100, 12, 88)+'%');
 }
 let toastT=0;
-function toast(t){ if(typeof spText==='function') t=spText(t); const el=$('#toast'); el.textContent=t; el.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove('on'),1800); }
+function toast(t){ if(typeof spText==='function') t=spText(t); const el=$('#toast'), g=$('#gl-toast'); el.style.cssText=g ? 'top:'+(g.offsetTop+g.offsetHeight+6)+'px; z-index:9' : ''; el.textContent=t;   /* 11/17 kiroku1117_g15 N7：もくひょう たっせい（#gl-toast・z 8）の 下に 出す（かさなって かくれて いた）。スマホ たては そこが ズーム（#camui・z 6）なので z 9 */ el.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove('on'),1800); }
 
 const sheet=$('#sheet');
 let sheetKind=null;
@@ -11030,7 +11021,7 @@ stroking = function(pr){
 const _v133_psVoice = psVoice;
 psVoice = function(kind){
   const r = _v133_psVoice(kind);
-  if(kind==='kind' && (typeof PS_KIND_EFF==='undefined' || PS_KIND_EFF) && !isDead() && v133Calm()) _v133_psAdd('kyofu', psOnce('kindKy') ? -4 : -1.5);   // 11/14 x_zeron1113_natsuki：連打・ねて いる 子では 動かない
+  if(kind==='kind' && M.state!=='sleep' && M.state!=='nap' && !isDead() && v133Calm()) _v133_psAdd('kyofu', psOnce('kindKy') ? -4 : -1.5);   // 11/14 x_zeron1113_natsuki：ねて いる 子（聞こえない）では 動かない
   return r;
 };
 // おいしい ごはん・あまあま
@@ -12230,16 +12221,17 @@ Object.assign(L, {
 function rainBad(){ const w=wxNow(); return w==='rain' || w==='drizzle' || w==='snow' || ENV().snow>.3; }
 function rainImmune(){ return typeof isTsumuri==='function' && isTsumuri(); }   // すいじょうも とける（つむりだけ みずに つよい）
 function rainRate(){
-  const w=wxNow(); let r = w==='rain' ? 3.2 : w==='drizzle' ? 1.1 : w==='snow' ? 1.6 : 0;
-  if(ENV().snow>.3 && !M.lifted) r = Math.max(r, .7);   // つもった ゆきの うえ
+  const w=wxNow(); let r = w==='rain' ? 3.2 : w==='drizzle' ? 1.1 : w==='snow' ? .8 : 0;   // 11/17 pl1115_f15（Nexus「両方」）：雪は 1.6→.8・つもった 雪 .7→.35
+  if(ENV().snow>.3 && !M.lifted) r = Math.max(r, .35);   // つもった ゆきの うえ
   return r;
 }
 function rainR(){ const p=PS(); return p.rainR||0; }
-function rainExposed(){ return !isDead() && !M.hidden && !M.boxed && rainBad() && !rainImmune() && !isSheltered(); }
+function rainExposed(){ const w=wxNow(); return !isDead() && !M.hidden && !M.boxed && rainBad() && !rainImmune() && !isSheltered() && !(M.state==='gyWarm' && w!=='rain' && w!=='drizzle'); }   // 11/17 pl1115_f15：焚き火に あたって いる 間は 雪で とけない
 
 function rainTick(dt){
   if(isDead()) return;
   const p=PS();
+  if(M.burnT>0 && !M.boxed && rainBad() && !isSheltered()) douse(false);   // 11/17 kiroku1117_g12 K1（Nexus 11/17 1:03「直す（次の版）」）：もえた 子は 雨・雪に あたると 火が きえる（つむりも。douse＝水たまりと 同じ「しゅぅぅ…」）
   if(rainExposed()){
     const before=p.rainR||0;
     p.rainR = Math.min(100, before + dt*rainRate());
@@ -13858,6 +13850,7 @@ function roomLayout(list,w,h,yk){
   for(const i of list){ const o=MS[i];
     if(o.state==='sleep'||o.state==='nap'){ const m=beds.length, k=nb++, r=k%2, c=(k>>1)-(Math.ceil(m/2)-1)/2;
       pos[i]=P(bd[0]+c*.11+(r?.055:0), Math.min(1, bd[1]+(r?.2:0))); }
+    else if(o._rmTo) pos[i]=P(o._rmTo[0], o._rmTo[1]);   // 11/18 nx1116_roommove：うろうろ の 行き先
     else { const sp=SP[o._rmS%SP.length]; pos[i]=P(sp[0], sp[1]); } }
   // ふたりの 動き（すーりすーり・いっしょに おうた）：相手の となり（左右は すいそうでの 左右）
   for(const i of list){ const o=MS[i];
@@ -13867,15 +13860,24 @@ function roomLayout(list,w,h,yk){
     pos[i]={cx:clamp(pos[j].cx+side*gap, w*.05, w*.95), cy:pos[j].cy+.5, v:pos[j].v}; }
   return list.map(i=>Object.assign({i}, pos[i])).sort((p,q)=>p.cy-q.cy);
 }
-// あまやどり中の うろうろ（20〜40びょうに 1回 空いて いる 別の 場所へ。見た目 だけ：M.x・M.z は さわらない）。rainMindTick から 呼ぶ
+// あまやどり中の 動き（11/18 nx1116_roommove・design_175a_o）：外の decide（d_mari.js）と 同じ えらび方・重み・ぼーっと 3〜7びょう。rainMindTick から 呼ぶ
+//   うろうろ・こっちに 来る は へやの 床の 上 だけ（M._rmTo・見た目 だけ：M.x・M.z は さわらない）。くるっ・きょろきょろ・おうた・のび〜・こっちを見る は 外と 同じ setState と ことば
+//   家に ない ごはん・どうぐ・ビーだま・ひなた・おいけ は ない。すーりすーり・いっしょに おうた・おひるね は RAINACT（zz_rain.js）
 function roomWander(dt){
-  if(!ROOMWIDE.on || M.state!=='shelter' || M._rmS==null) return;
-  if(M._rmW==null) M._rmW=rnd(20,40);
-  M._rmW-=dt; if(M._rmW>0) return; M._rmW=rnd(20,40);
-  const k=insideKind(); if(!k) return; const me=YK_I, used={};
-  ykEach(i=>{ if(i!==me && MS[i]._rmS!=null && insideKind()===k) used[MS[i]._rmS]=1; });
-  const free=[]; for(let s=0;s<ROOMWIDE.spots.length;s++) if(!used[s] && s!==M._rmS) free.push(s);
-  if(free.length) M._rmS=free[Math.floor(Math.random()*free.length)];
+  if(!ROOMWIDE.on || M.state!=='shelter' || M._rmS==null || !raCan()) return;   // テープ・発狂・非ゆっくり症・ぐったり は 動かない（RAINACT と 同じ）
+  if(M._rmLook && M._rmAt>0){ M._rmLook=0; M.raAct=T||1e-3; setState('look',4); say('lookYou'); jump(150); return; }   // こっちに きた
+  if(M._rmW==null) M._rmW=rnd(3,7);
+  M._rmW-=dt; if(M._rmW>0) return; M._rmW=rnd(3,7);
+  const w=[['wander',26],['idle',16],['spin',(SP.mv_spin_1 && S.braid!=='torn')?5:0],['explore',10],['look',7],['sing',6],['stretch',5]];
+  let r=Math.random()*w.reduce((a,b)=>a+b[1],0), act='idle'; for(const [k,v] of w){ if((r-=v)<=0){ act=k; break; } }
+  const go=(u,v)=>{ M._rmTo=[u,v]; M._rmAt=0; M._rmLook=0; const weak=S.health<25 || S.full<12 || (S.sleepy>80 && !isDark()); M._rmGa=weak?'zuri':(Math.random()<.72?'buri':'hop'); M._rmW+=4; };   // 歩き方は goTo と 同じ
+  if(act==='wander') go(rnd(.08,.92), rnd(0,1));
+  else if(act==='look'){ go(rnd(.15,.85), 1); M._rmLook=1; }
+  else if(act!=='idle') M.raAct=T||1e-3;   // へやの 中の 動きの しるし（zz_v137a_ok.js insideKind）
+  if(act==='spin'){ setState('spin', 1.1); fxText('くるっ',M.x+26,M.z-50,{size:13}); SFX.whoosh(); }
+  else if(act==='explore'){ setState('explore', rnd(3,5)); if(chance(.5)) say('explore'); }
+  else if(act==='sing') raSing();
+  else if(act==='stretch'){ setState('stretch', 2.4); say('stretch'); }
 }
 // へやの なかみ（はいけい＋なかの ゆっくり）を g の (0,0)-(w,h) に かく
 let ROOM_BUBLOG=[];   // 11/15 nx1115_ouchifix #2：さいごに まどへ かいた ふきだし（テスト・しらべ用）[{i, txt, cls, w}]
@@ -13891,10 +13893,11 @@ function roomDoorIn(kind,h,list){
   return {u:roomDoor()[0], v:roomDoorV(h), t:T, ent};
 }
 // 入る／出る あいだの すがた（横むき・はねる か ずーり）。もどす 関数を かえす
-function roomDoorPose(t, dir, gait){
+function roomDoorPose(t, dir, gait, dz, dx){   // dz・dx：おく／てまえ へ 歩く ときの 行き先（11/18 nx1116_roommove）
   const K={st:M.state, ga:M.gait, tg:M.target, f:M.face, h:M.h, vh:M.vh, ph:M.gaitPh, tt:M._turnT};
-  M.state='move'; M.gait=gait; M.target={x:M.x+dir*100, z:M.z}; M.face=dir; M._turnT=0;
+  M.state='move'; M.gait=gait; M.target={x:M.x+(dx!=null?dx:dir*100), z:M.z+(dz||0)}; M.face=dir; M._turnT=0;
   if(gait==='zuri'){ M.h=0; M.vh=0; M.gaitPh=t*6; }
+  else if(gait==='buri'){ M.h=0; M.vh=0; M.gaitPh=t*8; }
   else { const ph=(t*ROOMDOOR.hop)%1; M.h=Math.sin(ph*Math.PI)*ROOMDOOR.hopH; M.vh=Math.cos(ph*Math.PI)*200; }
   return ()=>{ M.state=K.st; M.gait=K.ga; M.target=K.tg; M.face=K.f; M.h=K.h; M.vh=K.vh; M.gaitPh=K.ph; M._turnT=K.tt; };
 }
@@ -13903,9 +13906,10 @@ function roomKidPaint(g,cx,cy,s){
   const sx=M.x, sz=M.z;
   // 11/15 nx1115_ouchifix #1：すいそうで となりの 子と おしあう（press）・うごいて かたむく（lean）・ぷるん（jig）は へやの 中には うつさない
   const kp=M.press, kl=M.lean, kj=M.jig; M.press=0; M.lean=0; M.jig=0;
+  M._flipV=undefined;   // 11/17 play1116_p1：横の むき（smoothFlip）は すいそうと へやで 1つ。へやでは のこりから ゆっくり かえず、かいた あとも のこさない（ちぢみ なし）
   g.save(); g.translate(cx,cy); g.scale(s,s); g.translate(-sx,-sz);
   try{ drawMari(); }catch(e){}
-  g.restore(); M.press=kp; M.lean=kl; M.jig=kj;
+  g.restore(); M.press=kp; M.lean=kl; M.jig=kj; M._flipV=undefined;
 }
 function roomDoorLog(i,kind,ph,u,v,a){ const D=ROOMDOOR; if(!D.log) return; D.log.push({i, kind, ph, u:+u.toFixed(3), v:+v.toFixed(3), face:M.face, gait:M.gait, state:M.state, h:+(M.h||0).toFixed(1), a:+a.toFixed(2), t:T}); if(D.log.length>4000) D.log.splice(0,1000); }
 // 出て いく 子（ROOM_OUT）：かいて いた 場所 から 入口へ。さいごの 15% は うすく → 着いたら 消す
@@ -13940,26 +13944,29 @@ function drawRoomInside(g,kind,list,w,h,yk){
   const n=list.length;
   for(const L of roomLayout(list,w,h,yk)){ ykDo(L.i,()=>{
     const sx=M.x, sz=M.z, sh=M.hidden; M.hidden=false;
-    let cx=L.cx, cy=L.cy, vv=L.v||0, ent=null;
+    let cx=L.cx, cy=L.cy, vv=L.v||0, ent=null, hpE=null, mv=null;
     if(ROOMWIDE.on){   // 場所が 変わる ときは 1びょうに へやの 幅の 1/4 くらいで 近づく（小さく はねる）
       const tu=L.cx/w, tv=L.cy/h; let p=M._rmP;
       if(!p || M._rmK!==kind || T-p.t>2 || T<p.t){ p=M._rmP=roomDoorIn(kind,h,list) || {u:tu, v:tv, t:T}; M._rmK=kind; }
       if(p.ent!=null && T<p.ent){ p.t=T; M.hidden=sh; return; }   // 11/16 roomdoor：前の 子と 0.4びょう あける あいだは かかない
-      const dt=Math.min(.2, T-p.t), du=tu-p.u, dv=(tv-p.v)*h/w, d=Math.hypot(du,dv), st=(p.ent!=null ? ROOMDOOR.inSp : .25)*dt; p.t=T;
-      if(d>st && d>1e-4){ p.u+=du/d*st; p.v+=dv/d*st*w/h; } else { p.u=tu; p.v=tv; p.ent=null; }
+      if(M._rmGa==null) M._rmGa=(S.health<25||S.full<12||(S.sleepy>80&&!isDark()))?'zuri':'buri';   // 11/18 r176_roomga：入って すぐ（最初の go の 前）も go と 同じ 歩き方
+      const dt=Math.min(.2, T-p.t), du=tu-p.u, dv=(tv-p.v)*h/w, d=Math.hypot(du,dv), st=p.ent!=null ? ROOMDOOR.inSp*dt : (M._rmGa==='zuri'?18:M._rmGa==='hop'?50:34)*yk/w*dt; p.t=T;   // 11/18 roommove：外と 同じ 見た目の はやさ
+      if(d>st && d>1e-4){ p.u+=du/d*st; p.v+=dv/d*st*w/h; } else { if(M._rmTo && !(M._rmAt>0)) M._rmAt=T; p.u=tu; p.v=tv; p.ent=null; }
       cx=p.u*w; cy=p.v*h;
       if(p.ent!=null){ ent=p; vv=roomVOf(p.v,h); }   // 11/16 roomdoor：入口から 入って くる あいだ（小さく はねる かわりに 横むきに はねる）
-      else if(d>.004) cy-=Math.abs(Math.sin(T*9))*h*.03;
+      else if(d>.004){ mv={dir:Math.abs(du)>.02*d?(du<0?-1:1):(M.face||1), dx:du/d*100, dz:dv/d*100}; M._rmF=mv.dir; }   // 11/18 roommove：歩く すがた（横・おく・てまえ）
     }
     const s=(ROOMWIDE.on ? yk*(.86+.14*vv) : yk)/Math.max(.6,depthScale(sz));
     if(ent){
       const t=T-ent.ent, undo=roomDoorPose(t, -1, M._rmG||'hop'), ga=g.globalAlpha, al=Math.min(1, .25+.75*t/ROOMDOOR.fadeIn); g.globalAlpha=ga*al;
       roomDoorLog(L.i,kind,'in',ent.u,ent.v,al);
       roomKidPaint(g,cx,cy,s);
+      const h0=M.h; if(M.gait!=='zuri') M.h=ROOMDOOR.hopH; try{ hpE=headPos(); }catch(e){} M.h=h0;   // 11/17 play1116_p2：ふきだしは 入って くる すがたの 頭（はねの いちばん 上）
       g.globalAlpha=ga; undo();
-    } else roomKidPaint(g,cx,cy,s);
+    } else if(mv){ const undo=roomDoorPose(T, mv.dir, M._rmGa||'buri', mv.dz, mv.dx); roomKidPaint(g,cx,cy,s); undo(); }
+    else { const f0=M.face; if(M._rmF) M.face=M._rmF; roomKidPaint(g,cx,cy,s); M.face=f0; }   // 着いたら その 向きの まま
     // 11/15 nx1115_ouchifix #2：その 子が しゃべって いれば 頭の 上に ふきだし（PC の まど だけ。かくのは 子を ぜんぶ かいた あと）
-    if(w>=300 && bubble && bubble.classList.contains('on') && bubble.textContent){ try{ const hp=headPos(); bubs.push({i:L.i, txt:bubble.textContent, cls:bubble.className, x:cx+(hp.x-sx)*s, y:cy+(hp.top-sz)*s}); }catch(e){} }
+    if(w>=300 && bubble && bubble.classList.contains('on') && bubble.textContent){ try{ const hp=hpE||headPos(); bubs.push({i:L.i, txt:bubble.textContent, cls:bubble.className, x:cx+(hp.x-sx)*s, y:cy+(hp.top-sz)*s}); }catch(e){} }
     M.hidden=sh;
   }); }
   if(outs) roomOutDraw(g,kind,w,h,yk);
@@ -14506,10 +14513,12 @@ function pfMode(){
   if(isLakeStage() && !lakeAt(M.x,M.z) && !(typeof lakeWader==='function' && lakeWader())) return 'lake';   // ふつうの 子は みずうみに はいれない（11/9 たんぼの つむり・にとりは はいれる）
   return null;
 }
+// 11/17 bt_a268_1117_mizuyoke：みずうみの ステージでも 置いた みずの 家具（WTYPES）は よける（いま みずの なかなら よけない＝でられなく ならない）
+function pfWs(x, z){ const w=waterAt(x,z); return !!(w && w.o && WTYPES[w.o.type]) && !waterAt(M.x,M.z); }
 function pfBad(mode, x, z){
   if(x<XMIN-2 || x>XMAX+2 || z<FLOOR_TOP || z>FLOOR_BOT-1) return true;
   if(typeof partOn==='function' && partOn() && acrossX(x)) return true;   // まんなかの ガラス
-  if(mode==='lake') return lakeAt(x,z);
+  if(mode==='lake') return lakeAt(x,z) || pfWs(x,z);
   if(mode==='water') return !!waterAt(x,z);
   return false;
 }
@@ -15245,8 +15254,8 @@ function nakaOk(){ if(nakaHeld()) return false;   // 11/14 x_yokan1109_req_minna
   return !isDead() && !M.lifted && !M.hidden && !M.boxed && !M.burnT && !isSuijo() && !(typeof uwOn==='function' && uwOn()) && !NAKA_BUSY.includes(M.state) && (S.health||0)>=20; }
 function lakeAtSafe(x, z){ if(typeof lakeAt==='function' && lakeAt(x,z)) return Math.max(FLOOR_TOP+6, lakeShoreZ(x,-.1)); return z; }
 function nakaLand(p){ return {x:clamp(p.x, XMIN+24, XMAX-24), z:lakeAtSafe(clamp(p.x,XMIN+24,XMAX-24), clamp(p.z, FLOOR_TOP+8, FLOOR_BOT-6))}; }
-function nakaSay(i, key, opts){ ykDo(i, ()=>{ if(!isDead() && !nakaHeld()) say(key, Object.assign({naka:1}, opts||{})); }); }
-function nakaSayRaw(i, text, opts){ ykDo(i, ()=>{ if(!isDead() && !nakaHeld()) say([text], Object.assign({naka:1}, opts||{})); }); }
+function nakaSay(i, key, opts){ ykDo(i, ()=>{ if(!isDead() && !nakaHeld() && !M.lifted) say(key, Object.assign({naka:1}, opts||{})); }); }
+function nakaSayRaw(i, text, opts){ ykDo(i, ()=>{ if(!isDead() && !nakaHeld() && !M.lifted) say([text], Object.assign({naka:1}, opts||{})); }); }
 // あそびの あいだ、ほかの 子の ふきだしが でている ときは ふだんの おしゃべりを しない（ふきだしが かさならない ように）
 function nakaOtherBubble(){ if(!NAKA) return false; const me=YK_I; let on=false;
   for(const j of NAKA.mem){ if(j===me || !S.yk[j]) continue; ykDo(j, ()=>{ if(bubbleT>0) on=true; }); } return on; }
@@ -15294,7 +15303,7 @@ function unCommand(auto){   // auto：子が 自分から（NAKAAUTO）。号令
 // いどう（ぴょんぴょん）
 function nakaWalk(tx, tz, sp, dt, hop){
   const dx=tx-M.x, dz=tz-M.z, d=Math.hypot(dx,dz);
-  if(d>3){ const s=Math.min(d, sp*dt); M.x=clamp(M.x+dx/d*s, XMIN, XMAX); M.z=clamp(M.z+dz/d*s, FLOOR_TOP+2, FLOOR_BOT-2); if(Math.abs(dx)>2) M.face=dx>0?1:-1; if(hop!==false && M.h<=0 && chance(dt*3)) jump(hop||110); }
+  if(d>3){ const s=Math.min(d, sp*(NAKA && M._nakaRush>T ? 1.8 : 1)*dt); M.x=clamp(M.x+dx/d*s, XMIN, XMAX); M.z=clamp(M.z+dz/d*s, FLOOR_TOP+2, FLOOR_BOT-2); if(Math.abs(dx)>2) M.face=dx>0?1:-1; if(hop!==false && M.h<=0 && chance(dt*3)) jump(hop||110); }
   if(typeof lakeAt==='function' && lakeAt(M.x,M.z)) M.z=Math.max(FLOOR_TOP+4, lakeShoreZ(M.x,-.08));
   return d;
 }
@@ -15657,7 +15666,7 @@ function nakaEnd(good, quiet){
     if(before<-10 && relGet(mem[a],mem[b])>=-10) made++;
   }
   N.mem.forEach(i=>ykDo(i,()=>{ if(M.tanIn){ M.hidden=false; M.tanIn=0; } }));
-  mem.forEach((i,k)=>ykDo(i,()=>{ M.unBack=0; M.rot=0; M.sq=0; if(M.state==='naka') setState('idle',2); if(quiet) return; S.mood=Math.min(100,(S.mood||0)+(good?6:3));
+  mem.forEach((i,k)=>ykDo(i,()=>{ M.unBack=0; M.rot=0; M.sq=0; if(M.state==='naka') setState('idle',2); if(M.nakaUp) M.nakaUp=2; if(quiet || M.nakaUp) return; S.mood=Math.min(100,(S.mood||0)+(good?6:3));
     if(!isDead()){ express('happy',2); if(N.kind==='un' && k<3) setTimeout(()=>{ try{ ykDo(i,()=>{ if(!nakaHeld()) say(M.unNo?'unNo':'unOk',{cls:'soft'}); M.unNo=0; }); }catch(e){} }, 200+k*500);
       else if(made && k===0) setTimeout(()=>{ try{ ykDo(i,()=>{ if(!nakaHeld()) say('nakaMake',{cls:'soft'}); }); }catch(e){} }, 400); } }));
   if(made) note(`いっしょに あそんで なかなおり できた（${made}くみ）。`);
@@ -15705,7 +15714,15 @@ function nakaDouguOut(N){
   return false;
 }
 function nakaTick(dt){
-  const N=NAKA; if(!N){ nakaAutoTick(dt); return; }
+  const N=NAKA;
+  // 11/17 kiroku1117_g7 R1（Nexus 11/17 1:02「直す（次の版）／遊びを中断されて文句を言う、降ろされたら遊びに急いで合流する、降ろされたときに遊びが終わっていたらご機嫌-」・設計 design_175a_g.md §3）
+  //   もちあげた とき もんく（liftHold の よろこびは 言わない）／下ろすと いそいで（nakaWalk ×1.8・4びょう）あそびに もどる／下ろした とき もう おわって いたら ごきげん −5（nakaEnd が nakaUp=2 に する）
+  ykEach(i=>{ const inN=!!N && N.mem.includes(i);
+    if(M.lifted){ if(inN && !M.nakaUp){ M.nakaUp=1; M.liftSaid=1; say('puku',{cls:'shout'}); express('puku',1.5); } return; }
+    if(!M.nakaUp) return; const up=M.nakaUp; M.nakaUp=0; if(isDead() || nakaHeld()) return;
+    if(inN){ setState('naka',99); M._nakaRush=T+4; say('tanLeft1',{cls:'shout'}); }
+    else if(up===2){ S.mood=Math.max(0,(S.mood||0)-5); express('puku',2); } });
+  if(!N){ nakaAutoTick(dt); return; }
   if(nakaDouguOut(N)) return;
   N.t+=dt;
   if(N.kind==='kari') nakaKariTick(dt); else if(N.kind==='tan') nakaTanTick(dt); else nakaUnTick(dt);
@@ -15789,7 +15806,7 @@ function kzAct(k, h){
   }
   if(k==='wear'){ wearHat(); M.next=null; setState('idle',2); return; }
   if(k==='move'){ KZ_MOVE={id:S.yk[YK_I].id}; toast(`${part}を おく ばしょを タップしてね`); return; }
-  if(k==='front'){ const ds=depthScale(M.z), x=clamp(M.x+(M.face||1)*44*ds, XMIN, XMAX), z=clamp(M.z+4, FLOOR_TOP+6, FLOOR_BOT-4), uv=toUV(x,z); S.hat={st:'taken', u:uv.u, v:uv.v}; FLOOR_HAT=null; save(); return; }
+  if(k==='front'){ const ds=depthScale(M.z), x=clamp(M.x+(M.face||1)*44*ds, XMIN, XMAX), z=clamp(M.z+4, FLOOR_TOP+6, FLOOR_BOT-4), uv=toUV(x,z); S.hat={st:'taken', u:uv.u, v:uv.v, dmg:S.hat.dmg}; FLOOR_HAT=null; save(); return; }
   if(k==='burn'){ ensureMean&&ensureMean(); S.hat={st:'burnt'}; FLOOR_HAT=null; clearVariants(); SFX.strike&&SFX.strike();
     for(let n=0;n<10;n++) fx('smoke', h.x+rnd(-14,14), h.z-rnd(4,20), {vy:-rnd(20,50), max:rnd(1.2,2)});
     fxText('ぼっ…', h.x, h.z-30, {size:16, color:'#b8452f'}); express('cry',4.5); M.tears=4.5; say('hatBurnt',{cls:'soft',t:3.4}); sad&&sad(20);
@@ -15805,7 +15822,7 @@ cv.addEventListener('pointerdown', e=>{
   if((typeof ED!=='undefined' && ED.on) || (typeof TOOL!=='undefined' && (TOOL.cur || TOOL.hold))) return;
   const p=toLogical(e);
   if(KZ_MOVE){ const i=S.yk.findIndex(y=>y.id===KZ_MOVE.id); KZ_MOVE=null;
-    if(i>=0) ykDo(i,()=>{ if(S.hat && S.hat.st==='taken'){ const z=clamp(p.y, FLOOR_TOP+6, FLOOR_BOT-4), x=clamp(p.x, XMIN, XMAX), uv=toUV(x,z); S.hat={st:'taken', u:uv.u, v:uv.v}; FLOOR_HAT={x, z, y:-40, vy:0}; SFX.plop&&SFX.plop(); save(); } });
+    if(i>=0) ykDo(i,()=>{ if(S.hat && S.hat.st==='taken'){ const z=clamp(p.y, FLOOR_TOP+6, FLOOR_BOT-4), x=clamp(p.x, XMIN, XMAX), uv=toUV(x,z); S.hat={st:'taken', u:uv.u, v:uv.v, dmg:S.hat.dmg}; FLOOR_HAT={x, z, y:-40, vy:0}; SFX.plop&&SFX.plop(); save(); } });
     e.stopImmediatePropagation(); e.preventDefault(); return; }
   const h=kzFloorHit(p); if(!h) return;
   e.stopImmediatePropagation(); e.preventDefault();
@@ -18470,7 +18487,9 @@ Object.assign(L, {
 /* v1.3.9 No.167：PC で「おてんきさん そうち」の うえ はんぶんに おせわの ショートカット（qb の らん）が かぶって おせない
    （X 10/7 23:53「上に欄があって反応しなくて」）→ よこながの ときは そうちを すいそうの みぎはしの うえへ */
 { const _wd=wxDevRect;
-  wxDevRect=function(){ const r=_wd(); if(LK==='portrait') return r; const {x1,top}=TANK, w=r.w; return Object.assign(r,{x:x1-w-34, y:top-r.h+6}); };
+  wxDevRect=function(){ const r=_wd(); if(LK==='portrait') return r; const {x1,top}=TANK, w=r.w;
+    const g=ctx; g.save(); g.font='700 12px sans-serif'; const lw=g.measureText(RMPANEL.lbl).width; g.restore();   // 11/17 play1116_p4：右の 文字（いちばん 長い 文）が キャンバスの はば W に おさまる まで 左へ
+    return Object.assign(r,{x:Math.min(x1-w-34, W-6-lw-4-w), y:top-r.h+6}); };
 }
 /* 10/8 Nexus Atelier「そうちからだけでなく メニューからも かえられるように」
    → 「おせわ」の うえの ならびに「おてんき」を ふやす（おてんきさん そうちの シートを ひらく）
@@ -23852,7 +23871,7 @@ Object.assign(L, {
 const HOGO_LV = [{n:'かるい', hp:[70,85], anyo:[10,30], pick:[0,1]}, {n:'ふつう', hp:[50,70], anyo:[30,55], pick:[1,2]}, {n:'ひどい', hp:[35,50], anyo:[55,75], pick:[2,3]}];
 function hogoAdopt(){
   const sps=Object.entries(SPECIES).filter(([k,v])=>(!v.spx || SP_RAW[v.spx+'smile']) && k!=='suijo').map(([k])=>k);
-  const sp=pick(sps); if(!ykAdd(sp)) return false;
+  let sp=pick(sps); if(!ykAdd(sp)) return false; sp=S.yk[S.yk.length-1].sp;   // 希少種は ykAdd で かわる（zz_v166_rarefirst）
   const i=S.yk.length-1, lv=pick(HOGO_LV), mind=pick(['normal','gesu','broken','fear','fear']);
   const hurt=[];
   ykDo(i,()=>{
@@ -23893,7 +23912,7 @@ function hogoAdopt(){
    ② 警告：公式で ない ウェブサイトで ひらかれた ときだけ、上に 小さな おしらせ（とじられる）
       公式＝ファイルを じかに ひらく（file:）／公式の ブラウザ版（aigptplan-cyber.github.io）／localhost
    ============================================================ */
-const SEC_MARK = 'mt-gh-175-5be8438d';                     // release.py が 配布ごとに おきかえる
+const SEC_MARK = 'mt-gh-176-68d34753';                     // release.py が 配布ごとに おきかえる
 const SEC_OK_HOSTS = ['aigptplan-cyber.github.io', 'localhost', '127.0.0.1', ''];
 function secHost(){ return (window.__SEC_HOST!=null) ? window.__SEC_HOST : (location.protocol==='file:' ? '' : location.hostname); }
 function secOfficial(){ const h=secHost(); return SEC_OK_HOSTS.includes(h); }
@@ -25101,7 +25120,7 @@ Object.assign(L, {
   odkBack:["ただいま[なのじぇ]！ …ゆぅ… つかれた[のじぇ]…","たのしかった[のじぇ]… すーや…"],
   odkMiss:["{o}、どこに いったの[なのじぇ]…？","{o}… はやく かえってきて[ほしいのじぇ]…"],
 });
-function odkCan(){ return !isDead() && !M.lifted && !M.boxed && !(typeof isSuijo==='function' && isSuijo()) && !(typeof shellKind==='function' && shellKind()) && !sleepTime() && !(typeof rainBad==='function' && rainBad()) && (S.anyo||0)<30 && S.health>=30; }
+function odkCan(){ return !isDead() && !M.lifted && !M.boxed && !PS().gyM && !PS().gyFoil && !(typeof isSuijo==='function' && isSuijo()) && !(typeof shellKind==='function' && shellKind()) && !sleepTime() && !(typeof rainBad==='function' && rainBad()) && (S.anyo||0)<30 && S.health>=30; }
 function odkIdx(){ return ODK.on ? S.yk.findIndex(y=>y.id===ODK.id) : -1; }
 function odkStart(place){
   if(ODK.on){ toast('いまは ほかの 子が おでかけ ちゅう'); return; }
@@ -25397,7 +25416,7 @@ if(typeof ilPath==='function'){ const _ip=ilPath; ilPath=function(){
 function sushiSeamOK(x0, z0, x1, z1){
   const n=Math.ceil(Math.hypot(x1-x0,(z1-z0)*2)/2); let run=0, rs=null;
   for(let i=0;i<=n;i++){ const t=i/n, x=x0+(x1-x0)*t, z=z0+(z1-z0)*t;
-    if(lakeAt(x,z)){ if(!run) rs={x,z}; run++; if(Math.hypot(x-rs.x,(z-rs.z)*2)>SH_SEAM) return false; } else run=0; }
+    if(lakeAt(x,z)){ if(!run) rs={x,z}; run++; if(Math.hypot(x-rs.x,(z-rs.z)*2)>SH_SEAM) return false; } else { if(pfWs(x,z)) return false; run=0; } }
   return true;
 }
 if(typeof pfLineOK==='function'){ const _pl=pfLineOK; pfLineOK=function(mode, x0, z0, x1, z1){
@@ -25617,7 +25636,7 @@ function predGuarded(){ return null; }
 // ---- えもの えらび ----
 function preyOk(j){
   const y=S.yk[j], o=MS[j]; if(!y || !o || y.dead || PRED_DEF[y.sp]) return false;
-  if(o.hidden || o.boxed || o.lifted || o._carried || o.inHouse) return false;
+  if(o.hidden || o.boxed || o.lifted || o._carried || o.inHouse || ((y.ps||{}).gyM||{}).k==='mizu') return false;   // x_bagel1117_suisoupred：水槽の 中の 子は ガラスごし（つかんで 水槽の 前に 浮いて いた）
   if(['house','box','sleepHouse','cave','tunnel'].includes(o.state)) return false;
   // 11/10 ベーグル眠りさん（X 2119888490515374330）「水上まりちゃを捕食しようとするけど、上手くできずに ずっと続く」
   //   しんでしまう OFF では けんこう 10 で はなす（下の suck・drag）。でも はなした 子を また ねらって、つかんだ しゅんかんに はなすので、
@@ -26530,6 +26549,7 @@ function st2TryEat(){
       //   もとから ある「ごはんさん… とられた」（zz_gesu2.js gsStolenV）に（あたらしい せりふは つくらない）
       if(!a || st2K()!==t.sk || !(a[t.i]>=1)){ say('gsStolenV',{cls:'shout'}); express('angry',2); return; }
       a[t.i]=0; S.full=Math.min(100,S.full+12); S.mood=Math.min(100,S.mood+4); psAdd('gesu',1.5);
+      if(typeof vrNg==='function' && vrNg()) shkMark('たべちゃ だめの おやさいを たべた');   // しかる りゆう（x_tenni1114_shikaru_yasai）
       say('st2VegEat',{cls:'shout'}); express('happy',2);
       const d=gameDayNo(); if(S.st2vegNote!==d){ S.st2vegNote=d; note(`${S.me||'まりちゃ'}が はたけの おやさいを かってに たべた。（ゲスど すこし ↑）`); }
       return; }
@@ -29312,7 +29332,8 @@ function ngGesuJoin(a, b, vi){
 // おなじ おやさいを わけて たべる
 { const _gd=grazeDone; grazeDone=function(){
     const t=M.grazeT;
-    if(t && t.k==='ngShare'){ M.grazeT=null; S.full=Math.min(100,S.full+7); S.mood=Math.min(100,S.mood+4); psAdd('gesu',1); say('ngGesuEat',{cls:'shout'}); express('happy',2); return; }
+    if(t && t.k==='ngShare'){ M.grazeT=null; S.full=Math.min(100,S.full+7); S.mood=Math.min(100,S.mood+4); psAdd('gesu',1); say('ngGesuEat',{cls:'shout'}); express('happy',2);
+      if(typeof vrNg==='function' && vrNg()) shkMark('たべちゃ だめの おやさいを たべた'); return; }   // しかる りゆう（x_tenni1114_shikaru_yasai）
     return _gd.apply(this, arguments); }; }
 // デバッグ：のらを よぶ・おやさいを みのらせる（にわ で ためす ため）
 function ngDbgRow(){
@@ -33378,7 +33399,7 @@ try{ if(YSHOP.beta) YSHOP.on=true; }catch(e){}
 try{ if(/[?&](yshop|ysf)=1(&|$)/.test(location.search||'')) YSHOP.on=true; }catch(e){}
 try{ if(!/[?&]yshop=0(&|$)/.test(location.search||'')){ const v=localStorage.getItem('mtYshop'); if(v==='1' || (v!=='0' && localStorage.getItem('mtYsf')==='1')) YSHOP.on=true; else if(v==='0') YSHOP.on=false; } else YSHOP.on=false; }catch(e){}
 const SH_START = 0;                   // はじめての おさいふ（おかねは うって はじめて はいる）
-const SH_SELL_DAY = 2;                // 1にちに かいとって もらえる かず
+const SH_SELL_DAY = 4;   /* 11/18 bt_502e1117_rare Nexus「4ひき」 */                // 1にちに かいとって もらえる かず
 // しゅぞくの もとね（円）。資料：通常種は やすい（れいむ・まりさは ねくずれ）・捕食種は ちゅうくらい・希少種は たかい・わさ種は ねが さがる・つむりは とても たかい
 // 10/16 Nexus Atelier「つむりが高すぎる意見がおおい」（X ナコスさん・ユシューさん「金策はつむり一択」）→ つむり 900→380・こちゃ 700→380・にとり 800→600
 const SH_BASE = {maricha:200, reimu:180, wasa:60, suijo:320, tsumuri:380, kocha:380,
@@ -34694,8 +34715,8 @@ updateBrain = function(dt){
       S.full=Math.min(100,S.full+dt*9); S.health=Math.min(100,S.health+dt*4); S.mood=Math.min(100,S.mood+dt*1);
       if(M.stT>M.stDur){ M.otabeE=false; const nm=ykLabel(y);
         psAdd('stress',-30); psAdd('yuk',8); setState('idle',4); express('cry3',3); M.tears=3; say('otabeDone',{o:nm, cls:'soft', t:5});
+        note(`${nm}は「おたべなさい」で ${S.me}に じぶんを たべさせた。${nm}の いのちは ${S.me}の なかで いきている。`);   // 11/18 i1118_bcd：さきに（ykRemoveQuiet で いまの 子が えらんで いる 子に かわる）
         const i=S.yk.indexOf(y); if(S.yk.length>1 && i>=0){ ykRemoveQuiet(i); if(typeof renderYkTabs==='function') renderYkTabs(); }
-        note(`${nm}は「おたべなさい」で ${S.me}に じぶんを たべさせた。${nm}の いのちは ${S.me}の なかで いきている。`);
         save(); }
       return;
     }
@@ -37805,8 +37826,9 @@ function shkCulprit(){
     if(M.state==='sleep' || M.state==='nap') return _pv.apply(this, arguments);   // ねている：きこえない（りゆうは のこす）
     // りゆう あり：わがまま と おなじ ながれ（はんせい／ききめ なし）に のせる
     shkClear(); p.rebelT=.01; if(!p.rebelKind) p.rebelKind='refuse';
+    const lk={'ごはんを よこどり した':'scoldLieGohan','たべちゃ だめの おやさいを たべた':'scoldLieYasai'}[w.k], ng0=L.scoldNg; if(L[lk]) L.scoldNg=L[lk];   // はんぱつ なら うそが へた（zz_v170_diclines・x_tenni1114_shikaru_yasai）
     try{ return _pv.apply(this, arguments); }
-    finally{ try{ if((p.rebelT||0)>0 && p.rebelT<=.01) p.rebelT=0; }catch(e){} }
+    finally{ L.scoldNg=ng0; try{ if((p.rebelT||0)>0 && p.rebelT<=.01) p.rebelT=0; }catch(e){} }
   }; }
 // ④ ハリセン
 if(typeof kyHarisen==='function'){ const _kh=kyHarisen; kyHarisen=function(){
@@ -37876,7 +37898,7 @@ const SHU_NEM = {
   confirm:[["…ほんとに いいの？ もどってこないよ",'n'],["もういっかい おしたら きまり。…いい？",'n']],
   sold:   [["まいど。…{yen}ね。いい子だったよ",'s'],["…はい、{yen}。だいじに つかいな",'s'],["やば…いい買いもの しちゃった",'s']],
   taken:  [["…はい。じゃ、あずかるね",'a'],["ま、いっか。…こっちで なんとかする",'a']],
-  limit:  [["きょうは もう いっぱい。…あした また来て",'a'],["2ひき 買ったし… だるいから また あしたね",'a']],
+  limit:  [["きょうは もう いっぱい。…あした また来て",'a']],   /* 11/18 bt_502e1117_rare：1日 4ひき に なった ので「2ひき 買ったし…」を けした */
   last:   [["さいごの 1ぴきは だめ。…さみしく なるじゃん",'a'],["その子 いなくなったら ひとりじゃん。…やめときな",'a']],
   nomoney:[["お金 たりないって。…だるいけど 稼いできて",'a'],["…{short} たりない。だるいね",'a'],["それ 買うなら あと {short}。…がんばって",'a']],
   buy:    [["まいど。…大事にしなよ",'s'],["…はい。いい買いもの したじゃん",'s'],["まいど。…ま、にあうんじゃない？",'s']],
@@ -41720,7 +41742,7 @@ if(typeof drawMeanOverlay==='function'){ const _dm=drawMeanOverlay; drawMeanOver
 }
 
 /* v1.5.3 おさげちゅぱ の 絵（ChatGPT で もとの ねがおに おさげを くわえさせた：chupa/）*/
-const CHUPA_IMG={"sleep": "data:image/webp;base64,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", "sleep_nohat": "data:image/webp;base64,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"};
+const CHUPA_IMG={"sleep": "data:image/webp;base64,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", "sleep_nohat": "data:image/webp;base64,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"};
 
 /* ============================================================
    v1.5.3 おさげちゅぱ（board x_sticky_list1014：鬼威惨さん「おさげちゅぱ（まりちゃのみ）」／Nexus Atelier「参照資料確認必須」）
@@ -41783,7 +41805,7 @@ if(typeof kyStudyEnd==='function'){ const _ke=kyStudyEnd; kyStudyEnd=function(){
       if(a){ box.innerHTML=`<p class="edit-help" style="margin:0">いまは「${(SHOP_COURSE[a.course]||{}).name||''}」に あずけています（あと ${Math.ceil(Math.max(0,a.until-shopNow())/60)}じかん）</p>`; }
       else { box.innerHTML=`<p class="edit-help" style="margin:0 0 4px">🏪 ゆっくりショップに あずける（せいかくを かえる・ゲーム内で 1にち）</p><div style="display:flex;flex-wrap:wrap;gap:6px">${Object.entries(SHOP_COURSE).map(([k,c])=>`<button type="button" class="btn" data-dazuke="${k}" title="${c.desc}">${{study:'📚',shitsuke:'📏',care:'🍵',amanuki:'🚫'}[k]||'🏪'} ${c.name}</button>`).join('')}</div>`; }
       old.replaceWith(box);
-      box.querySelectorAll('[data-dazuke]').forEach(b=>b.addEventListener('click',()=>{ shopSend(b.dataset.dazuke); toast('あずけたよ（あした かえってきます）'); }));
+      box.querySelectorAll('[data-dazuke]').forEach(b=>b.addEventListener('click',()=>{ shopSend(b.dataset.dazuke); if(shopAway()) toast('あずけたよ（あした かえってきます）'); }));
     }catch(e){ console.warn('[sushi] diary', e); }
     return r; }; }
 /* ③ したなおし フード */
@@ -45001,7 +45023,7 @@ if(CENAME.on && typeof ykRemoveQuiet==='function' && typeof note==='function'){
         const now=performance.now(); CENAME.gone=CENAME.gone.filter(g=>now-g.t<CENAME.keep);
         if(typeof text==='string' && CENAME.gone.length){
           const keep=[]; let k=0;
-          for(const g of [...CENAME.gone].sort((a,b)=>b.nm.length-a.nm.length)){ if(text.includes(g.nm)){ text=text.split(g.nm).join('\u0003'+k+'\u0004'); keep[k++]=g.nm; } }
+          for(const g of [...CENAME.gone, {nm:SPECIES.tsumuri.name}].sort((a,b)=>b.nm.length-a.nm.length)){   /* 11/18 i1118_bcd：「まりちゃつむり」を まるごと（「つむり」だけ かくすと のこりの「まりちゃ」が かわる） */ if(text.includes(g.nm)){ text=text.split(g.nm).join('\u0003'+k+'\u0004'); keep[k++]=g.nm; } }
           if(keep.length){ const sv=spText; spText=t=>{ t=sv(t); return typeof t==='string' ? t.replace(/\u0003(\d+)\u0004/g,(m,q)=>keep[+q]) : t; };
             try{ return _n.call(this, text); } finally{ spText=sv; } }
         }
@@ -45030,6 +45052,7 @@ if(CEREACH.on && typeof gyNoKazari==='function'){
   function cerSwim(){ try{ return typeof canSwimSp==='function' && canSwimSp(S.sp); }catch(e){ return false; } }
   function cerFar(y){   // りくから とどかない みずの なかの したい
     try{
+      if(y && y.dead && ((y.ps||{}).gyM||{}).k==='mizu') return true;   // x_bagel1117_suijoeat：水槽の 中の 死体は ガラスごし（水槽の 中に 入って たべて いた）
       if(!y || !y.dead || typeof waterAt!=='function' || cerSwim()) return false;
       const p=cerPos(y); if(!p || !waterAt(p.x, p.z)) return false;
       for(const r of [CEREACH.near*.5, CEREACH.near]) for(let k=0;k<12;k++){ const a=k/12*Math.PI*2, x=p.x+Math.cos(a)*r, z=p.z+Math.sin(a)*r*.5;
@@ -45037,6 +45060,7 @@ if(CEREACH.on && typeof gyNoKazari==='function'){
       return true;
     }catch(e){ return false; }
   }
+  try{ window.cerFar=cerFar; }catch(e){}   // 11/18 m3_1118_tgfar：ともぐい（zz_v162_tomogui.js tgFind）からも 見える ように（ブロックの 中の function は 外から 見えない）
   { const _g=gyNoKazari; gyNoKazari=function(y){ const r=_g.apply(this, arguments); try{ if(r && cerCtx && cerFar(y)){ if(CEREACH.log.length<60) CEREACH.log.push('skip'); return false; } }catch(e){} return r; }; }
   { const _d=decide; decide=function(){ const s=cerCtx; cerCtx=true; try{ return _d.apply(this, arguments); } finally{ cerCtx=s; } }; }
   { const _ub=updateBrain; updateBrain=function(dt){ const s=cerCtx; cerCtx = M.state!=='corpseEat'; try{ return _ub.apply(this, arguments); } finally{ cerCtx=s; } }; }
@@ -46113,7 +46137,7 @@ const KAMA = { on:true, every:1, log:[] };
 function kmOn(){ try{ return KAMA.on && typeof st2On==='function' && st2On('yuki') && wxNow()==='snow'; }catch(e){ return false; } }
 function kmHome(){ try{ const h=(S.objects||[]).find(o=>o.bgHome); return (h && typeof homeObj==='function' && homeObj()===h) ? h : null; }catch(e){ return null; } }
 function kmSpot(h){ const p=objPos(h), d=ods(h); return {x:p.x, z:Math.min(FLOOR_BOT-3, p.z+3), r:30*d, o:h}; }
-function kmNear(h){ const p=objPos(h), ds=depthScale(p.z)*osc(h); return Math.abs(M.x-p.x)<40*ds && Math.abs(M.z-p.z)<10; }
+function kmNear(h){ return homeBoxAt(M.x, M.z)===h; }   // 11/17 kiroku1117_g8 R2：まどに うつる 箱（zz_v137a_ok homeBoxAt）と 同じ 箱で 見る（40×10 だと まどの 中の 子を もう いちど かまくらへ 歩かせて いた）
 function kmWho(){ return !isDead() && !M.lifted && !M.boxed && !(typeof isPred==='function' && isPred()) && !(typeof rainImmune==='function' && rainImmune())
   && !(typeof isSuijo==='function' && isSuijo() && typeof waterAt==='function' && waterAt(M.x, M.z)); }
 if(KAMA.on){
@@ -47868,9 +47892,9 @@ const HDMG_C = new Map();
 // ① つるした／しまった おかざりを もやす・やぶる
 { const _k=kzAct; kzAct=function(k, h){
     try{
-      if(HANGDMG.on && (k==='burn' || k==='tear') && h && h.kind==='floor' && typeof kgIso==='function' && kgIso() && S.hat && S.hat.st==='taken'){
+      if(HANGDMG.on && (k==='burn' || k==='tear') && h && h.kind==='floor' && S.hat && S.hat.st==='taken'){
         ensureMean && ensureMean();
-        const part=kzPart(), iso=kgIso(), where = iso.k==='hang' ? 'つるしだいの' : 'はこの なかの';
+        const part=kzPart(), iso=typeof kgIso==='function' && kgIso(), where = !iso ? 'ゆかの' : iso.k==='hang' ? 'つるしだいの' : 'はこの なかの';   // 11/17 x_tenni1116_kazarimodoru：ゆかも 同じ 枝で
         if(k==='burn'){
           S.hat.dmg='burnt'; SFX.strike && SFX.strike();
           for(let n=0;n<10;n++) fx('smoke', h.x+rnd(-14,14), h.z-rnd(4,20), {vy:-rnd(20,50), max:rnd(1.2,2)});
@@ -52271,12 +52295,12 @@ function tgFind(){
   for(let j=0;j<S.yk.length;j++){ if(j===me) continue; const y=S.yk[j], o=MS[j]; if(!y || !o || y.away || o.hidden || o.lifted) continue;
     let sc;
     if(y.dead){
-      if(y.dead.cleared || (y.dead.eaten||0)>=1) continue;
+      if(y.dead.cleared || (y.dead.eaten||0)>=1 || ((y.ps||{}).gyM||{}).k==='mizu') continue;   // x_bagel1117_suijoeat：水槽の 中の 死体は ガラスごし
       try{ if(typeof cerFar==='function' && cerFar(y)) continue; }catch(e){}   // みずの なかで とどかない（zz_v156_cereach）
       sc=1000;
     } else {
       let ok=false;
-      ykDo(j,()=>{ ok = !isDead() && S.health<TOMOGUI.hinshiHp && !isPred() && !M.boxed && !TG_VBUSY.includes(M.state); });
+      ykDo(j,()=>{ ok = !isDead() && S.health<TOMOGUI.hinshiHp && !isPred() && !M.boxed && (PS().gyM||{}).k!=='mizu' && !TG_VBUSY.includes(M.state); });   // x_bagel1117_suijoeat：水槽の 中の ひんしの 子も ガラスごし
       if(!ok) continue; sc=0;
     }
     sc -= Math.hypot(o.x-M.x,(o.z-M.z)*2)*.1;
@@ -52347,8 +52371,8 @@ function tgRun(dt){
     if(bubbleT<=0 && chance(dt*.4)) say('jitabata',{cls:'sleepy'});
   });
   if(y.dead && y.dead.eaten>=1 && S.yk.includes(y)){
-    try{ if(typeof ceFinish==='function') ceFinish(y); }catch(e){ console.warn('[tomogui]', e); }
-    tgEnd(true); return; }
+    tgEnd(true);   // さきに（ceFinish の ykRemove で いまの 子が えらんでいる 子に かわる）
+    try{ if(typeof ceFinish==='function') ceFinish(y); }catch(e){ console.warn('[tomogui]', e); } return; }
   if(M.stT>M.stDur) tgEnd(true);
 }
 // まいフレーム：ぺこぺこで ごはんが ない じかんを かぞえる
@@ -53180,8 +53204,8 @@ const GYI = {
   doku_paste:{name:'あまあま ペースト',  short:'あまあまペースト', yen:6000, n:1,  help:'ゆかに おく。たべた 子が まわりから あまあまに みえる'},
   doku_kashi:{name:'ユッ殺リ（おかし）', short:'ユッ殺リ',       yen:5200,  n:1,  help:'ゆかに おく。おうちに もちかえって みんなで たべる'},
   // 10/26 なおし（Nexus「細菌散布剤は名前を効果に寄せて／甘味散布剤は体内餡凝固剤に変更」）：キーは そのまま（絵・セーブ）
-  sanpu_ama: {name:'たいない あん ぎょうこざい', short:'あん ぎょうこざい', yen:4400, n:5, help:'はたけの おやさいに かける（たべた 子は あんこが かたまって だんだん うごけない・しゃべれない）'},
-  sanpu_kin: {name:'げり さんぷざい',    short:'げり さんぷ',    yen:4400,  n:5,  help:'はたけの おやさいに かける（たべた 子は げりで うんうんが とまらない・うつる）'},
+  sanpu_ama: {name:'たいない あん ぎょうこざい', short:'あん ぎょうこざい', yen:4400, n:5, help:'はたけに かける（たべると あんこが かたまり うごけない・しゃべれない）'},
+  sanpu_kin: {name:'げり さんぷざい',    short:'げり さんぷ',    yen:4400,  n:5,  help:'はたけに かける（たべると げりが とまらない・うつる）'},
   kunen:     {name:'くんえんざい「ユルサン」', short:'ユルサン',  yen:11600, n:1,  help:'たくと すいそうの 子が けむりで まとめて くるしむ…'},
 };
 const GYI_RUN = {};   // k → function(e,p)：どうぐの うごき（zz_v162_gy_*.js）
@@ -53327,7 +53351,7 @@ if(GYTOOLS.on && typeof GYI_RUN==='object' && typeof GYI==='object'){
       const r=_u.apply(this, arguments);
       try{
         const x=hhOf();
-        if(PS().gyHH && !x) delete PS().gyHH;   // シートが なくなった
+        if(PS().gyHH && !x){ delete PS().gyHH; if(M.state==='jitabata') setState('idle',1); }   // シートが なくなった（11/17 kiroku1117_g12 K5：ステージを かえた・もようがえで かたづけた とき じたばた 99びょう の まま だった → うごける ように）
         if(M.lifted) M._hhLiftT=T;   // 11/14 smartdanger：さいごに もちあげられた とき（シートの 上に 落とされた 子は かしこくても くっつく）
         if(x){
           if(M.lifted){ hhPeel(); return r; }
@@ -53656,7 +53680,9 @@ if(GYS.on && typeof goTo==='function'){ const _g=goTo; goTo=function(x,z,then,sp
 if(GYS.on && typeof bestFood==='function'){ const _bf=bestFood; bestFood=function(){ if(gysKoOn() && gysKoF()>=1 && !M.lifted) return null; return _bf.apply(this, arguments); }; }
 // ねない（いしきが ある）・うごけない
 if(GYS.on && typeof setState==='function'){ const _ss=setState; setState=function(st){
-    try{ if(gysKoOn() && gysKoF()>=1 && !M.lifted && st!=='idle' && st!=='dead' && st!=='bath' && st!=='sink'){ const a=Array.from(arguments); a[0]='idle'; return _ss.apply(this, a); } }catch(e){}
+    try{ if(gysKoOn() && gysKoF()>=1 && !M.lifted && st!=='idle' && st!=='dead' && st!=='bath' && st!=='sink'){
+      if(st==='eat' && M.eatItem && M.eatItem.handFor){ const e=express, j=jump; express=jump=()=>{}; try{ finishEat(); }finally{ express=e; jump=j; } return; }   // 11/18 x_kagachi1117_gyokoveg 案B：てわたし（口に つっこむ）は 固まった まま 食べる
+      const a=Array.from(arguments); a[0]='idle'; return _ss.apply(this, a); } }catch(e){}
     return _ss.apply(this, arguments); }; }
 // しゃべれない：セリフは ぜんぶ「・・・！」（しんだ ときの 'dying' も → だまって しぬ）
 if(GYS.on && typeof say==='function'){ const _s=say; say=function(key){
@@ -55059,6 +55085,11 @@ if(GYKICK.on && typeof GYI==='object' && typeof GYI_RUN==='object' && typeof TOO
 
 // パッチノートの データ（tools/mk_patchnote.py が pk の section.txt から つくる・てで かえない）
 const PATCH_NOTES = [
+{
+"v": "1.7.6",
+"d": "2026/11/18",
+"t": "【増えたこと】\n・おうちの中でも、外と同じように動くようになりました（あるく・はねる・くるくる・たんけん・こっちを見る・おうた・のび。弱っている子は、はって動きます）\n・水責めの水槽に入れただけ（水を入れる前）のあいだも、しゃべるようにしました\n【変えたこと】\n・ショップの「ゆっくり」のたなに、希少種が毎日1ぴき並ぶようにしました（これまでは1日に30%でした。希少種パックが入っているときです）\n・のらの子が希少種のことがある確率を、15%から30%にしました\n・ゆっくりを1日に売れる数を、2ひきから4ひきにしました\n・ver 1.7.5 で入れた「やさしいことばを続けて言ったときの、なつき度のしぼり」を、もとにもどしました（ストレス・こわがりも下がらなくなっていました）\n・雪の日でも、寒い子は焚き火にあたりに来るようにしました。焚き火にあたっているあいだは、雪でとけません。雪でふやけて動けなくなるまでの時間を、これまでの約2倍にしました\n・持ち上げた子を、焚き火で焼けにくくしました（火があたる所をせまく、さめるのを早く、焼けるまでを長くしました）\n・「みんなで あそぶ」のとちゅうで持ち上げて下ろした子は、もんくを言って、いそいでなかまのところへもどるようにしました。あそびが終わっていたら、ごきげんが下がります（これまでは、なかまのままうろうろして、終わったときにごきげんが上がっていました）\n・水責めの水槽の台のボタンの絵を大きくしました\n・スマホのよこ画面で、どうぐの説明を短くして1行におさめました\n・もう置いてあるいじわるどうぐ（子が入っていないとき）が、ガラス・仕切り・おいけにかかっていたら、近くの置ける所へ動くようにしました\n・もようがえで家具を置く・動かすときも、家具のはばがガラスの外・仕切りの上・おいけにかかる所には置けないようにしました（もう置いてある家具は動かしません）\n・おしらせ（「ここには おけないよ」など）を、もくひょう達成のすぐ下に出すようにしました（もくひょう達成にかくれていました）\n【BOOTH・X でご報告いただいた不具合を直しました（ご報告ありがとうございます）】\n・ぎょうこざいで固まった子に、手渡しでやさいをあげても食べなかった（固まったまま口に入り、おなかがふえるようにしました）\n・吊り下げたままショップにあずけたり、おでかけさせたりすると、ひもに頭のない体だけが残っていた（吊り下げている子は、あずける・おでかけができないようにしました）\n・仕切りの向こうがわだけにあるトイレへ、かしこい子が向かいつづけ、ごはんに行かずに仕切りの前に集まっていた\n・ゆかに置いたおかざりを、やぶったり もやしたりすると、すぐ頭にもどっていた（ゆかに残るようにしました）\n・水上まりちゃが、水槽の壁をとおりぬけて、水槽の中の死骸を食べていた\n・水責めの水槽に入れた子が浮くと、ジュースやガラスの手前に描かれていた。夜の捕食種が、水槽の中の子をつかみに来て、水槽の前に浮いていた\n・ほごゆで「らんを ほごした」のに来たのがふらんだったなど、にっきの種族名がまざっていた（「まりちゃつむり」が「ふらんつむり」などになることもありました）\n・ともぐいで死体を食べきると、にっきに「undefined」と出ていた\n・しかると、なにもしていないのに「おやさいさんを たべて なんか ない」などと言っていた\n・やさしいことばで、ストレス・こわがりが下がらなくなっていた（上の「なつき度のしぼり」をもどしたので、これまでどおり下がります）\n・みずうみのあるステージで、置いた水の家具（おがわ・いずみ・たき）を、子がよけずに通っていた\n・あんよをけがした子・ふやけた子を吊り下げると、あごの下をけがしているように見えていた（ぶら下がっている体の先に描くようにしました）\n【そのほかに直したこと】\n・おうちから出るとき、入口で子の絵が一瞬よこに細くつぶれていた\n・おうちの中でしゃべっている子のふきだしが、その子の体にかぶさっていた\n・どうくつステージの夜の雨のとき、おうちの中のまりちゃの帽子が、緑っぽい黒になることがあった\n・スマホのよこ画面で、右上のおてんきさん装置と季節の文字が、水槽の右はしで切れていた\n・かまくらで、おうちの中であまやどりしている子が、まどから出ていくことがあった\n・火がついた子が雨・雪の中に出ても（持ち上げているあいだも）、火が消えなかった（ガラスや仕切りのきわで、そのまま永遠にゆっくりしてしまうことがありました）\n・スライサーに入れなおすと、切った回数をわすれていた\n・ホイホイにかかった子がいるままステージを変えると、じたばたしたままになり、使ったシートも残っていた\n・水責めの水槽のすぐ前のゆかにいる子をさわろうとすると、水槽の台のボタンが反応していた\n・二段水槽の上の段の奥で、いじわるどうぐの絵のはしが、ななめの横ガラスの外に出ていた\n・せまい所の振り子が、かべの手前で急に止まっていた（ゆれのはばをちぢめて、なめらかにもどるようにしました）\n・ともぐいをする子が、おいけのまんなかの、届かない死体をえらんで向かっていた\n・おたべなさいのにっきで、食べた子の名前が、えらんでいる子の名前になっていた\n・けしたばかりの子が「つむり」とよばれていると、にっきの「まりちゃつむり」が、ほかの種族名つむりになることがあった"
+},
 {
 "v": "1.7.5",
 "d": "2026/11/16",
@@ -58044,7 +58075,7 @@ const SANPUYK = { on:true, log:[] };
 // 漢字モード：「ちょくせつ」→「直接」（じしょに ない とき だけ たす）
 try{ if(SANPUYK.on && typeof KJ_MAP!=='undefined' && !KJ_MAP.has('ちょくせつ')) KJ_MAP.set('ちょくせつ','直接'); }catch(e){}
 const SPYK_TXT = {
-  help:{ ama:'ゆっくりを タップすると その子に ちょくせつ きく。', kin:'ゆっくりを タップすると その子に ちょくせつ きく。' },
+  help:{ ama:'子に タップで ちょくせつ。', kin:'子に タップで ちょくせつ。' },   // 11/17 kiroku1117_g15 N2（Nexus 14:16「説明を削って1行に」）
   // ずかん：「〜お野菜を食べると。」→「〜お野菜を食べる・ゆっくりに直接使うと。」／げりは「〜お野菜を食べる・ゆっくりに直接使う／「くだしあまあま」を食べると。」
   zk:{ ama:'・ゆっくりに直接使うと。', kin:'・ゆっくりに直接使う／' },
 };
@@ -59557,7 +59588,7 @@ try{ Object.assign(window, {RAREEYE}); }catch(e){}
    ・RAREGET.on=false で もとどおり（希少種は どこにも でない）
    ============================================================ */
 // 10/31 Nexus 18:19「ショップ30%、野良15%に変更・値段は15000〜32000の範囲で」：しつけ済みの いい子度（kashi 62〜86）に あわせて 15000〜32000円
-const RAREGET = { on:true, shopP:.30, noraP:.15, base:15000, yMin:15000, yMax:32000 };
+const RAREGET = { on:true, shopP:1, noraP:.30,   /* 11/18 bt_502e1117_rare Nexus「100%（毎日1ぴき）」「30%」 */ base:15000, yMin:15000, yMax:32000 };
 if(RAREGET.on && typeof RARE_SP==='object'){
   const rgIs=sp=>!!(RARE_SP[sp] && SPECIES[sp] && SPECIES[sp].rare);
   const rgList=()=>Object.keys(RARE_SP).filter(rgIs);
@@ -63033,7 +63064,7 @@ const MEAN = { on:true, ship:['mixer'], packTools:['takibi','tamago','slicer','f
   mxReal:true, mxK:1.25, mxH0:1.02, mxStep:.62, mxSpinV:15,   // 見本（Nexus 11/5 3:12）：3びきも 実スプライトの まま。ミキサーを mxK ばい。mxReal=false の 固定の 列（mxh・mxs）は 絵を いれていない
   pasteHurt:{health:15, kyofu:8, natsu:6},
   foilN:5, mxMax:3, spin1:1.5, spin2:1.5, pasteShow:3.2,
-  hotFoot:2, hotBurn:7, foilBurn:20,
+  hotFoot:4, hotBurn:7, foilBurn:20, hotCool:1,   // 11/17 bt_a268_1117_liftburn（Nexus「当たりをせまく, さめるのを早く, 焼けるまでをのばす」）：あんよ 2→4びょう・さめる .2→1／びょう
   lidSpeed:.55, slMax:6,
   fuInc:.02, fuAmax:.55, fuKillA:.45, fuW0:3, fuWinc:.55, fuWmax:15, fuDecay:.008, fuWdecay:.15, fuThc:.07, fuJoyA:.13, fuHard:3.2, fuDmg0:1.2, fuDmgK:1.5,
   memT:[1,7,13], memEnd:18, eatS:2.6, airS:1.6, log:[] };
@@ -63374,7 +63405,7 @@ if(MEAN.on && typeof GYI==='object' && typeof GYI_RUN==='object' && typeof MEAN_
   add('tamago', {name:'ゆで卵スライサー', short:'ゆで卵スライサー', yen:MEAN.yen.tamago, dur:true, help:'ゆかを タップして おく。もちあげた 子を のせて、ふたを ドラッグで 上下する'});
   add('slicer', {name:'スライサー', short:'スライサー', yen:MEAN.yen.slicer, dur:true, help:'ゆかを タップして おく。もちあげた 子を のせて、タップで あんよから 切る'});
   add('furiko', {name:'振り子', short:'振り子', yen:MEAN.yen.furiko, dur:true, help:`子を 2ひき タップして つるす。つるした 子を ${mnClick()}すると ゆれる（もう いちど どうぐで タップ＝おろす）`});
-  add('tsuri',  {name:'吊り下げ', short:'吊り下げ', yen:MEAN.yen.tsuri, dur:true, help:`子をタップして吊るす。吊るした子を${mnClick()}すると横に揺れる（続けると大きく揺れる）。もう一度道具でタップで下ろす`});
+  add('tsuri',  {name:'吊り下げ', short:'吊り下げ', yen:MEAN.yen.tsuri, dur:true, help:`子をタップして吊るす。吊るした子を${mnClick()}で横に揺れる（続けると大きく）。もう一度道具でタップで下ろす`});
   add('kioku',  {name:'ゆっくりできない記憶が詰まったゆっくりペースト', short:'記憶ペースト', yen:0, n:1, hide:true, help:'子をタップして直接あげる。食べた子にゆっくりできない記憶が流れこむ'});
   const ICON={mixer:'mx0', takibi:'fire', foil:'ball', tamago:'tm0', slicer:'sl00', furiko:'fu0', kioku:'paste', mizu:'tk0', tsuri:'tsh0'};
   const regIcon=k=>{ if(ICON[k] && MEAN_IMG[ICON[k]]) GYI_IMG[k]=MEAN_IMG[ICON[k]]; };
@@ -63452,6 +63483,7 @@ if(MEAN.on && typeof GYI==='object' && typeof GYI_RUN==='object' && typeof MEAN_
   function mnSpotOk(t, x, z){
     const d=OBJ[t]; if(!d) return true; const ds=depthScale(z)*(d.s||1), b=d.b, x0=x+b[0]*ds, x1=x+b[2]*ds, fz=(d.fp[1]||8)*ds;
     if(x0<XMIN-MNP.glass-.5 || x1>XMAX+MNP.glass+.5) return false;
+    if(typeof ndOn==='function' && ndOn() && (!ndSideOk(x0, z) || !ndSideOk(x1, z))) return false;   // 11/17 kiroku1117_g15 N5：にだんの ななめの 横ガラス
     if(typeof partOn==='function' && partOn()){ const X=partX(), g=16*depthScale(z); if(x0<X+g && x1>X-g) return false; }
     const pts=[]; for(let q=x0; q<=x1+.1; q+=Math.max(4,(x1-x0)/Math.ceil((x1-x0)/MNP.step))) pts.push([q, z]);
     // とおれない しきり：あしもとの 前の 線（z+fz）と うしろの 線（z−fz）の あいだに しきりの 線が 通る／しきりから 10 より ちかい（kgNear と 同じ はかり）
@@ -63459,7 +63491,7 @@ if(MEAN.on && typeof GYI==='object' && typeof GYI_RUN==='object' && typeof MEAN_
     const fp=[[x,z],[x+d.fp[0]*ds,z],[x-d.fp[0]*ds,z],[x,z-fz],[x,z+fz]];
     const pond=objsOf('pond').length; for(const [px,pz] of fp){ if(pond && Math.hypot((px-POND.x)/(POND.rx+14),(pz-POND.z)/(POND.rz+8))<1) return false; try{ if(typeof waterAt==='function' && waterAt(px,pz)) return false; }catch(e){} }
     return true; }
-  { const _pv=placeValid; placeValid=function(t, x, z, ig){ const r=_pv.apply(this, arguments); if(!r || !MNP.on || !/^gy_(mizu|mixer|takibi|tamago|slicer)$/.test(t)) return r; return mnSpotOk(t, x, z); }; }
+  { const _pv=placeValid; placeValid=function(t, x, z, ig){ const r=_pv.apply(this, arguments); if(!r || !MNP.on || !OBJ[t] || !OBJ[t].b || !OBJ[t].fp || t==='kg_fence' || t==='uwhouse' || (!/^gy_(mizu|mixer|takibi|tamago|slicer)$/.test(t) && (/^gy_/.test(t) || !landObjType(t)))) return r; return mnSpotOk(t, x, z);   /* 11/17 kiroku1117_g15 N4：陸の 家具も はば・あしもとで 見る */ }; }
   // 吊り下げ・振り子の 天井：にだんの 下の段は 上の段の 棚板の 下の ふち（絵の y＝ndEdgeY）。ほかは いままでどおり 水槽の 上（11/15 pl1115_tsuritop・F1）
   function mnCeil(x, z){ try{ if(MNP.on && typeof ndOn==='function' && ndOn() && !ndUpper(z)) return ilToW(ilToImg(x, z).xi, ndEdgeY()).z+4; }catch(e){} return TANK.glassTop+4; }
   function mnPlace(k, p){
@@ -63468,7 +63500,7 @@ if(MEAN.on && typeof GYI==='object' && typeof GYI_RUN==='object' && typeof MEAN_
     if(Math.hypot((p.x-POND.x)/(POND.rx+14),(p.y-POND.z)/(POND.rz+8))<1 && objsOf('pond').length){ toast('みずの うえには おけません'); return; }
     const t=TYPES[k], old=objsOf(t)[0];
     let px=clamp(p.x, XMIN, XMAX);
-    if(MNP.on){ const d=OBJ[t], ds=depthScale(p.y)*(d.s||1); px=clamp(p.x, XMIN-MNP.glass-d.b[0]*ds, XMAX+MNP.glass-d.b[2]*ds); if(!mnSpotOk(t, px, p.y)){ toast('ここには おけないよ'); return; } }
+    if(MNP.on){ const d=OBJ[t], ds=depthScale(p.y)*(d.s||1); px=clamp(p.x, XMIN-MNP.glass-d.b[0]*ds, XMAX+MNP.glass-d.b[2]*ds); if(typeof ndOn==='function' && ndOn()){ px+=ndSideX(px+d.b[0]*ds, p.y)-(px+d.b[0]*ds); px+=ndSideX(px+d.b[2]*ds, p.y)-(px+d.b[2]*ds); } if(!mnSpotOk(t, px, p.y)){ toast('ここには おけないよ'); return; } }
     const uv=toUV(px, p.y);
     if(old){ if(kidsOf(old).length){ toast('子が はいって いる あいだは うごかせません'); return; } old.u=uv.u; old.v=uv.v; }
     else { if(S.objects.length>=MAX_OBJECTS){ toast('すいそうが いっぱいです'); return; } S.objects.push({id:uid(), type:t, u:uv.u, v:uv.v, flip:false}); }
@@ -63502,6 +63534,7 @@ if(MEAN.on && typeof GYI==='object' && typeof GYI_RUN==='object' && typeof MEAN_
   function leave(s){
     const o=objById(s.oid), id=yid();
     if(o && o.kids){ const i=o.kids.indexOf(id); if(i>=0) o.kids.splice(i,1); }
+    if(s.k==='slicer') PS().gySl=s.n||0;   // 11/17 kiroku1117_g12 K4：スライサーで 切った 回数を おぼえる（もう いちど のせると つづきから）
     delete PS().gyM; M._side=undefined; M._kgSide={}; mlog({t:'leave', k:s.k, who:id});   // 11/13 しきりの どっちがわ を わすれる（むこうで 下ろした ときの ワープ よけ）
   }
   const RM=[];   // しんで からだが なくなる 子（update の おわりに けす）
@@ -63533,9 +63566,9 @@ if(MEAN.on && typeof GYI==='object' && typeof GYI_RUN==='object' && typeof MEAN_
       if(!t || !t.ok) return _r.apply(this, arguments);
       if(!mariOnly()) return _r.apply(this, arguments);
       if(t.k==='fire' && !deathOn()){ toast('「しんでしまう」が OFF なので 火に いれられません'); return _r.apply(this, arguments); }
-      enter(t.o, t.k, t.k==='fire'?{t:0, s:0}:t.k==='slicer'?{n:0}:null);
+      enter(t.o, t.k, t.k==='fire'?{t:0, s:0}:t.k==='slicer'?{n:PS().gySl||0}:null);
       const b=mariBox();
-      if(t.k==='mizu'){ MEAN.mz.entered(t.o); }
+      if(t.k==='mizu'){ MEAN.mz.entered(t.o); say(mnMxKey(),{cls:'shout'}); }
       else if(t.k==='mixer'){ fxText('ぽとん', M.x, b.top, {size:15}); sfx('plop'); say(mnMxKey(),{cls:'shout'}); psAdd('kyofu',MEAN.fear.mxIn); note(`${S.me||'まりちゃ'}を ミキサーに いれた。`); }
       else if(t.k==='fire'){ fxText('じゅっ…', M.x, b.top, {size:15, color:'#b8452f'}); sfx('sizzle'); say('mnFoil0',{cls:'shout'}); note(`ホイルで つつんだ ${S.me||'まりちゃ'}を 焚き火に いれた。とりだすと 焼きゆっくり、とりださないと…`); }
       else if(t.k==='tamago'){ t.o.lid=0; t.o.lidT=0; t.o.cut=0; sfx('plop'); say(mnPick('mnTm0'),{cls:'shout'}); note(`${S.me||'まりちゃ'}を ゆで卵スライサーに あおむけで 固定した。ふたを ドラッグで おろせる。`); }
@@ -63609,6 +63642,8 @@ if(MEAN.on && typeof GYI==='object' && typeof GYI_RUN==='object' && typeof MEAN_
       M.stT+=dt; M.stDur=99;
       const s=PS().gyM;
       if(s && s.k==='mixer'){ const o=objById(s.oid); M.rot=Math.sin(M.stT*9)*.06; if(o && !o.spin && bubbleT<=0 && (o.sayT||0)<=0 && chance(dt*.5)){ o.sayT=3.2; say(mnMxKey(),{cls:'shout'}); express('cry3',2.5); M.tears=2.5; } }
+      // 水責めの 水槽：水が 足もとに とどく まで は ミキサーと 同じ ことば（bt_a268_1115_furiko #2 案B。とどいたら zz_v170_mizu）
+      else if(s && s.k==='mizu'){ const o=objById(s.oid); s.sayT=Math.max(0,(s.sayT||0)-dt); if(o && MEAN.mz.stageOf(s,o)===0 && bubbleT<=0 && s.sayT<=0 && chance(dt*.14)){ s.sayT=4; say(mnMxKey(),{cls:'shout'}); } }
       else if(s && s.k==='fire'){ fireTick(s, dt); }
       else if(s && s.k==='tamago'){ /* tamagoTick */ }
       else if(!s){ M.rot=Math.sin(M.stT*7)*.05; if(bubbleT<=0 && chance(dt*.3)) say('mnMxBaka',{cls:'shout'}); }
@@ -63647,7 +63682,7 @@ if(MEAN.on && typeof GYI==='object' && typeof GYI_RUN==='object' && typeof MEAN_
           g.beginPath(); g.rect(-u*400,-u*600,u*800,u*1200);
           g.moveTo(-u*50,-u*6); g.quadraticCurveTo(0,u*10,u*50,-u*6); g.lineTo(u*50,u*300); g.lineTo(-u*50,u*300); g.closePath();
           g.clip('evenodd'); g.rotate(al*.25); g.translate(-x,-y);
-          M.rot=-al*.25; const r=_dm.apply(this, arguments); M.rot=r0; g.restore();
+          const a0=S.anyo, k0=M.soak; M.rot=-al*.25; S.anyo=0; M.soak=0; let r; try{ r=_dm.apply(this, arguments); } finally{ M.rot=r0; S.anyo=a0; M.soak=k0; } g.restore();   // 11/17 x_tenni1116_tsuriago：あんよの けが・ふやけは 頭に かかない（体の 先に かく）
           return r; }
         if(MEAN.mxReal && s.k==='mixer' && o && !isDead()){   // 3びきでも 実スプライト。おかざり・ハゲ・ゆかび などの 差分が そのまま でる
           const K=kidsOf(o), t=o.spin?o.spin.t/(MEAN.spin1+MEAN.spin2):0;
@@ -63726,12 +63761,12 @@ if(MEAN.on && typeof GYI==='object' && typeof GYI_RUN==='object' && typeof MEAN_
   function nearFire(){ const x=M.lx, o=objsOf('gy_takibi').sort((a,b)=>Math.abs(objPos(a).x-x)-Math.abs(objPos(b).x-x))[0]; return o?objPos(o):null; }
   function hotTick(dt){
     M.gyHot=0;
-    if(!M.lifted || PS().gyFoil || PS().gyM){ if(M.gyHeat>0) M.gyHeat=Math.max(0, M.gyHeat-dt*.2); return; }
+    if(!M.lifted || PS().gyFoil || PS().gyM){ if(M.gyHeat>0) M.gyHeat=Math.max(0, M.gyHeat-dt*MEAN.hotCool); return; }
     const fires=objsOf('gy_takibi'); if(!fires.length) return;
     const bw=BW(), x=M.lx, bot=M.ly-M.grabDy;
     let over=false, near=false;
     for(const o of fires){ const p=objPos(o), ds=ods(o), dx=Math.abs(x-p.x), dy=p.z-bot;
-      if(dx<bw*.8*ds && dy>bw*.15*ds && dy<bw*2.3*ds) over=true;
+      if(dx<bw*.8*ds && dy>bw*.15*ds && dy<bw*1.2*ds) over=true;   // 11/17 bt_a268_1117_liftburn：上 2.3→1.2（火の すぐ 上 だけ）
       else if(dx<bw*2.4*ds && dy>-bw*1*ds && dy<bw*3.2*ds) near=true; }
     if(over){ M.gyHot=1; M.gyHeat=(M.gyHeat||0)+dt;
       if(!M.gyHotSaid || bubbleT<=0){ if(!M.gyHotSaid || chance(dt*1.2)){ bubbleT=0; say(M.gyHeat>MEAN.hotBurn*.5?'burn':'mnHot',{cls:'shout'}); if(!M.gyHotSaid) psAdd('kyofu',MEAN.fear.hot); M.gyHotSaid=1; } }
@@ -63746,7 +63781,7 @@ if(MEAN.on && typeof GYI==='object' && typeof GYI_RUN==='object' && typeof MEAN_
     } else {
       M.gyHotSaid=0; M.gyScream=0;
       if(near && bubbleT<=0 && T-(M.gyNearT||-99)>3.5){ M.gyNearT=T; say('mnNear',{cls:'soft'}); express('worry',2); psAdd('kyofu',MEAN.fear.near); mlog({t:'near', who:yid()}); }
-      if(M.gyHeat>0) M.gyHeat=Math.max(0, M.gyHeat-dt*.2);
+      if(M.gyHeat>0) M.gyHeat=Math.max(0, M.gyHeat-dt*MEAN.hotCool);
     }
     if(!M.lifted) M.gyHot=0;
   }
@@ -63790,7 +63825,7 @@ if(MEAN.on && typeof GYI==='object' && typeof GYI_RUN==='object' && typeof MEAN_
     if(!shipped('takibi') || !objsOf('gy_takibi').length) return;
     if(!wet && !warmCold()) return;   // ぬれて いる か さむい とき だけ
     const P=PS(); if(P.gyM || P.gyFoil || P.gyHH || M.boxed || M.trapped || M.hidden) return;
-    if(typeof rainBad==='function' && rainBad()) return;
+    if(typeof wxNow==='function' && ['rain','drizzle'].includes(wxNow())) return;   // 11/17 pl1115_f15：雪の 日は 寒い 子も 火に 来る（雨・こさめ は 来ない）
     if(isSuijo() || (typeof syPredBlocks==='function' && syPredBlocks())) return;
     if((typeof hkOn==='function' && hkOn()) || (typeof brokenOn==='function' && brokenOn()) || (typeof hyOn==='function' && hyOn())) return;
     if(sleepTime()) return;
@@ -64112,7 +64147,7 @@ if(MEAN.on && typeof GYI==='object' && typeof GYI_RUN==='object' && typeof MEAN_
     });
   }
   // (A) 吊り下げ中の うんうん（11/14 x_mackie1113_req_tsurushi）
-  const TS_FALL=[];   // 落ちて いる うんうん（セーブしない）
+  const TS_FALL=[], TS_DECOR={};   // 落ちて いる うんうん（セーブしない）・けがを ぬった 体の 絵
   function tsUnTick(o, dt, big){
     const C=MEAN.ts, U=C.un; if(!U || !U.on || wk('tsuri')) return;
     if(o.unSay>0){ o.unSay-=dt; if(o.unSay<=0 && !isDead()){ bubbleT=0; say('poopDone'); express('happy',1.8); } }
@@ -64172,7 +64207,10 @@ if(MEAN.on && typeof GYI==='object' && typeof GYI_RUN==='object' && typeof MEAN_
     g.strokeStyle='#5d4326'; g.lineWidth=3.4*ds; g.beginPath(); g.moveTo(0,0); g.lineTo(0,c.L); g.stroke();
     g.strokeStyle='#c79a56'; g.lineWidth=2*ds; g.beginPath(); g.moveTo(0,0); g.lineTo(0,c.L); g.stroke();
     g.translate(0,c.L); g.rotate(al*.75);
-    for(const k of (MEAN.ts.real?[bk]:[bk,hk])){ const f=MEAN_FR[k], sc=scOf(k)*ds*MEAN.ts.bodyK; g.drawImage(MIM[k], -f.ax*sc, -f.ay*sc, f.w*sc, f.h*sc); }
+    const lv=MEAN.ts.real ? ykDo(kidIdx(K[0]), ()=>{ const a=S.anyo||0; return (a>=60?2:a>=30?1:0)+'|'+((M.soak||0)>14?1:0); }) : '0|0';   // 11/17 x_tenni1116_tsuriago（Nexus 14:14「体の下部に書く(ぶら下がっている下部分の先端)」）
+    for(const k of (MEAN.ts.real?[bk]:[bk,hk])){ const f=MEAN_FR[k], sc=scOf(k)*ds*MEAN.ts.bodyK; let im=MIM[k];
+      if(k===bk && lv!=='0|0'){ const ck=k+'|'+lv; im=TS_DECOR[ck]||(TS_DECOR[ck]=(()=>{ const c=document.createElement('canvas'), q=c.getContext('2d'); c.width=im.width; c.height=im.height; q.drawImage(im,0,0); q.globalCompositeOperation='source-atop'; anyoPaint(q,c.width,c.height,+lv[0],+lv[2],false); return c; })()); }
+      g.drawImage(im, -f.ax*sc, -f.ay*sc, f.w*sc, f.h*sc); }
     g.restore();
     // 落ちて いる うんうん（落ちる 先の 大きさの まま 上に ずらして いまの drawPoop で かく）
     for(const q of TS_FALL){ if(q.oid!==o.id) continue; g.save(); g.scale(1/ds,1/ds); g.translate(-c.p.x,-c.p.z); g.translate(0, q.y-q.zf); drawPoop({x:q.x, z:q.zf}, {toilet:true, sp:q.sp}); g.restore(); }
@@ -64189,10 +64227,10 @@ if(MEAN.on && typeof GYI==='object' && typeof GYI_RUN==='object' && typeof MEAN_
     return {x:-Math.sin(a)*c.L+vx*co-vy*si, y:Math.cos(a)*c.L+vx*si+vy*co, r:f.r*sc}; }
   function fuContact(c, key){ let lo=0, hi=1.3; const hit=a=>{ const b=fuBelly(c,key,a); return b.x+b.r*.96<=0; }; if(hit(lo)) return 0; for(let i=0;i<24;i++){ const m=(lo+hi)/2; if(hit(m)) hi=m; else lo=m; } return hi; }
   const fuKey=(o,side)=>{ const k=(o.crush||0)>=55?'fu2':(o.hits>0?'fu1':'fu0'), K=kidsOf(o); const id=K[side||0]; return id!=null ? spkv(k, kidSp(id), kidVars(id)) : spk(k,'maricha'); };
-  const fuAlpha=(o,c,key)=>{ const a=fuContact(c,key)+1.3*(o.A||0)*Math.abs(Math.sin(o.ph||0)); if(!MNP.on) return a;
+  const fuAlpha=(o,c,key)=>{ const c0=fuContact(c,key), a=c0+1.3*(o.A||0)*Math.abs(Math.sin(o.ph||0)); if(!MNP.on) return a;
     // 11/15 pl1115_furiko（F12）：玉の そとがわ が ガラス・しきりを こえない かく度で とめる（ふつうの ばしょ では とどかない）
     const w=mnWalls(c.px, c.p.z), r=MEAN_FR[key].r*scOf(key)*c.ds, room=Math.min(c.px-w.L, w.R-c.px)-r; if(room<=0) return a;
-    const lim=Math.asin(Math.max(0,Math.min(1,room/c.L))); return Math.min(a, Math.max(fuContact(c,key), lim)); };
+    const lim=Math.asin(Math.max(0,Math.min(1,room/c.L))); const cap=Math.max(c0, lim); return c0+1.3*(o.A||0)<=cap ? a : c0+(cap-c0)*Math.abs(Math.sin(o.ph||0)); };   // 11/17 kiroku1117_g15 N6：かべの 手前で とまらず、ゆれの はばを ちぢめて なめらかに もどる
   // 振り子を おく 所：2ひきの まんなか。ゆれの はば（いちばん 大きく ひらいた 玉の そとがわ）が ガラス・しきりの 中に はいる ように よせる
   function fuSpot(xa, za, xb, zb){
     let x=(xa+xb)/2, z=clamp((za+zb)/2, FLOOR_TOP+6, FLOOR_BOT-6);
@@ -64337,6 +64375,7 @@ if(MEAN.on && typeof GYI==='object' && typeof GYI_RUN==='object' && typeof MEAN_
           // 11/15 pl1115_stagedougu：その 子の gyM が この どうぐを さして いない 子は のこさない（1.7.5 までの セーブ：ステージを かえて gyM だけ 消えた 子・updateOne の !o で 消えた 子）
           if(o.kids && o.kids.length) o.kids=o.kids.filter(id=>{ const j=kidIdx(id), y=S.yk[j]; return y && !(y.dead && y.dead.cleared) && ykDo(j,()=>{ const s=PS().gyM; return !!s && s.oid===o.id; }); });
           if(String(o.type).startsWith('gy_') && wk(o.type.slice(3))) continue;
+          if(MNP.on && !ED.on && /^gy_(mizu|mixer|takibi|tamago|slicer)$/.test(o.type) && !kidsOf(o).length){ const p=objPos(o); if(!mnSpotOk(o.type, p.x, p.z)) for(let k=1;k<=80;k++){ const x=p.x+(k%2?1:-1)*Math.ceil(k/2)*MNP.step/2; if(mnSpotOk(o.type, x, p.z)){ const uv=toUV(x, p.z); o.u=uv.u; o.v=uv.v; break; } } }   // 11/17 kiroku1117_g15 N3：セーブに のこった・あとから しきりを おいた とき も ちかい 所へ（子が 入って いる あいだは うごかさない）
           if(o.type==='gy_mizu'){ if(MEAN.mz) MEAN.mz.tick(o,d); }
           else if(o.type==='gy_mixer') mixerTick(o,d);
           else if(o.type==='gy_tamago') tamagoTick(o,d);
@@ -64365,7 +64404,7 @@ if(MEAN.on && typeof GYI==='object' && typeof GYI_RUN==='object' && typeof MEAN_
             for(const id of kidsOf(o).slice()){ const i=kidIdx(id); if(i>=0) ykDo(i,()=>{ const s=PS().gyM; if(s && s.oid===o.id) leave(s); }); }
             o.kids=[];
             if(o.type==='gy_tamago'){ o.lid=0; o.lidT=0; o.cut=0; o.st=0; }
-            if(o.type==='gy_tsuri' || o.type==='gy_furiko'){ const q=S.objects.indexOf(o); if(q>=0) S.objects.splice(q,1); }
+            if(o.type==='gy_tsuri' || o.type==='gy_furiko' || (o.type==='gy_hoihoi' && o.gyYk)){ const q=S.objects.indexOf(o); if(q>=0) S.objects.splice(q,1); }   // 11/17 kiroku1117_g12 K5：くっついた ホイホイも すてる（はがした ときと 同じ）
           }
           flushRM();
         } }catch(er){ console.warn('[mean stage]', er); }
@@ -64446,7 +64485,7 @@ if(typeof MEAN==='object' && MEAN.on && MEAN.x)(function(){   // 11/6 関数で 
   function entered(o){ const b=mariBox(); fxText('ぽとん', M.x, b.top, {size:15}); sfx('plop'); express('worry',2); psAdd('kyofu',MZ.fear.wet); note(`${S.me||'まりちゃ'}を水責めの水槽に入れた。台のボタンで水かオレンジジュースを入れられる。`); }
   function stageOf(s,o){ const i=Math.max(0,kidsOf(o).indexOf(yid())), h=(SLOT[i]||SLOT[0])[1], w=surfBw(o.lv||0); return w>=h+.72?3:w>=h+.36?2:w>h?1:0; }
   function pin(s,o){ const p=objPos(o), ds=ods(o), bw=BW()*ds, i=Math.max(0,kidsOf(o).indexOf(yid())), q=SLOT[i]||SLOT[0];
-    M.vh=0; M.thrownVx=0; M.rollV=0; M.x=p.x+q[0]*bw; M.z=Math.min(FLOOR_BOT-1,p.z+1);
+    M.hover=false; M.vh=0; M.thrownVx=0; M.rollV=0; M.x=p.x+q[0]*bw; M.z=Math.min(FLOOR_BOT-1,p.z+1);   // x_bagel1117_suisoupred：浮いて いる（hover）と かく 順が 水槽の 前の ガラス（z+3）と ならび、ジュース・ガラスの 手前に かかれた
     let h=q[1]*bw; if(floats(s) && surfBw(o.lv||0)>q[1]) h=(surfBw(o.lv||0)-.1)*bw; M.h=h; }
   /* ---- 1ぴきごと ---- */
   function kidTick(o,s,dt){
@@ -64510,7 +64549,7 @@ if(typeof MEAN==='object' && MEAN.on && MEAN.x)(function(){   // 11/6 関数で 
     if(o.bub){ const bw=BW(); g.lineWidth=1.1; for(const b of o.bub){ const y=-(b.h+b.t*.45)*bw; if(-y/bw>surfBw(lv)) continue; g.strokeStyle='rgba(255,255,255,.85)'; g.fillStyle='rgba(255,255,255,.25)'; g.beginPath(); g.arc((b.x+Math.sin(b.t*5)*.04)*bw,y,2.4+b.t,0,Math.PI*2); g.fill(); g.stroke(); } }
     mnFrame(g,'tkf');
     g.restore();
-    for(const b of BTN){ const q=btnPos(o,b), off=(b[0]==='d'?!(lv>0):(liq&&liq!==b[0])), on=(b[0]==='d'?o.draining:(o.fill&&liq===b[0])), im=bIm(b[1]), r=q.r*1.25;
+    for(const b of BTN){ const q=btnPos(o,b), off=(b[0]==='d'?!(lv>0):(liq&&liq!==b[0])), on=(b[0]==='d'?o.draining:(o.fill&&liq===b[0])), im=bIm(b[1]), r=q.r*1.7;   /* 11/17 kiroku1117_g15 N1：絵を 当たりの 円（tap の q.r*1.7）と 同じ 大きさに（となりとの すきま .04bw）*/
       g.globalAlpha=off?.45:1; if(on){ g.fillStyle='rgba(255,226,120,.95)'; g.beginPath(); g.arc(q.x,q.y,r*1.12,0,Math.PI*2); g.fill(); }
       if(im.complete&&im.naturalWidth) g.drawImage(im,q.x-r,q.y-r,r*2,r*2); g.globalAlpha=1; }
   }
@@ -64522,10 +64561,10 @@ if(typeof MEAN==='object' && MEAN.on && MEAN.x)(function(){   // 11/6 関数で 
   //   (b) その 点に ゆっくりが いない（ykPickAt＝もちあげ・つつく の えらび方 と 同じ。床で 水槽の 前に いる 子も）
   //   どちらか で だめ なら いままでの はんけい（q.r*1.7）＝1.7.5 と 同じ
   const MZT={on:true, css:22};
-  const kidAt=(x,y)=>{ try{ return !!(S.yk && S.yk.length && typeof ykPickAt==='function' && ykPickAt(x,y)>=0); }catch(e){ return false; } };
-  const tapR=(q,x,y,kid)=>{ try{ if(!MZT.on || !matchMedia('(pointer: coarse)').matches || y<q.y-q.r || kid()) return q.r*1.7; const k=cv.getBoundingClientRect().width/W*((typeof CAM!=='undefined' && CAM.z) || 1); return Math.max(q.r*1.7, MZT.css/Math.max(.05,k)); }catch(e){ return q.r*1.7; } };
+  const kidAt=(x,y,o)=>{ try{ const i=(S.yk && S.yk.length && typeof ykPickAt==='function') ? ykPickAt(x,y) : -1; return i<0 ? 0 : (MS[i].z>objPos(o).z+3 && !ykDo(i,()=>PS().gyM)) ? 2 : 1; }catch(e){ return 0; } };   // 11/17 kiroku1117_g19 R3：2＝床で 水槽より 手前に いる 子（ボタンより 上に かかれる）
+  const tapR=(q,x,y,kid)=>{ try{ if(kid()===2) return -1; if(!MZT.on || !matchMedia('(pointer: coarse)').matches || y<q.y-q.r || kid()) return q.r*1.7; const k=cv.getBoundingClientRect().width/W*((typeof CAM!=='undefined' && CAM.z) || 1); return Math.max(q.r*1.7, MZT.css/Math.max(.05,k)); }catch(e){ return q.r*1.7; } };
   function tap(o,x,y){
-    let ka; const kid=()=>(ka===undefined ? (ka=kidAt(x,y)) : ka);
+    let ka; const kid=()=>(ka===undefined ? (ka=kidAt(x,y,o)) : ka);
     let near=null, nd=1e9; for(const b of BTN){ const q=btnPos(o,b), d=Math.hypot(x-q.x,y-q.y); if(d<=tapR(q,x,y,kid) && d<nd){ nd=d; near=b; } }
     for(const b of BTN){ if(b!==near) continue;
       if(b[0]==='d'){ if(!(o.lv>0)){ toast('空っぽです'); return true; } delete o.fill; o.draining=!o.draining; if(!o.draining) delete o.draining; sfx('plop'); mlog({t:'mzDrain'}); save(); return true; }
@@ -64900,7 +64939,7 @@ if(DICLINES.on){
   add('liftStart',["{me}は おおぞらを はばたく とりさん！！"]);   // Nexus 11/6：「みたい」とは言わない。大げさに断定する
   add('yummySweet',["うっめ！ まじうっめ！","がーつがーつ！ パねぇ！"]);   // Nexus 11/6
   add('hatHeld',["{me}の だいじな おぼうしさんが！"]);
-  add('scoldHuh',["ごはんさんを とって なんか ない[のじぇ]！","おやさいさんを たべて なんか ない[のじぇ]！"]);
+  L.scoldLieGohan=["ごはんさんを とって なんか ない[のじぇ]！"]; L.scoldLieYasai=["おやさいさんを たべて なんか ない[のじぇ]！"];   // うそが へた：しかられて はんぱつ した とき だけ（zz_v150_shikaru・x_tenni1114_shikaru_yasai）
 }
 try{ Object.assign(window, {DICLINES}); }catch(e){}
 
@@ -65930,13 +65969,13 @@ if(ZKMONEY.on && typeof HELP!=='undefined'){
   const add=[
     ['💰','おかねの かせぎかた',
       '<p>・おかねが ふえるのは <b>ショップで 子を うる</b> と <b>くさかりの おしごと</b> の 2つ だけです（おせわ・まいにちの おれい では ふえません）。</p>'+
-      '<p>・<b>うる</b>：うえの「ショップ」→「うる」。そだてた 子を かいとって もらいます。おむかえ して <b>3にち</b> から・<b>1にち 2ひき</b> まで。さいごの 1ぴきは うれません。うった 子は もどってきません。</p>'+
+      '<p>・<b>うる</b>：うえの「ショップ」→「うる」。そだてた 子を かいとって もらいます。おむかえ して <b>3にち</b> から・<b>1にち 4ひき</b> まで。さいごの 1ぴきは うれません。うった 子は もどってきません。</p>'+
       '<p>・かいとれない 子（おかざりの ない子・どゲス・ゆかびの 子・こころが こわれた子・茎が はえている子）は「ひきとり（0円）」だけです。</p>'+
       '<p>・<b>いらい</b>：ショップの「いらい」に いつも 3けん ならびます。いらいどおりの 子を うると <b>ふつうの ねだんの ×2〜3</b>（むずかしい いらい ほど たかい）。ことわると あしたまで いらいは ふえません。</p>'+
       '<p>・<b>くさかりの おしごと</b>：「あそぶ」から。ゲーム内で <b>3じかん</b> でかけて、<b>40えん ＋ かしこさ・なつき・たいりょく</b> の ぶん（いちばん おおくて 180えん）を もって かえります。よるは いけません。かえると おなかが へって すこし つかれます。ゲスな 子は サボって 0〜10えん しか もらえない ことも。</p>',
       'お金の稼ぎ方',
       '<p>・お金が増えるのは<b>ショップで子を売る</b>と<b>草刈りのお仕事</b>の2つだけです（お世話・毎日のお礼では増えません）。</p>'+
-      '<p>・<b>売る</b>：上の「ショップ」→「売る」。育てた子を買い取ってもらいます。お迎えして<b>3日</b>から・<b>1日2匹</b>まで。最後の1匹は売れません。売った子は戻ってきません。</p>'+
+      '<p>・<b>売る</b>：上の「ショップ」→「売る」。育てた子を買い取ってもらいます。お迎えして<b>3日</b>から・<b>1日4匹</b>まで。最後の1匹は売れません。売った子は戻ってきません。</p>'+
       '<p>・買い取れない子（お飾りのない子・どゲス・ゆかびの子・心が壊れた子・茎が生えている子）は「引き取り（0円）」だけです。</p>'+
       '<p>・<b>依頼</b>：ショップの「依頼」にいつも3件並びます。依頼どおりの子を売ると<b>普通の値段の×2〜3</b>（難しい依頼ほど高い）。断ると明日まで依頼は増えません。</p>'+
       '<p>・<b>草刈りのお仕事</b>：「遊ぶ」から。ゲーム内で<b>3時間</b>出かけて、<b>40円＋かしこさ・なつき・たいりょく</b>の分（いちばん多くて180円）を持って帰ります。夜は行けません。帰るとお腹が減って少し疲れます。ゲスな子はサボって0〜10円しかもらえないことも。</p>'],
